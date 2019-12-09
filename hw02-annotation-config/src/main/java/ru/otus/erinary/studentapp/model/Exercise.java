@@ -1,12 +1,14 @@
 package ru.otus.erinary.studentapp.model;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Data
+@RequiredArgsConstructor
 public class Exercise {
 
-    private String question;
+    private final String question;
 
-    private String answer;
+    private final String answer;
 
 }
