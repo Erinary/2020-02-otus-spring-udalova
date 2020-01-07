@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+/**
+ * Реализация {@link ExerciseLoader} для загрузки из .csv файла
+ */
 @Service
 public class FileExerciseLoader implements ExerciseLoader {
 
@@ -29,13 +32,13 @@ public class FileExerciseLoader implements ExerciseLoader {
     @SneakyThrows
     public List<Exercise> getExercises() {
         Reader reader = new FileReader(getFile());
-        Iterable<CSVRecord> records = CSVFormat.DEFAULT
+        Iterable<CSVRecord> records = CSVFormat.DEFAULT.withEscape('\\')
                 .withFirstRecordAsHeader()
                 .withHeader(FileHeaders.class)
                 .parse(reader);
         return StreamSupport.stream(records.spliterator(), false)
                 .map(record -> new Exercise(record.get(FileHeaders.QUESTION),
-                        getResponses(record.get(FileHeaders.RESPONSES)), record.get(FileHeaders.ANSWER)))
+                        getResponses(record.get(FileHeaders.RESPONSES)), record.get(FileHeaders.ANSWER).trim()))
                 .collect(Collectors.toList());
     }
 

@@ -9,6 +9,7 @@ public class AppInitializer {
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         ExerciseController controller = context.getBean(ExerciseController.class);
+        controller.start();
     }
 
 }

@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+/**
+ * Модель для упражнения с вариантами ответов
+ */
 @Data
 @RequiredArgsConstructor
 public class Exercise {
