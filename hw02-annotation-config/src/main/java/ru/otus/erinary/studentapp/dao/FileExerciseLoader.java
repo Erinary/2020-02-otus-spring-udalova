@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -33,7 +34,8 @@ public class FileExerciseLoader implements ExerciseLoader {
                 .withHeader(FileHeaders.class)
                 .parse(reader);
         return StreamSupport.stream(records.spliterator(), false)
-                .map(record -> new Exercise(record.get(FileHeaders.QUESTION), record.get(FileHeaders.ANSWER)))
+                .map(record -> new Exercise(record.get(FileHeaders.QUESTION),
+                        getResponses(record.get(FileHeaders.RESPONSES)), record.get(FileHeaders.ANSWER)))
                 .collect(Collectors.toList());
     }
 
@@ -47,7 +49,11 @@ public class FileExerciseLoader implements ExerciseLoader {
         }
     }
 
+    private List<String> getResponses(String responses) {
+        return Arrays.asList(responses.split(";"));
+    }
+
     private enum FileHeaders {
-        QUESTION, ANSWER
+        QUESTION, RESPONSES, ANSWER
     }
 }
