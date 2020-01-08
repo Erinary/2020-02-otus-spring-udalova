@@ -20,9 +20,4 @@ public class User {
         correctAnswersCounter++;
     }
 
-    public void lowerAnswersCounter() {
-        if (correctAnswersCounter > 0) {
-            correctAnswersCounter--;
-        }
-    }
 }

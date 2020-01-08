@@ -6,6 +6,7 @@ import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.otus.erinary.studentapp.model.Exercise;
+import ru.otus.erinary.studentapp.service.LocalizationService;
 
 import java.io.File;
 import java.io.FileReader;
@@ -23,9 +24,12 @@ import java.util.stream.StreamSupport;
 public class FileExerciseLoader implements ExerciseLoader {
 
     private String fileName;
+    private final LocalizationService localizationService;
 
-    public FileExerciseLoader(@Value("${exercise.file.name}") String fileName) {
-        this.fileName = fileName;
+    public FileExerciseLoader(@Value("${exercise.base.file.name}") String fileBaseName,
+                              LocalizationService localizationService) {
+        this.localizationService = localizationService;
+        this.fileName = selectFileName(fileBaseName);
     }
 
     @Override
@@ -42,11 +46,17 @@ public class FileExerciseLoader implements ExerciseLoader {
                 .collect(Collectors.toList());
     }
 
+    private String selectFileName(String fileBaseName) {
+        String base = fileBaseName.substring(0, fileBaseName.lastIndexOf("."));
+        String extension = fileBaseName.substring(fileBaseName.lastIndexOf(".") + 1);
+        return String.format("%s-%s.%s", base, localizationService.getLocaleCode(), extension);
+    }
+
     private File getFile() {
         ClassLoader classLoader = getClass().getClassLoader();
         URL resource = classLoader.getResource(fileName);
         if (resource == null) {
-            throw new IllegalArgumentException("File not found");
+            throw new IllegalArgumentException(localizationService.localizeMessage("messages.file.not.found"));
         } else {
             return new File(resource.getFile());
         }
