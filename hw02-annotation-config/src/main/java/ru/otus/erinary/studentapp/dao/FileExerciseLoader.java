@@ -6,16 +6,15 @@ import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.otus.erinary.studentapp.model.Exercise;
-import ru.otus.erinary.studentapp.service.LocalizationService;
+import ru.otus.erinary.studentapp.service.localization.LocalizationService;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  * Реализация {@link ExerciseLoader} для загрузки из .csv файла
@@ -40,10 +39,19 @@ public class FileExerciseLoader implements ExerciseLoader {
                 .withFirstRecordAsHeader()
                 .withHeader(FileHeaders.class)
                 .parse(reader);
-        return StreamSupport.stream(records.spliterator(), false)
-                .map(record -> new Exercise(record.get(FileHeaders.QUESTION),
-                        getResponses(record.get(FileHeaders.RESPONSES)), record.get(FileHeaders.ANSWER).trim()))
-                .collect(Collectors.toList());
+
+        List<Exercise> exercises = new ArrayList<>();
+        for (CSVRecord record : records) {
+            try {
+                exercises.add(new Exercise(
+                        record.get(FileHeaders.QUESTION),
+                        getResponses(record.get(FileHeaders.RESPONSES)),
+                        record.get(FileHeaders.ANSWER).trim()));
+            } catch (Exception e) {
+                throw new ExerciseLoaderException(localizationService.localizeMessage("messages.record.reading.failure"), e);
+            }
+        }
+        return exercises;
     }
 
     private String selectFileName(String fileBaseName) {
@@ -56,7 +64,7 @@ public class FileExerciseLoader implements ExerciseLoader {
         ClassLoader classLoader = getClass().getClassLoader();
         URL resource = classLoader.getResource(fileName);
         if (resource == null) {
-            throw new IllegalArgumentException(localizationService.localizeMessage("messages.file.not.found"));
+            throw new ExerciseLoaderException(localizationService.localizeMessage("messages.file.not.found"));
         } else {
             return new File(resource.getFile());
         }

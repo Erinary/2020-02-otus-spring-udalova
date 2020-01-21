@@ -1,4 +1,4 @@
-package ru.otus.erinary.studentapp.service;
+package ru.otus.erinary.studentapp.service.exercise;
 
 import org.springframework.stereotype.Service;
 import ru.otus.erinary.studentapp.dao.ExerciseLoader;
@@ -10,11 +10,11 @@ import java.util.List;
  * Сервис для получения и работы с упражнениями
  */
 @Service
-public class ExerciseService {
+public class ExerciseServiceImpl implements ExerciseService {
 
     private final ExerciseLoader loader;
 
-    public ExerciseService(ExerciseLoader loader) {
+    public ExerciseServiceImpl(ExerciseLoader loader) {
         this.loader = loader;
     }
 

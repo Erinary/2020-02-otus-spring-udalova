@@ -1,21 +1,19 @@
-package ru.otus.erinary.studentapp.controller;
+package ru.otus.erinary.studentapp.service;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import ru.otus.erinary.studentapp.model.Exercise;
 import ru.otus.erinary.studentapp.model.User;
-import ru.otus.erinary.studentapp.service.ExerciseService;
-import ru.otus.erinary.studentapp.service.LocalizationService;
+import ru.otus.erinary.studentapp.service.exercise.ExerciseService;
+import ru.otus.erinary.studentapp.service.interaction.UserInteractionService;
+import ru.otus.erinary.studentapp.service.localization.LocalizationService;
 
 import java.util.List;
-import java.util.Scanner;
 
 /**
- * Контроллер для взаимодействия с пользователем через консоль
+ * Сервис для запуска викторины
  */
-@Controller
-public class ExerciseController {
+@Service
+public class QuizService {
 
     private final static String QUIZ_COMMAND = "-quiz";
     private final static String HELP_COMMAND = "-help";
@@ -23,28 +21,26 @@ public class ExerciseController {
 
     private final ExerciseService exerciseService;
     private final LocalizationService localizationService;
+    private final UserInteractionService userInteractionService;
 
-    public ExerciseController(ExerciseService exerciseService, LocalizationService localizationService) {
+    public QuizService(ExerciseService exerciseService, LocalizationService localizationService, UserInteractionService userInteractionService) {
         this.exerciseService = exerciseService;
         this.localizationService = localizationService;
+        this.userInteractionService = userInteractionService;
     }
 
     public void start() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println(localizationService.localizeMessage("message.greeting"));
         help();
-        System.out.println(localizationService.localizeMessage("message.input.name"));
-        String name = scanner.nextLine();
-        System.out.println(localizationService.localizeMessage("message.input.surname"));
-        String surname = scanner.nextLine();
-        User user = new User(name, surname);
+        System.out.println(localizationService.localizeMessage("message.input.user"));
+        User user = userInteractionService.getUser();
 
         //noinspection InfiniteLoopStatement
         while (true) {
             System.out.println(localizationService.localizeMessage("message.input.command"));
-            String command = scanner.nextLine();
+            String command = userInteractionService.readCommand();
             if (QUIZ_COMMAND.equals(command)) {
-                quiz(scanner, user);
+                quiz(user);
             } else if (QUIT_COMMAND.equals(command)) {
                 quit();
             } else if (HELP_COMMAND.equals(command)) {
@@ -59,7 +55,7 @@ public class ExerciseController {
         System.out.println(localizationService.localizeMessage("message.help"));
     }
 
-    private void quiz(Scanner scanner, User user) {
+    private void quiz(User user) {
         if (user.getCorrectAnswersCounter() != 0) {
             user.setCorrectAnswersCounter(0);
         }
@@ -71,7 +67,7 @@ public class ExerciseController {
             exercise.getResponses().forEach(System.out::println);
 
             System.out.println(localizationService.localizeMessage("message.answer"));
-            String answer = scanner.nextLine();
+            String answer = userInteractionService.readCommand();
             if (exerciseService.checkAnswer(exercise, answer)) {
                 System.out.println(localizationService.localizeMessage("message.answer.correct"));
                 user.raiseAnswersCounter();

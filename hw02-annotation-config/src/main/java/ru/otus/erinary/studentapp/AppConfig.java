@@ -6,6 +6,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import ru.otus.erinary.studentapp.service.interaction.UserInteractionService;
+import ru.otus.erinary.studentapp.service.interaction.ScannerService;
+import ru.otus.erinary.studentapp.service.localization.LocalizationService;
+
+import java.util.Scanner;
 
 @ComponentScan
 @Configuration
@@ -18,5 +23,10 @@ public class AppConfig {
         source.setBasename("/messages");
         source.setDefaultEncoding("UTF-8");
         return source;
+    }
+
+    @Bean
+    public UserInteractionService ioService(LocalizationService localizationService) {
+        return new ScannerService(new Scanner(System.in), localizationService);
     }
 }

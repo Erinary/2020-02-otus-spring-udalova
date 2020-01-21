@@ -1,4 +1,4 @@
-package ru.otus.erinary.studentapp.service;
+package ru.otus.erinary.studentapp.service.localization;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -10,12 +10,12 @@ import java.util.Locale;
  * Сервис для локализации сообщений
  */
 @Service
-public class LocalizationService {
+public class LocalizationServiceImpl implements LocalizationService {
 
     private final MessageSource messageSource;
     private final Locale currentLocale;
 
-    public LocalizationService(MessageSource messageSource, @Value("${application.locale}") String localeKey) {
+    public LocalizationServiceImpl(MessageSource messageSource, @Value("${application.locale}") String localeKey) {
         this.messageSource = messageSource;
         this.currentLocale = selectLocale(localeKey);
     }
