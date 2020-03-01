@@ -5,11 +5,11 @@ package ru.otus.erinary.hw01.studentapp.dao;
  */
 public class ExerciseLoaderException extends RuntimeException {
 
-    public ExerciseLoaderException(String message) {
+    public ExerciseLoaderException(final String message) {
         super(message);
     }
 
-    public ExerciseLoaderException(String message, Throwable cause) {
+    public ExerciseLoaderException(final String message, final Throwable cause) {
         super(message, cause);
     }
 }

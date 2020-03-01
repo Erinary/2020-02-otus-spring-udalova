@@ -20,7 +20,7 @@ public class FileExerciseLoader implements ExerciseLoader {
 
     private final String fileName;
 
-    public FileExerciseLoader(String fileName) {
+    public FileExerciseLoader(final String fileName) {
         this.fileName = fileName;
     }
 
@@ -57,7 +57,7 @@ public class FileExerciseLoader implements ExerciseLoader {
         }
     }
 
-    private List<String> getResponses(String responses) {
+    private List<String> getResponses(final String responses) {
         return Arrays.asList(responses.split(";"));
     }
 

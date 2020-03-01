@@ -15,7 +15,7 @@ public class QuizService {
     private final ExerciseService exerciseService;
     private final UserInteractionService userInteractionService;
 
-    public QuizService(ExerciseService exerciseService, UserInteractionService userInteractionService) {
+    public QuizService(final ExerciseService exerciseService, final UserInteractionService userInteractionService) {
         this.exerciseService = exerciseService;
         this.userInteractionService = userInteractionService;
     }
@@ -46,7 +46,7 @@ public class QuizService {
         System.out.println(MessageConstants.HELP);
     }
 
-    private void quiz(User user) {
+    private void quiz(final User user) {
         if (user.getCorrectAnswersCounter() != 0) {
             user.setCorrectAnswersCounter(0);
         }
