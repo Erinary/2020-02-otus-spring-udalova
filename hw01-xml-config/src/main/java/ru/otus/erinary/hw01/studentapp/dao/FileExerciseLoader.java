@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Реализация {@link ExerciseLoader} для загрузки из .csv файла
  */
-public class FileExerciseLoader implements ExerciseLoader {
+public final class FileExerciseLoader implements ExerciseLoader {
 
     private final String fileName;
 

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Сервис для получения и работы с упражнениями
  */
-public class ExerciseServiceImpl implements ExerciseService {
+public final class ExerciseServiceImpl implements ExerciseService {
 
     private final ExerciseLoader loader;
 

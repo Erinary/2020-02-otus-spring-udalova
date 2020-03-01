@@ -7,7 +7,7 @@ import ru.otus.erinary.hw01.studentapp.service.interaction.UserInteractionServic
 
 import java.util.List;
 
-public class QuizService {
+public final class QuizService {
     private final static String QUIZ_COMMAND = "-quiz";
     private final static String HELP_COMMAND = "-help";
     private final static String QUIT_COMMAND = "-quit";

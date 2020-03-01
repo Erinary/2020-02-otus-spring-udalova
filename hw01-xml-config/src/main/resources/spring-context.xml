@@ -13,11 +13,14 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
     </bean>
 
     <bean id="userInteractionService" class="ru.otus.erinary.hw01.studentapp.service.interaction.ScannerService">
+        <constructor-arg name="factory" ref="scannerFactory"/>
     </bean>
 
     <bean id="quizService" class="ru.otus.erinary.hw01.studentapp.service.QuizService">
         <constructor-arg name="exerciseService" ref="exerciseService"/>
         <constructor-arg name="userInteractionService" ref="userInteractionService"/>
     </bean>
+
+    <bean id="scannerFactory" class="ru.otus.erinary.hw01.studentapp.service.interaction.scanner.ConsoleScannerFactory"/>
 
 </beans>

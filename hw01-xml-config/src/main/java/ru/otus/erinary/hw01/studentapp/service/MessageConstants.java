@@ -1,6 +1,6 @@
 package ru.otus.erinary.hw01.studentapp.service;
 
-public class MessageConstants {
+public final class MessageConstants {
 
     //ExerciseController messages
     public static final String GREETING = "Приветсвтую в программе-викторине с несложными вопросами по истории!";

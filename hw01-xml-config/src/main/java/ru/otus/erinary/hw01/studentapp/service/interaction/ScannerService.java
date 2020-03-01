@@ -2,18 +2,19 @@ package ru.otus.erinary.hw01.studentapp.service.interaction;
 
 import ru.otus.erinary.hw01.studentapp.model.User;
 import ru.otus.erinary.hw01.studentapp.service.MessageConstants;
+import ru.otus.erinary.hw01.studentapp.service.interaction.scanner.ScannerFactory;
 
 import java.util.Scanner;
 
 /**
  * Сервис для работы с консолью с помощью {@link Scanner}
  */
-public class ScannerService implements UserInteractionService {
+public final class ScannerService implements UserInteractionService {
 
     private final Scanner scanner;
 
-    public ScannerService() {
-        this.scanner = new Scanner(System.in);
+    public ScannerService(final ScannerFactory factory) {
+        this.scanner = factory.createScanner();
     }
 
     @Override
