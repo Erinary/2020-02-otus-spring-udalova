@@ -3,10 +3,7 @@ package ru.otus.erinary.studentapp.dao;
 import lombok.SneakyThrows;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 import ru.otus.erinary.studentapp.model.Exercise;
-import ru.otus.erinary.studentapp.service.localization.LocalizationService;
 
 import java.io.File;
 import java.io.FileReader;
@@ -19,15 +16,13 @@ import java.util.List;
 /**
  * Реализация {@link ExerciseLoader} для загрузки из .csv файла
  */
-@Service
 public class FileExerciseLoader implements ExerciseLoader {
 
-    private String fileName;
-    private final LocalizationService localizationService;
+    private final String localeCode;
+    private final String fileName;
 
-    public FileExerciseLoader(@Value("${exercise.base.file.name}") String fileBaseName,
-                              LocalizationService localizationService) {
-        this.localizationService = localizationService;
+    public FileExerciseLoader(final String localeCode, final String fileBaseName) {
+        this.localeCode = localeCode;
         this.fileName = selectFileName(fileBaseName);
     }
 
@@ -48,29 +43,29 @@ public class FileExerciseLoader implements ExerciseLoader {
                         getResponses(record.get(FileHeaders.RESPONSES)),
                         record.get(FileHeaders.ANSWER).trim()));
             } catch (Exception e) {
-                throw new ExerciseLoaderException(localizationService.localizeMessage("messages.record.reading.failure"), e);
+                throw new ExerciseLoaderException("Failed to read record from scv file", e);
             }
         }
         return exercises;
     }
 
-    private String selectFileName(String fileBaseName) {
+    private String selectFileName(final String fileBaseName) {
         String base = fileBaseName.substring(0, fileBaseName.lastIndexOf("."));
         String extension = fileBaseName.substring(fileBaseName.lastIndexOf(".") + 1);
-        return String.format("%s-%s.%s", base, localizationService.getLocaleCode(), extension);
+        return String.format("%s-%s.%s", base, localeCode, extension);
     }
 
     private File getFile() {
         ClassLoader classLoader = getClass().getClassLoader();
         URL resource = classLoader.getResource(fileName);
         if (resource == null) {
-            throw new ExerciseLoaderException(localizationService.localizeMessage("messages.file.not.found"));
+            throw new ExerciseLoaderException("File not found");
         } else {
             return new File(resource.getFile());
         }
     }
 
-    private List<String> getResponses(String responses) {
+    private List<String> getResponses(final String responses) {
         return Arrays.asList(responses.split(";"));
     }
 

@@ -1,10 +1,7 @@
 package ru.otus.erinary.studentapp.dao;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import ru.otus.erinary.studentapp.model.Exercise;
-import ru.otus.erinary.studentapp.service.localization.LocalizationServiceImpl;
 
 import java.util.List;
 
@@ -22,17 +19,10 @@ class FileExerciseLoaderTest {
     public static final String RESPONSE = "1) A";
 
     private FileExerciseLoader loader;
-    private LocalizationServiceImpl service;
-
-    @BeforeEach
-    void setup() {
-        service = Mockito.mock(LocalizationServiceImpl.class);
-        Mockito.when(service.getLocaleCode()).thenReturn(LOCALE_CODE);
-    }
 
     @Test
     void getExercises() {
-        loader = new FileExerciseLoader(BASE_FILE_NAME, service);
+        loader = new FileExerciseLoader(LOCALE_CODE, BASE_FILE_NAME);
         List<Exercise> exercises = loader.getExercises();
         assertEquals(EXPECTED_EXERCISE_NUMBER, exercises.size());
         exercises.forEach(exercise ->
@@ -47,7 +37,7 @@ class FileExerciseLoaderTest {
 
     @Test
     void getExerciseFromBadFile() {
-        loader = new FileExerciseLoader(BAD_FILE_NAME, service);
+        loader = new FileExerciseLoader(LOCALE_CODE, BAD_FILE_NAME);
         assertThrows(ExerciseLoaderException.class, () -> loader.getExercises());
     }
 }

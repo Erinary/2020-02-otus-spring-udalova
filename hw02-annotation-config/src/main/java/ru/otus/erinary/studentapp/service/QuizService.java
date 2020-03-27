@@ -4,7 +4,8 @@ import org.springframework.stereotype.Service;
 import ru.otus.erinary.studentapp.model.Exercise;
 import ru.otus.erinary.studentapp.model.User;
 import ru.otus.erinary.studentapp.service.exercise.ExerciseService;
-import ru.otus.erinary.studentapp.service.interaction.UserInteractionService;
+import ru.otus.erinary.studentapp.service.interaction.input.InputInteractionService;
+import ru.otus.erinary.studentapp.service.interaction.output.OutputInteractionService;
 import ru.otus.erinary.studentapp.service.localization.LocalizationService;
 
 import java.util.List;
@@ -21,24 +22,27 @@ public class QuizService {
 
     private final ExerciseService exerciseService;
     private final LocalizationService localizationService;
-    private final UserInteractionService userInteractionService;
+    private final InputInteractionService inputService;
+    private final OutputInteractionService outputService;
 
-    public QuizService(ExerciseService exerciseService, LocalizationService localizationService, UserInteractionService userInteractionService) {
+    public QuizService(final ExerciseService exerciseService, final LocalizationService localizationService,
+                       final InputInteractionService inputService, final OutputInteractionService outputService) {
         this.exerciseService = exerciseService;
         this.localizationService = localizationService;
-        this.userInteractionService = userInteractionService;
+        this.inputService = inputService;
+        this.outputService = outputService;
     }
 
     public void start() {
-        System.out.println(localizationService.localizeMessage("message.greeting"));
+        outputService.sendMessage(localizationService.localizeMessage("message.greeting"));
         help();
-        System.out.println(localizationService.localizeMessage("message.input.user"));
-        User user = userInteractionService.getUser();
+        outputService.sendMessage(localizationService.localizeMessage("message.input.user"));
+        User user = inputService.getUser();
 
         //noinspection InfiniteLoopStatement
         while (true) {
-            System.out.println(localizationService.localizeMessage("message.input.command"));
-            String command = userInteractionService.readCommand();
+            outputService.sendMessage(localizationService.localizeMessage("message.input.command"));
+            String command = inputService.readCommand();
             if (QUIZ_COMMAND.equals(command)) {
                 quiz(user);
             } else if (QUIT_COMMAND.equals(command)) {
@@ -46,41 +50,41 @@ public class QuizService {
             } else if (HELP_COMMAND.equals(command)) {
                 help();
             } else {
-                System.out.println(localizationService.localizeMessage("message.unknown.command") + command);
+                outputService.sendMessage(localizationService.localizeMessage("message.unknown.command") + command);
             }
         }
     }
 
     private void help() {
-        System.out.println(localizationService.localizeMessage("message.help"));
+        outputService.sendMessage(localizationService.localizeMessage("message.help"));
     }
 
     private void quiz(User user) {
         if (user.getCorrectAnswersCounter() != 0) {
             user.setCorrectAnswersCounter(0);
         }
-        System.out.println(localizationService.localizeMessage("message.quiz.start"));
+        outputService.sendMessage(localizationService.localizeMessage("message.quiz.start"));
         List<Exercise> exercises = exerciseService.getExercises();
         exercises.forEach(exercise -> {
-            System.out.println(localizationService.localizeMessage("message.question"));
-            System.out.println(exercise.getQuestion());
+            outputService.sendMessage(localizationService.localizeMessage("message.question"));
+            outputService.sendMessage(exercise.getQuestion());
             exercise.getResponses().forEach(System.out::println);
 
-            System.out.println(localizationService.localizeMessage("message.answer"));
-            String answer = userInteractionService.readCommand();
+            outputService.sendMessage(localizationService.localizeMessage("message.answer"));
+            String answer = inputService.readCommand();
             if (exerciseService.checkAnswer(exercise, answer)) {
-                System.out.println(localizationService.localizeMessage("message.answer.correct"));
+                outputService.sendMessage(localizationService.localizeMessage("message.answer.correct"));
                 user.raiseAnswersCounter();
             } else {
-                System.out.println(localizationService.localizeMessage("message.answer.wrong"));
+                outputService.sendMessage(localizationService.localizeMessage("message.answer.wrong"));
             }
         });
-        System.out.println(localizationService.localizeMessage("message.quiz.end")
+        outputService.sendMessage(localizationService.localizeMessage("message.quiz.end")
                 + user.getCorrectAnswersCounter());
     }
 
     private void quit() {
-        System.out.println(localizationService.localizeMessage("messages.quit"));
+        outputService.sendMessage(localizationService.localizeMessage("messages.quit"));
         System.exit(-1);
     }
 }
