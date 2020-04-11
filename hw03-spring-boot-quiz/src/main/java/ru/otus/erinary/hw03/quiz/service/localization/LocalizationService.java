@@ -5,6 +5,6 @@ package ru.otus.erinary.hw03.quiz.service.localization;
  */
 public interface LocalizationService {
 
-    String localizeMessage(String code);
+    String localizeMessage(final String code);
 
 }

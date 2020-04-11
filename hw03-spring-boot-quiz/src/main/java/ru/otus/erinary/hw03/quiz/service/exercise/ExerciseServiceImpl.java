@@ -14,7 +14,7 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     private final ExerciseLoader loader;
 
-    public ExerciseServiceImpl(ExerciseLoader loader) {
+    public ExerciseServiceImpl(final ExerciseLoader loader) {
         this.loader = loader;
     }
 
@@ -22,7 +22,7 @@ public class ExerciseServiceImpl implements ExerciseService {
         return loader.getExercises();
     }
 
-    public boolean checkAnswer(Exercise exercise, String answer) {
+    public boolean checkAnswer(final Exercise exercise, final String answer) {
         return exercise.getAnswer().equals(answer);
     }
 }

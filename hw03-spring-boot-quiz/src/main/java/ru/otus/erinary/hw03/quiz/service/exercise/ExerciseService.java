@@ -12,5 +12,5 @@ public interface ExerciseService {
 
     List<Exercise> getExercises();
 
-    boolean checkAnswer(Exercise exercise, String answer);
+    boolean checkAnswer(final Exercise exercise, final String answer);
 }

@@ -1,34 +1,20 @@
 package ru.otus.erinary.hw03.quiz.settings;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import ru.otus.erinary.hw03.quiz.service.interaction.ConsoleInteractionService;
+import ru.otus.erinary.hw03.quiz.service.interaction.InteractionService;
 
-import java.util.Locale;
+import java.util.Scanner;
 
 @Configuration
-@ConfigurationProperties(prefix = "application")
-public class ApplicationSettings {
+public class AppConfig {
 
-    private Locale localeCode;
-    private String fileName;
-
-    public Locale getLocaleCode() {
-        return localeCode;
-    }
-
-    public void setLocaleCode(String localeCode) {
-        this.localeCode = Locale.forLanguageTag(localeCode);
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    @Bean
+    public InteractionService interactionService() {
+        return new ConsoleInteractionService(new Scanner(System.in));
     }
 
     //TODO не хочет автоконфигурироваться
@@ -39,4 +25,5 @@ public class ApplicationSettings {
         source.setDefaultEncoding("UTF-8");
         return source;
     }
+
 }

@@ -5,7 +5,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Component;
 import ru.otus.erinary.hw03.quiz.model.Exercise;
-import ru.otus.erinary.hw03.quiz.settings.ApplicationSettings;
+import ru.otus.erinary.hw03.quiz.settings.AppSettings;
 
 import java.io.File;
 import java.io.FileReader;
@@ -23,7 +23,7 @@ public class FileExerciseLoader implements ExerciseLoader {
 
     private final String fileName;
 
-    public FileExerciseLoader(final ApplicationSettings settings) {
+    public FileExerciseLoader(final AppSettings settings) {
         this.fileName = selectFileName(settings.getFileName(), settings.getLocaleCode().getLanguage());
     }
 
