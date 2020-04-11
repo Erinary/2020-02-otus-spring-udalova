@@ -1,25 +1,28 @@
 package ru.otus.erinary.hw03.quiz.dao;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.otus.erinary.hw03.quiz.model.Exercise;
-import ru.otus.erinary.hw03.quiz.settings.ApplicationSettings;
+import ru.otus.erinary.hw03.quiz.settings.AppSettings;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
 class FileExerciseLoaderTest {
 
-    private static final String BASE_FILE_NAME = "test-exercise.csv";
     private static final String BAD_FILE_NAME = "bad-test-exercise.csv";
-    private static final String LOCALE_CODE = "en";
     public static final int EXPECTED_EXERCISE_NUMBER = 3;
     public static final String QUESTION = "question";
     public static final String ANSWER = "answer";
     public static final String RESPONSE = "1) A";
 
+    @Autowired
+    private AppSettings settings;
     private FileExerciseLoader loader;
-    private ApplicationSettings settings;
 
     @Test
     void getExercises() {
@@ -38,7 +41,10 @@ class FileExerciseLoaderTest {
 
     @Test
     void getExerciseFromBadFile() {
-        loader = new FileExerciseLoader(settings);
+        var spySettings = Mockito.spy(settings);
+        Mockito.when(spySettings.getFileName()).thenReturn(BAD_FILE_NAME);
+
+        loader = new FileExerciseLoader(spySettings);
         assertThrows(ExerciseLoaderException.class, () -> loader.getExercises());
     }
 

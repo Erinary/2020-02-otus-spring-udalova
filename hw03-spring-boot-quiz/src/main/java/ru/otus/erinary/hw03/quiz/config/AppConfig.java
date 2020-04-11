@@ -1,4 +1,4 @@
-package ru.otus.erinary.hw03.quiz.settings;
+package ru.otus.erinary.hw03.quiz.config;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;

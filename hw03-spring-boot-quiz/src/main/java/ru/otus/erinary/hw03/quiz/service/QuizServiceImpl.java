@@ -33,7 +33,6 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    @EventListener(ApplicationReadyEvent.class)
     public void start() {
         interactionService.sendMessage(localizationService.localizeMessage("message.greeting"));
         help();
