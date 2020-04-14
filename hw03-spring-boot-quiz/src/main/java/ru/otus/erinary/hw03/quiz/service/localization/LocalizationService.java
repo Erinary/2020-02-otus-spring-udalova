@@ -7,4 +7,6 @@ public interface LocalizationService {
 
     String localizeMessage(final String code);
 
+    String localizeMessageWithParams(final String code, final String[] params);
+
 }

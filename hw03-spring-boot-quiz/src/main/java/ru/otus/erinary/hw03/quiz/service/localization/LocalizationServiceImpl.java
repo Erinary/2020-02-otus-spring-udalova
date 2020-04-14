@@ -24,4 +24,7 @@ public class LocalizationServiceImpl implements LocalizationService {
         return messageSource.getMessage(code, null, currentLocale);
     }
 
+    public String localizeMessageWithParams(final String code, final String[] params) {
+        return messageSource.getMessage(code, params, currentLocale);
+    }
 }
