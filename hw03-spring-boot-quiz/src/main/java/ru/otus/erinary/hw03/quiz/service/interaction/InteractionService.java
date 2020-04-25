@@ -32,5 +32,5 @@ public interface InteractionService {
      * @param code код сообщения
      * @param params параметры сообщения
      */
-    void sendLocalizedMessage(final String code, final String[] params);
+    void sendLocalizedMessage(final String code, final String... params);
 }

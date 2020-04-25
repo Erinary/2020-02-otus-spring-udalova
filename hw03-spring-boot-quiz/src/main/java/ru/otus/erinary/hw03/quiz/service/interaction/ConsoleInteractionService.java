@@ -33,7 +33,7 @@ public class ConsoleInteractionService implements InteractionService {
     }
 
     @Override
-    public void sendLocalizedMessage(final String code, final String[] params) {
+    public void sendLocalizedMessage(final String code, final String... params) {
         System.out.println(localizationService.localizeMessageWithParams(code, params));
     }
 }

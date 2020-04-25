@@ -44,7 +44,7 @@ public class QuizServiceImpl implements QuizService {
             } else if (HELP_COMMAND.equals(command)) {
                 help();
             } else {
-                interactionService.sendLocalizedMessage("message.unknown.command", new String[]{command});
+                interactionService.sendLocalizedMessage("message.unknown.command", command);
             }
         }
     }
@@ -74,7 +74,7 @@ public class QuizServiceImpl implements QuizService {
             }
         });
         interactionService.sendLocalizedMessage("message.quiz.end",
-                new String[]{String.valueOf(user.getCorrectAnswersCounter())});
+                String.valueOf(user.getCorrectAnswersCounter()));
     }
 
     private void quit() {
