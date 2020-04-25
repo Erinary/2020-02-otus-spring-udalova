@@ -14,10 +14,6 @@ import java.util.List;
 @Service
 public class QuizServiceImpl implements QuizService {
 
-    private final static String QUIZ_COMMAND = "-quiz";
-    private final static String HELP_COMMAND = "-help";
-    private final static String QUIT_COMMAND = "-quit";
-
     private final ExerciseService exerciseService;
     private final InteractionService interactionService;
 
@@ -27,33 +23,15 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public void start() {
+    public void help() {
         interactionService.sendLocalizedMessage("message.greeting");
-        help();
-        interactionService.sendLocalizedMessage("message.input.user");
-        User user = createUser();
-
-        //noinspection InfiniteLoopStatement
-        while (true) {
-            interactionService.sendLocalizedMessage("message.input.command");
-            String command = interactionService.readLine();
-            if (QUIZ_COMMAND.equals(command)) {
-                quiz(user);
-            } else if (QUIT_COMMAND.equals(command)) {
-                quit();
-            } else if (HELP_COMMAND.equals(command)) {
-                help();
-            } else {
-                interactionService.sendLocalizedMessage("message.unknown.command", command);
-            }
-        }
-    }
-
-    private void help() {
         interactionService.sendLocalizedMessage("message.help");
     }
 
-    private void quiz(User user) {
+    @Override
+    public void quiz() {
+        interactionService.sendLocalizedMessage("message.input.user");
+        User user = createUser();
         if (user.getCorrectAnswersCounter() != 0) {
             user.setCorrectAnswersCounter(0);
         }
@@ -77,7 +55,8 @@ public class QuizServiceImpl implements QuizService {
                 String.valueOf(user.getCorrectAnswersCounter()));
     }
 
-    private void quit() {
+    @Override
+    public void quit() {
         interactionService.sendLocalizedMessage("messages.quit");
         System.exit(-1);
     }

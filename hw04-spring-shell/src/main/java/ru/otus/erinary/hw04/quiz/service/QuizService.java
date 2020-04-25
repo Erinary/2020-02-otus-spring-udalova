@@ -6,8 +6,17 @@ package ru.otus.erinary.hw04.quiz.service;
 public interface QuizService {
 
     /**
+     * Вызов справки
+     */
+    void help();
+
+    /**
      * Старт викторины
      */
-    void start();
+    void quiz();
 
+    /**
+     * Выход из викторины
+     */
+    void quit();
 }

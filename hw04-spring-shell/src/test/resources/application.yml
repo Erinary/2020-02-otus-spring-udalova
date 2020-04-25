@@ -5,3 +5,6 @@ application:
 spring:
   messages:
     basename: "messages"
+  shell:
+    interactive:
+      enabled: false
