@@ -5,6 +5,7 @@ import ru.otus.erinary.hw04.quiz.model.Exercise;
 import ru.otus.erinary.hw04.quiz.model.User;
 import ru.otus.erinary.hw04.quiz.service.exercise.ExerciseService;
 import ru.otus.erinary.hw04.quiz.service.interaction.InteractionService;
+import ru.otus.erinary.hw04.quiz.service.user.UserService;
 
 import java.util.List;
 
@@ -16,10 +17,12 @@ public class QuizServiceImpl implements QuizService {
 
     private final ExerciseService exerciseService;
     private final InteractionService interactionService;
+    private final UserService userService;
 
-    public QuizServiceImpl(final ExerciseService exerciseService, final InteractionService interactionService) {
+    public QuizServiceImpl(final ExerciseService exerciseService, final InteractionService interactionService, final UserService userService) {
         this.exerciseService = exerciseService;
         this.interactionService = interactionService;
+        this.userService = userService;
     }
 
     @Override
@@ -30,8 +33,7 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public void quiz() {
-        interactionService.sendLocalizedMessage("message.input.user");
-        User user = createUser();
+        User user = userService.getCurrentUser();
         if (user.getCorrectAnswersCounter() != 0) {
             user.setCorrectAnswersCounter(0);
         }
@@ -61,11 +63,14 @@ public class QuizServiceImpl implements QuizService {
         System.exit(-1);
     }
 
-    private User createUser() {
-        interactionService.sendLocalizedMessage("message.input.key.name");
-        String name = interactionService.readLine();
-        interactionService.sendLocalizedMessage("message.input.key.surname");
-        String surname = interactionService.readLine();
-        return new User(name, surname);
+    @Override
+    public String createUser(final String name, final String surname) {
+        userService.createCurrentUser(name, surname);
+        return "message.user.created";
+    }
+
+    @Override
+    public String checkIfUserExists() {
+        return !userService.isUserCreated() ? "message.user.input" : null;
     }
 }
