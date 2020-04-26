@@ -1,0 +1,12 @@
+package ru.otus.erinary.hw04.quiz.service.localization;
+
+/**
+ * Интерфейс сервиса для локализации сообщений
+ */
+public interface LocalizationService {
+
+    String localizeMessage(final String code);
+
+    String localizeMessageWithParams(final String code, final String[] params);
+
+}

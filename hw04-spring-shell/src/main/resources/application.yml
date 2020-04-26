@@ -1,0 +1,7 @@
+application:
+  localeCode: "en-UK"
+  fileName: "exercise.csv"
+
+spring:
+  messages:
+    basename: "messages"

@@ -1,0 +1,10 @@
+application:
+  localeCode: "en-UK"
+  fileName: "test-exercise.csv"
+
+spring:
+  messages:
+    basename: "messages"
+  shell:
+    interactive:
+      enabled: false
