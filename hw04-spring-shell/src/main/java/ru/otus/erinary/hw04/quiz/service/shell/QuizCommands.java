@@ -30,8 +30,8 @@ public class QuizCommands {
     }
 
     @ShellMethod(key = {"-user", "-u"}, value = "Create current user.")
-    public String createUser(@ShellOption final String name, @ShellOption final String surname) {
-        return localizationService.localizeMessage(quizService.createUser(name, surname));
+    public void createUser(@ShellOption final String name, @ShellOption final String surname) {
+        quizService.createUser(name, surname);
     }
 
     @ShellMethod(key = {"-quiz", "-qz"}, value = "Start quiz.")
@@ -46,7 +46,7 @@ public class QuizCommands {
     }
 
     private Availability checkIfUserCreated() {
-        String code = quizService.checkIfUserExists();
-        return code == null ? Availability.available() : Availability.unavailable(localizationService.localizeMessage(code));
+        return quizService.checkIfUserExists() ? Availability.available() :
+                Availability.unavailable(localizationService.localizeMessage("message.user.input"));
     }
 }

@@ -24,13 +24,12 @@ public interface QuizService {
      * Создание пользователя
      * @param name имя
      * @param surname фамилия
-     * @return код сообщения о создании пользователя
      */
-    String createUser(String name, String surname);
+    void createUser(String name, String surname);
 
     /**
      * Проверка, существует ли пользователь
      * @return код сообщения с результатом проверки
      */
-    String checkIfUserExists();
+    boolean checkIfUserExists();
 }

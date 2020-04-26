@@ -64,13 +64,13 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public String createUser(final String name, final String surname) {
+    public void createUser(final String name, final String surname) {
         userService.createCurrentUser(name, surname);
-        return "message.user.created";
+        interactionService.sendLocalizedMessage("message.user.created");
     }
 
     @Override
-    public String checkIfUserExists() {
-        return !userService.isUserCreated() ? "message.user.input" : null;
+    public boolean checkIfUserExists() {
+        return userService.isUserCreated();
     }
 }
