@@ -1,4 +1,4 @@
-package ru.otus.erinary.jdbclibrary.model;
+package ru.otus.erinary.hw05.jdbclibrary.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class Genre {
 
-    private long id;
-    private String name;
+    private final long id;
+    private final String name;
 
 }

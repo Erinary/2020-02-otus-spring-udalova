@@ -1,10 +1,13 @@
-package ru.otus.erinary.jdbclibrary.dao;
+package ru.otus.erinary.hw05.jdbclibrary.dao.genre;
 
-import ru.otus.erinary.jdbclibrary.model.Genre;
+import ru.otus.erinary.hw05.jdbclibrary.model.Genre;
 
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Интерфейс репозитория для {@link Genre}
+ */
 public interface GenreDao {
 
     long save(Genre genre);

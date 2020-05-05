@@ -1,10 +1,13 @@
-package ru.otus.erinary.jdbclibrary.dao;
+package ru.otus.erinary.hw05.jdbclibrary.dao.author;
 
-import ru.otus.erinary.jdbclibrary.model.Author;
+import ru.otus.erinary.hw05.jdbclibrary.model.Author;
 
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Интерфейс репозитория для {@link Author}
+ */
 public interface AuthorDao {
 
     long save(Author author);

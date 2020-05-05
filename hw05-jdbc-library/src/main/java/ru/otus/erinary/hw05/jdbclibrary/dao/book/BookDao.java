@@ -1,10 +1,13 @@
-package ru.otus.erinary.jdbclibrary.dao;
+package ru.otus.erinary.hw05.jdbclibrary.dao.book;
 
-import ru.otus.erinary.jdbclibrary.model.Book;
+import ru.otus.erinary.hw05.jdbclibrary.model.Book;
 
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Интерфейс репозитория для {@link Book}
+ */
 public interface BookDao {
 
     long save(Book book);
