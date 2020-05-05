@@ -9,8 +9,8 @@ import java.util.List;
 @AllArgsConstructor
 public class Author {
 
-    private final long id;
-    private final String name;
-    private final List<Book> books;
+    private long id;
+    private String name;
+    private List<Book> books;
 
 }

@@ -10,7 +10,9 @@ import java.util.Optional;
  */
 public interface GenreDao {
 
-    long save(Genre genre);
+    long insert(Genre genre);
+
+    void update(Genre genre);
 
     Optional<Genre> findById(long id);
 
