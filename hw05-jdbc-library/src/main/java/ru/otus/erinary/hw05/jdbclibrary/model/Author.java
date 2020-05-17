@@ -13,7 +13,7 @@ public class Author {
     private String name;
     private List<Book> books;
 
-    public Author(String name) {
+    public Author(final String name) {
         this.name = name;
     }
 }

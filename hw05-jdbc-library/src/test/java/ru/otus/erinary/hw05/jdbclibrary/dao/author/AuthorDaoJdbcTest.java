@@ -48,8 +48,9 @@ class AuthorDaoJdbcTest {
 
     @Test
     void testFindById() {
-        var genre = repository.findById(1).orElseThrow();
-        assertEquals("author1", genre.getName());
+        var author = repository.findById(1).orElseThrow();
+        assertEquals("author1", author.getName());
+        assertNull(author.getBooks());
     }
 
     @Test
@@ -63,11 +64,10 @@ class AuthorDaoJdbcTest {
         var authors = repository.findAll();
         assertFalse(authors.isEmpty());
         assertEquals(3, authors.size());
+        assertNull(authors.get(0).getBooks());
 
         var authorNames = authors.stream().map(Author::getName).collect(Collectors.toList());
         assertTrue(authorNames.containsAll(List.of("author1", "author2", "author3")));
-
-        assertNull(authors.get(0).getBooks());
     }
 
     @Test

@@ -20,4 +20,8 @@ values ('title1',
        ('title3',
         2018,
         (select id from authors where name = 'author3'),
-        (select id from genres where name = 'genre3'));
+        (select id from genres where name = 'genre3')),
+       ('title4',
+        2018,
+        (select id from authors where name = 'author1'),
+        (select id from genres where name = 'genre2'));

@@ -6,8 +6,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
-import ru.otus.erinary.hw05.jdbclibrary.dao.author.AuthorDao;
-import ru.otus.erinary.hw05.jdbclibrary.dao.genre.GenreDao;
+import ru.otus.erinary.hw05.jdbclibrary.dao.exception.DaoException;
 import ru.otus.erinary.hw05.jdbclibrary.model.Author;
 import ru.otus.erinary.hw05.jdbclibrary.model.Book;
 import ru.otus.erinary.hw05.jdbclibrary.model.Genre;
@@ -25,14 +24,10 @@ public class BookDaoJdbc implements BookDao {
 
     private final NamedParameterJdbcOperations jdbcOperations;
     private final BookExtractor extractor;
-    private final AuthorDao authorDao;
-    private final GenreDao genreDao;
 
-    public BookDaoJdbc(final NamedParameterJdbcOperations jdbcOperations, final AuthorDao authorDao, final GenreDao genreDao) {
+    public BookDaoJdbc(final NamedParameterJdbcOperations jdbcOperations) {
         this.jdbcOperations = jdbcOperations;
         this.extractor = new BookExtractor();
-        this.authorDao = authorDao;
-        this.genreDao = genreDao;
     }
 
     @Override
@@ -48,14 +43,8 @@ public class BookDaoJdbc implements BookDao {
     @SuppressWarnings("ConstantConditions")
     private long insert(final Book book) {
         var params = new MapSqlParameterSource();
-        var author = book.getAuthor();
-        if (author != null) {
-            params.addValue("author_id", getAuthorId(author));
-        }
-        var genre = book.getGenre();
-        if (genre != null) {
-            params.addValue("genre_id", getGenreId(genre));
-        }
+        handleBookAuthor(params, book.getAuthor());
+        handleBookGenre(params, book.getGenre());
         params.addValue("title", book.getTitle());
         params.addValue("year", book.getYear());
         var keyHolder = new GeneratedKeyHolder();
@@ -69,26 +58,30 @@ public class BookDaoJdbc implements BookDao {
         params.addValue("id", book.getId());
         params.addValue("title", book.getTitle());
         params.addValue("year", book.getYear());
-        var author = book.getAuthor();
-        if (author != null) {
-            params.addValue("author_id", getAuthorId(author));
-        }
-        var genre = book.getGenre();
-        if (genre != null) {
-            params.addValue("genre_id", getGenreId(genre));
-        }
+        handleBookAuthor(params, book.getAuthor());
+        handleBookGenre(params, book.getGenre());
         jdbcOperations.update("update books set title = :title, year = :year, author_id = :author_id," +
                 " genre_id = :genre_id where id = :id", params);
     }
 
-    private long getAuthorId(final Author author) {
-        return authorDao.findIdByName(author.getName())
-                .orElseGet(() -> authorDao.insert(author));
+    private void handleBookAuthor(final MapSqlParameterSource params, final Author author) {
+        if (author != null) {
+            if (author.getId() != 0L) {
+                params.addValue("author_id", author.getId());
+            } else {
+                throw new DaoException("Author of book has no id and must be saved first.");
+            }
+        }
     }
 
-    private long getGenreId(final Genre genre) {
-        return genreDao.findIdByName(genre.getName())
-                .orElseGet(() -> genreDao.insert(genre));
+    private void handleBookGenre(final MapSqlParameterSource params, final Genre genre) {
+        if (genre != null) {
+            if (genre.getId() != 0L) {
+                params.addValue("genre_id", genre.getId());
+            } else {
+                throw new DaoException("Genre of book has no id and must be saved first.");
+            }
+        }
     }
 
     @Override
@@ -122,7 +115,7 @@ public class BookDaoJdbc implements BookDao {
     public List<Book> findAllByAuthorId(final long authorId) {
         var params = new HashMap<String, Object>();
         params.put("author_id", authorId);
-        var books =  jdbcOperations.query(
+        var books = jdbcOperations.query(
                 "select b.id, b.title, b.year," +
                         " a.id as author_id, a.name as author_name," +
                         " g.id as genre_id, g.name as genre_name" +
@@ -158,7 +151,7 @@ public class BookDaoJdbc implements BookDao {
                 var genreId = rs.getLong("author_id");
                 var genre = genres.get(genreId);
                 if (genre == null) {
-                    genre = new Genre(genreId, rs.getString("genre_name"));
+                    genre = new Genre(genreId, rs.getString("genre_name"), null);
                     genres.put(genreId, genre);
                 }
 

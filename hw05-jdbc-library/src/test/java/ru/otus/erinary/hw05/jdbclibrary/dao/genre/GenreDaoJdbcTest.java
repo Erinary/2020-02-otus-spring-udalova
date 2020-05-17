@@ -50,6 +50,7 @@ class GenreDaoJdbcTest {
     void testFindById() {
         var genre = repository.findById(1).orElseThrow();
         assertEquals("genre1", genre.getName());
+        assertNull(genre.getBooks());
     }
 
     @Test
@@ -63,6 +64,7 @@ class GenreDaoJdbcTest {
         var genres = repository.findAll();
         assertFalse(genres.isEmpty());
         assertEquals(3, genres.size());
+        assertNull(genres.get(0).getBooks());
 
         var genreNames = genres.stream().map(Genre::getName).collect(Collectors.toList());
         assertTrue(genreNames.containsAll(List.of("genre1", "genre2", "genre3")));

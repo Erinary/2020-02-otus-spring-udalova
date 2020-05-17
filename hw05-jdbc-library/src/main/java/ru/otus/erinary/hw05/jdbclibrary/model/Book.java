@@ -13,4 +13,10 @@ public class Book {
     private Author author;
     private Genre genre;
 
+    public Book(final String title, final int year, final Author author, final Genre genre) {
+        this.title = title;
+        this.year = year;
+        this.author = author;
+        this.genre = genre;
+    }
 }
