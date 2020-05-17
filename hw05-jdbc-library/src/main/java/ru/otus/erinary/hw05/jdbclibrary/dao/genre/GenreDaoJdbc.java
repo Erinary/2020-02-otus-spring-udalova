@@ -57,6 +57,14 @@ public class GenreDaoJdbc implements GenreDao {
     }
 
     @Override
+    public Optional<Long> findIdByName(final String name) {
+        var params = new HashMap<String, Object>();
+        params.put("name", name);
+        return Optional.ofNullable(
+                jdbcOperations.queryForObject("select id from genres where name = :name", params, Long.class));
+    }
+
+    @Override
     public List<Genre> findAll() {
         return jdbcOperations.query("select * from genres", mapper);
     }

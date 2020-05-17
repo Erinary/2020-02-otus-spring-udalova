@@ -10,9 +10,13 @@ import java.util.Optional;
  */
 public interface AuthorDao {
 
-    long save(Author author);
+    long insert(Author author);
+
+    void update(Author author);
 
     Optional<Author> findById(long id);
+
+    Optional<Long> findIdByName(String name);
 
     List<Author> findAll();
 

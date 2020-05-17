@@ -19,22 +19,22 @@ class GenreDaoJdbcTest {
     private GenreDaoJdbc repository;
 
     @Test
-    void insert() {
+    void testInsert() {
         var genres = repository.findAll();
         assertFalse(genres.isEmpty());
         assertEquals(3, genres.size());
 
         var genre = new Genre("genre4");
-        repository.insert(genre);
+        var id = repository.insert(genre);
 
         genres = repository.findAll();
-        assertEquals(4L, genre.getId());
+        assertEquals(id, genre.getId());
         assertEquals(4, genres.size());
         assertTrue(genres.contains(genre));
     }
 
     @Test
-    void update() {
+    void testUpdate() {
         var genre = repository.findById(1).orElseThrow();
         assertEquals("genre1", genre.getName());
 
@@ -47,9 +47,15 @@ class GenreDaoJdbcTest {
     }
 
     @Test
-    void findById() {
+    void testFindById() {
         var genre = repository.findById(1).orElseThrow();
         assertEquals("genre1", genre.getName());
+    }
+
+    @Test
+    void testFindIdByName() {
+        var id = repository.findIdByName("genre1").orElseThrow();
+        assertEquals(1L, id);
     }
 
     @Test

@@ -16,6 +16,8 @@ public interface GenreDao {
 
     Optional<Genre> findById(long id);
 
+    Optional<Long> findIdByName(String name);
+
     List<Genre> findAll();
 
     void delete(long id);

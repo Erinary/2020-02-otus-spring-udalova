@@ -10,11 +10,13 @@ import java.util.Optional;
  */
 public interface BookDao {
 
-    long save(Book book);
+    Book save(Book book);
 
     Optional<Book> findById(long id);
 
     List<Book> findAll();
+
+    List<Book> findAllByAuthorId(long authorId);
 
     void delete(long id);
 }
