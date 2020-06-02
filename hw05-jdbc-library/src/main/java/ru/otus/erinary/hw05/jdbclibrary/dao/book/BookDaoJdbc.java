@@ -127,6 +127,21 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
+    public List<Book> findAllByGenreId(final long genreId) {
+        var params = new HashMap<String, Object>();
+        params.put("genre_id", genreId);
+        var books = jdbcOperations.query(
+                "select b.id, b.title, b.year," +
+                        " a.id as author_id, a.name as author_name," +
+                        " g.id as genre_id, g.name as genre_name" +
+                        " from books as b" +
+                        " left join authors as a on b.author_id = a.id" +
+                        " left join genres as g on b.genre_id = g.id" +
+                        " where b.genre_id = :genre_id", params, extractor);
+        return new ArrayList<>(Objects.requireNonNull(books).values());
+    }
+
+    @Override
     public void delete(final long id) {
         var params = new HashMap<String, Object>();
         params.put("id", id);

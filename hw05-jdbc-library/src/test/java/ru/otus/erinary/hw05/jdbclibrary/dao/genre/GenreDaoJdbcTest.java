@@ -54,6 +54,13 @@ class GenreDaoJdbcTest {
     }
 
     @Test
+    void testFindByName() {
+        var author = repository.findByName("genre1").orElseThrow();
+        assertEquals(1L, author.getId());
+        assertNull(author.getBooks());
+    }
+
+    @Test
     void testFindIdByName() {
         var id = repository.findIdByName("genre1").orElseThrow();
         assertEquals(1L, id);

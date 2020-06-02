@@ -1,5 +1,7 @@
 package ru.otus.erinary.hw05.jdbclibrary.dao.genre;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
@@ -22,10 +24,12 @@ public class GenreDaoJdbc implements GenreDao {
 
     private final NamedParameterJdbcOperations jdbcOperations;
     private final GenreRowMapper mapper;
+    private final GenreExtractor extractor;
 
     public GenreDaoJdbc(final NamedParameterJdbcOperations jdbcOperations) {
         this.jdbcOperations = jdbcOperations;
         this.mapper = new GenreRowMapper();
+        this.extractor = new GenreExtractor();
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -52,8 +56,14 @@ public class GenreDaoJdbc implements GenreDao {
     public Optional<Genre> findById(final long id) {
         var params = new HashMap<String, Object>();
         params.put("id", id);
-        return Optional.ofNullable(
-                jdbcOperations.queryForObject("select * from genres where id = :id", params, mapper));
+        return Optional.ofNullable(jdbcOperations.query("select * from genres where id = :id", params, extractor));
+    }
+
+    @Override
+    public Optional<Genre> findByName(final String name) {
+        var params = new HashMap<String, Object>();
+        params.put("name", name);
+        return Optional.ofNullable(jdbcOperations.query("select * from genres where name = :name", params, extractor));
     }
 
     @Override
@@ -61,7 +71,9 @@ public class GenreDaoJdbc implements GenreDao {
         var params = new HashMap<String, Object>();
         params.put("name", name);
         return Optional.ofNullable(
-                jdbcOperations.queryForObject("select id from genres where name = :name", params, Long.class));
+                jdbcOperations.query("select id from genres where name = :name", params,
+                        rs -> rs.next() ? rs.getLong("id") : 0L)
+        );
     }
 
     @Override
@@ -83,6 +95,22 @@ public class GenreDaoJdbc implements GenreDao {
             var id = rs.getLong("id");
             var name = rs.getString("name");
             return new Genre(id, name, null);
+        }
+    }
+
+    private static class GenreExtractor implements ResultSetExtractor<Genre> {
+
+        @Override
+        public Genre extractData(ResultSet rs) throws SQLException, DataAccessException {
+            if (rs.next()) {
+                return new Genre(
+                        rs.getLong("id"),
+                        rs.getString("name"),
+                        null
+                );
+            } else {
+                return null;
+            }
         }
     }
 }

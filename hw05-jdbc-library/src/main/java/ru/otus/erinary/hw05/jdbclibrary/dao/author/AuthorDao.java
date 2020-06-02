@@ -16,6 +16,8 @@ public interface AuthorDao {
 
     Optional<Author> findById(long id);
 
+    Optional<Author> findByName(String name);
+
     Optional<Long> findIdByName(String name);
 
     List<Author> findAll();
