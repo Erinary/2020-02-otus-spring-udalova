@@ -10,21 +10,21 @@ public interface LibraryService {
 
     List<Author> getAuthors();
 
-    Author getAuthorById(long id);
-
     Author getAuthorByName(String name);
+
+    void deleteAuthor(long id);
 
     List<Genre> getGenres();
 
-    Genre getGenreById(long id);
-
     Genre getGenreByName(String name);
+
+    void deleteGenre(long id);
 
     List<Book> getBooks();
 
     Book getBookById(long id);
 
-    Book saveBook(Book book);
+    Book saveBook(long id, String title, int year, String authorName, String genreName);
 
     void deleteBook(long id);
 }

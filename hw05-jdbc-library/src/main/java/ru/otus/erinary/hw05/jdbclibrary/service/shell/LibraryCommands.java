@@ -6,6 +6,8 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.otus.erinary.hw05.jdbclibrary.service.LibraryService;
 
+import java.util.Collections;
+
 @ShellComponent
 public class LibraryCommands {
 
@@ -27,7 +29,7 @@ public class LibraryCommands {
     }
 
     @ShellMethod(key = "author", value = "Get author by name")
-    public String getAuthor(@ShellOption({"-n", "-name"}) String name) {
+    public String getAuthor(@ShellOption({"-n", "-name"}) final String name) {
         var author = libraryService.getAuthorByName(name);
         if (author == null) {
             return String.format(NOT_FOUND, "author", "name");
@@ -38,6 +40,12 @@ public class LibraryCommands {
         }
     }
 
+    @ShellMethod(key = "delete-author", value = "Delete author by id")
+    public void deleteAuthor(@ShellOption({"-id"}) final long id) {
+        libraryService.deleteAuthor(id);
+        System.out.println(String.format("Author with id [%d] was deleted", id));
+    }
+
     @ShellMethod(key = "all-genres", value = "Get all genres in library")
     public String getAllGenres() {
         var genres = libraryService.getGenres();
@@ -45,7 +53,7 @@ public class LibraryCommands {
     }
 
     @ShellMethod(key = "genre", value = "Get genre by name")
-    public String getGenre(@ShellOption({"-n", "-name"}) String name) {
+    public String getGenre(@ShellOption({"-n", "-name"}) final String name) {
         var genre = libraryService.getGenreByName(name);
         if (genre == null) {
             return String.format(NOT_FOUND, "genre", "name");
@@ -54,6 +62,51 @@ public class LibraryCommands {
             System.out.println(String.format("NAME: %s", genre.getName()));
             return dataRenderer.getShortBookTable(genre.getBooks());
         }
+    }
+
+    @ShellMethod(key = "delete-genre", value = "Delete genre by id")
+    public void deleteGenre(@ShellOption({"-id"}) final long id) {
+        libraryService.deleteGenre(id);
+        System.out.println(String.format("Genre with id [%d] was deleted", id));
+    }
+
+    @ShellMethod(key = "all-books", value = "Get all books")
+    public String getAllBooks() {
+        var books = libraryService.getBooks();
+        return dataRenderer.getFullBookTable(books);
+    }
+
+    @ShellMethod(key = "book", value = "Get book by id")
+    public String getBook(@ShellOption({"-id"}) final long id) {
+        var book = libraryService.getBookById(id);
+        if (book == null) {
+            return String.format(NOT_FOUND, "book", "id");
+        } else {
+            return dataRenderer.getFullBookTable(Collections.singletonList(book));
+        }
+    }
+
+    @ShellMethod(key = "save-book", value = "Create new book or update existed")
+    public String saveBook(
+            @ShellOption({"-id"}) final long id,
+            @ShellOption({"-t", "-title"}) final String title,
+            @ShellOption({"-y", "-year"}) final int year,
+            @ShellOption({"-a", "-author"}) final String authorName,
+            @ShellOption({"-g", "-genre"}) final String genreName
+    ) {
+        var book = libraryService.saveBook(id, title, year, authorName, genreName);
+        if (id != 0) {
+            System.out.println("Book was updated");
+        } else {
+            System.out.println("New book was saved");
+        }
+        return dataRenderer.getFullBookTable(Collections.singletonList(book));
+    }
+
+    @ShellMethod(key = "delete-book", value = "Delete book by id")
+    public void deleteBook(@ShellOption({"-id"}) final long id) {
+        libraryService.deleteBook(id);
+        System.out.println(String.format("Book with id [%d] was deleted", id));
     }
 
 }

@@ -15,7 +15,7 @@ import java.util.List;
 public class DataRenderer {
 
     private static final int AVAILABLE_WIDTH = 80;
-    private static final String[] BOOK_COLUMNS = {"ID", "TITLE", "YEAR"};
+    private static final String[] BOOK_COLUMNS = {"BOOK_ID", "TITLE", "YEAR"};
     private static final String[] FULL_BOOK_COLUMNS = {"ID", "TITLE", "YEAR", "AUTHOR", "GENRE"};
     private static final String[] AUTHOR_COLUMNS = {"ID", "NAME"};
     private static final String[] GENRE_COLUMNS = {"ID", "NAME"};
