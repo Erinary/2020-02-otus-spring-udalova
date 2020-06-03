@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class Book {
 
-    private long id;
+    private Long id;
     private String title;
     private int year;
     private Author author;

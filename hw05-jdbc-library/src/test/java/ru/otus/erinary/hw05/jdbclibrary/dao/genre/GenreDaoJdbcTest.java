@@ -35,20 +35,20 @@ class GenreDaoJdbcTest {
 
     @Test
     void testUpdate() {
-        var genre = repository.findById(1).orElseThrow();
+        var genre = repository.findById(1L).orElseThrow();
         assertEquals("genre1", genre.getName());
 
         var newName = "genre5";
         genre.setName(newName);
         repository.update(genre);
 
-        var loadedGenre = repository.findById(1).orElseThrow();
+        var loadedGenre = repository.findById(1L).orElseThrow();
         assertEquals(newName, loadedGenre.getName());
     }
 
     @Test
     void testFindById() {
-        var genre = repository.findById(1).orElseThrow();
+        var genre = repository.findById(1L).orElseThrow();
         assertEquals("genre1", genre.getName());
         assertNull(genre.getBooks());
     }
@@ -83,7 +83,7 @@ class GenreDaoJdbcTest {
         assertFalse(genres.isEmpty());
         assertEquals(3, genres.size());
 
-        repository.delete(1);
+        repository.delete(1L);
         genres = repository.findAll();
         assertEquals(2, genres.size());
         var genreIds = genres.stream().map(Genre::getId).collect(Collectors.toList());

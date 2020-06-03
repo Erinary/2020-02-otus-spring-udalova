@@ -12,13 +12,13 @@ public interface BookDao {
 
     Book save(Book book);
 
-    Optional<Book> findById(long id);
+    Optional<Book> findById(Long id);
 
     List<Book> findAll();
 
-    List<Book> findAllByAuthorId(long authorId);
+    List<Book> findAllByAuthorId(Long authorId);
 
-    List<Book> findAllByGenreId(long genreId);
+    List<Book> findAllByGenreId(Long genreId);
 
-    void delete(long id);
+    void delete(Long id);
 }

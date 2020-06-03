@@ -32,12 +32,12 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public long insert(final Author author) {
+    public Long insert(final Author author) {
         var params = new MapSqlParameterSource();
         params.addValue("name", author.getName());
         var keyHolder = new GeneratedKeyHolder();
         jdbcOperations.update("insert into authors (name) values (:name)", params, keyHolder);
-        var id = (long) keyHolder.getKey();
+        var id = (Long) keyHolder.getKey();
         author.setId(id);
         return id;
     }
@@ -51,7 +51,7 @@ public class AuthorDaoJdbc implements AuthorDao {
     }
 
     @Override
-    public Optional<Author> findById(final long id) {
+    public Optional<Author> findById(final Long id) {
         var params = new HashMap<String, Object>();
         params.put("id", id);
         return Optional.ofNullable(jdbcOperations.query("select * from authors where id = :id", params, extractor));
@@ -70,7 +70,7 @@ public class AuthorDaoJdbc implements AuthorDao {
         params.addValue("name", name);
         return Optional.ofNullable(
                 jdbcOperations.query("select id from authors where name = :name", params,
-                        rs -> rs.next() ? rs.getLong("id") : 0L)
+                        rs -> rs.next() ? rs.getLong("id") : null)
         );
     }
 
@@ -80,7 +80,7 @@ public class AuthorDaoJdbc implements AuthorDao {
     }
 
     @Override
-    public void delete(final long id) {
+    public void delete(final Long id) {
         var params = new HashMap<String, Object>();
         params.put("id", id);
         jdbcOperations.update("delete from authors where id = :id", params);

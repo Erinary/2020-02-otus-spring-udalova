@@ -42,20 +42,20 @@ class BookDaoJdbcTest {
         var books = repository.findAll();
         assertEquals(4, books.size());
 
-        var book = repository.findById(1).orElseThrow();
+        var book = repository.findById(1L).orElseThrow();
         assertEquals("title1", book.getTitle());
 
         var newTitle = "newTitle";
         book.setTitle(newTitle);
         repository.save(book);
 
-        var loadedBook = repository.findById(1).orElseThrow();
+        var loadedBook = repository.findById(1L).orElseThrow();
         assertEquals(newTitle, loadedBook.getTitle());
     }
 
     @Test
     void testFindById() {
-        var book = repository.findById(1).orElseThrow();
+        var book = repository.findById(1L).orElseThrow();
         assertEquals("title1", book.getTitle());
         assertEquals(2020, book.getYear());
 
@@ -86,7 +86,7 @@ class BookDaoJdbcTest {
 
     @Test
     void testFindAllByAuthorId() {
-        var books = repository.findAllByAuthorId(1);
+        var books = repository.findAllByAuthorId(1L);
         assertEquals(2, books.size());
         assertEquals("author1", books.get(0).getAuthor().getName());
         var bookTitles = books.stream().map(Book::getTitle).collect(Collectors.toList());
@@ -99,7 +99,7 @@ class BookDaoJdbcTest {
         assertFalse(books.isEmpty());
         assertEquals(4, books.size());
 
-        repository.delete(1);
+        repository.delete(1L);
         books = repository.findAll();
         assertEquals(3, books.size());
         var bookIds = books.stream().map(Book::getId).collect(Collectors.toList());

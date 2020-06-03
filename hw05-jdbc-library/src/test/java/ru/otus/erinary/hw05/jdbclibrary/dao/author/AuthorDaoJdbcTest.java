@@ -35,20 +35,20 @@ class AuthorDaoJdbcTest {
 
     @Test
     void testUpdate() {
-        var author = repository.findById(1).orElseThrow();
+        var author = repository.findById(1L).orElseThrow();
         assertEquals("author1", author.getName());
 
         var newName = "author5";
         author.setName(newName);
         repository.update(author);
 
-        var loadedAuthor = repository.findById(1).orElseThrow();
+        var loadedAuthor = repository.findById(1L).orElseThrow();
         assertEquals(newName, loadedAuthor.getName());
     }
 
     @Test
     void testFindById() {
-        var author = repository.findById(1).orElseThrow();
+        var author = repository.findById(1L).orElseThrow();
         assertEquals("author1", author.getName());
         assertNull(author.getBooks());
     }
@@ -83,7 +83,7 @@ class AuthorDaoJdbcTest {
         assertFalse(authors.isEmpty());
         assertEquals(3, authors.size());
 
-        repository.delete(1);
+        repository.delete(1L);
         authors = repository.findAll();
         assertEquals(2, authors.size());
         var authorIds = authors.stream().map(Author::getId).collect(Collectors.toList());

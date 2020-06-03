@@ -40,7 +40,7 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public void deleteAuthor(long id) {
+    public void deleteAuthor(Long id) {
         authorDao.delete(id);
     }
 
@@ -60,7 +60,7 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public void deleteGenre(long id) {
+    public void deleteGenre(Long id) {
         genreDao.delete(id);
     }
 
@@ -70,12 +70,12 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public Book getBookById(final long id) {
+    public Book getBookById(final Long id) {
         return bookDao.findById(id).orElse(null);
     }
 
     @Override
-    public Book saveBook(final long id, final String title, final int year, final String authorName, final String genreName) {
+    public Book saveBook(final Long id, final String title, final int year, final String authorName, final String genreName) {
         var author = authorDao.findByName(authorName)
                 .orElseGet(() -> {
                     var a = new Author(authorName);
@@ -93,7 +93,7 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public void deleteBook(long id) {
+    public void deleteBook(Long id) {
         bookDao.delete(id);
     }
 }

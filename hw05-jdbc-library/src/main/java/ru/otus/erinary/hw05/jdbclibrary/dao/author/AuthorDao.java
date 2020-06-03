@@ -10,11 +10,11 @@ import java.util.Optional;
  */
 public interface AuthorDao {
 
-    long insert(Author author);
+    Long insert(Author author);
 
     void update(Author author);
 
-    Optional<Author> findById(long id);
+    Optional<Author> findById(Long id);
 
     Optional<Author> findByName(String name);
 
@@ -22,5 +22,5 @@ public interface AuthorDao {
 
     List<Author> findAll();
 
-    void delete(long id);
+    void delete(Long id);
 }

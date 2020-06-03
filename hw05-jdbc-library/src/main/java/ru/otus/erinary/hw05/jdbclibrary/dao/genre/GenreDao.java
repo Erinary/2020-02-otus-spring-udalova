@@ -10,11 +10,11 @@ import java.util.Optional;
  */
 public interface GenreDao {
 
-    long insert(Genre genre);
+    Long insert(Genre genre);
 
     void update(Genre genre);
 
-    Optional<Genre> findById(long id);
+    Optional<Genre> findById(Long id);
 
     Optional<Genre> findByName(String name);
 
@@ -22,5 +22,5 @@ public interface GenreDao {
 
     List<Genre> findAll();
 
-    void delete(long id);
+    void delete(Long id);
 }

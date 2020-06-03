@@ -34,12 +34,12 @@ public class GenreDaoJdbc implements GenreDao {
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public long insert(final Genre genre) {
+    public Long insert(final Genre genre) {
         var params = new MapSqlParameterSource();
         params.addValue("name", genre.getName());
         var keyHolder = new GeneratedKeyHolder();
         jdbcOperations.update("insert into genres (name) values (:name)", params, keyHolder);
-        var id = (long) keyHolder.getKey();
+        var id = (Long) keyHolder.getKey();
         genre.setId(id);
         return id;
     }
@@ -53,7 +53,7 @@ public class GenreDaoJdbc implements GenreDao {
     }
 
     @Override
-    public Optional<Genre> findById(final long id) {
+    public Optional<Genre> findById(final Long id) {
         var params = new HashMap<String, Object>();
         params.put("id", id);
         return Optional.ofNullable(jdbcOperations.query("select * from genres where id = :id", params, extractor));
@@ -72,7 +72,7 @@ public class GenreDaoJdbc implements GenreDao {
         params.put("name", name);
         return Optional.ofNullable(
                 jdbcOperations.query("select id from genres where name = :name", params,
-                        rs -> rs.next() ? rs.getLong("id") : 0L)
+                        rs -> rs.next() ? rs.getLong("id") : null)
         );
     }
 
@@ -82,7 +82,7 @@ public class GenreDaoJdbc implements GenreDao {
     }
 
     @Override
-    public void delete(final long id) {
+    public void delete(final Long id) {
         var params = new HashMap<String, Object>();
         params.put("id", id);
         jdbcOperations.update("delete from genres where id = :id", params);
