@@ -1,7 +1,6 @@
 package ru.otus.erinary.hw05.jdbclibrary.dao.author;
 
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
@@ -11,7 +10,9 @@ import ru.otus.erinary.hw05.jdbclibrary.model.Author;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Имплементация {@link AuthorDao}
@@ -22,15 +23,12 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     private final NamedParameterJdbcOperations jdbcOperations;
     private final AuthorRowMapper mapper;
-    private final AuthorExtractor extractor;
 
     public AuthorDaoJdbc(final NamedParameterJdbcOperations jdbcOperations) {
         this.jdbcOperations = jdbcOperations;
         this.mapper = new AuthorRowMapper();
-        this.extractor = new AuthorExtractor();
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public Long insert(final Author author) {
         var params = new MapSqlParameterSource();
@@ -54,14 +52,22 @@ public class AuthorDaoJdbc implements AuthorDao {
     public Optional<Author> findById(final Long id) {
         var params = new HashMap<String, Object>();
         params.put("id", id);
-        return Optional.ofNullable(jdbcOperations.query("select * from authors where id = :id", params, extractor));
+        try {
+            return Optional.ofNullable(jdbcOperations.queryForObject("select * from authors where id = :id", params, mapper));
+        } catch (DataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
     public Optional<Author> findByName(final String name) {
         var params = new HashMap<String, Object>();
         params.put("name", name);
-        return Optional.ofNullable(jdbcOperations.query("select * from authors where name = :name", params, extractor));
+        try {
+            return Optional.ofNullable(jdbcOperations.queryForObject("select * from authors where name = :name", params, mapper));
+        } catch (DataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -96,19 +102,4 @@ public class AuthorDaoJdbc implements AuthorDao {
         }
     }
 
-    private static class AuthorExtractor implements ResultSetExtractor<Author> {
-
-        @Override
-        public Author extractData(ResultSet rs) throws SQLException, DataAccessException {
-            if (rs.next()) {
-                return new Author(
-                        rs.getLong("id"),
-                        rs.getString("name"),
-                        null
-                );
-            } else {
-                return null;
-            }
-        }
-    }
 }

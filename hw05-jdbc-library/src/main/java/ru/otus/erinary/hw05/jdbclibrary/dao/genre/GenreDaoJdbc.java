@@ -24,15 +24,12 @@ public class GenreDaoJdbc implements GenreDao {
 
     private final NamedParameterJdbcOperations jdbcOperations;
     private final GenreRowMapper mapper;
-    private final GenreExtractor extractor;
 
     public GenreDaoJdbc(final NamedParameterJdbcOperations jdbcOperations) {
         this.jdbcOperations = jdbcOperations;
         this.mapper = new GenreRowMapper();
-        this.extractor = new GenreExtractor();
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public Long insert(final Genre genre) {
         var params = new MapSqlParameterSource();
@@ -56,14 +53,22 @@ public class GenreDaoJdbc implements GenreDao {
     public Optional<Genre> findById(final Long id) {
         var params = new HashMap<String, Object>();
         params.put("id", id);
-        return Optional.ofNullable(jdbcOperations.query("select * from genres where id = :id", params, extractor));
+        try {
+            return Optional.ofNullable(jdbcOperations.queryForObject("select * from genres where id = :id", params, mapper));
+        } catch (DataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
     public Optional<Genre> findByName(final String name) {
         var params = new HashMap<String, Object>();
         params.put("name", name);
-        return Optional.ofNullable(jdbcOperations.query("select * from genres where name = :name", params, extractor));
+        try {
+            return Optional.ofNullable(jdbcOperations.queryForObject("select * from genres where name = :name", params, mapper));
+        } catch (DataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -98,19 +103,4 @@ public class GenreDaoJdbc implements GenreDao {
         }
     }
 
-    private static class GenreExtractor implements ResultSetExtractor<Genre> {
-
-        @Override
-        public Genre extractData(ResultSet rs) throws SQLException, DataAccessException {
-            if (rs.next()) {
-                return new Genre(
-                        rs.getLong("id"),
-                        rs.getString("name"),
-                        null
-                );
-            } else {
-                return null;
-            }
-        }
-    }
 }
