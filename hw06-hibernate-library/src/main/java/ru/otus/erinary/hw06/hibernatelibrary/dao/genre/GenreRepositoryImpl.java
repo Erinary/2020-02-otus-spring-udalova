@@ -1,39 +1,37 @@
-package ru.otus.erinary.hw06.hibernatelibrary.dao.author;
+package ru.otus.erinary.hw06.hibernatelibrary.dao.genre;
 
 import org.springframework.stereotype.Repository;
-import ru.otus.erinary.hw06.hibernatelibrary.model.Author;
+import ru.otus.erinary.hw06.hibernatelibrary.model.Genre;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Имплементация {@link AuthorRepository}
+ * Имплементация {@link GenreRepository}
  */
 @Repository
-@Transactional
-public class AuthorRepositoryImpl implements AuthorRepository {
+public class GenreRepositoryImpl implements GenreRepository {
 
     @PersistenceContext
     private EntityManager manager;
 
     @Override
-    public Long insert(final Author author) {
-        manager.persist(author);
-        return author.getId();
+    public Long insert(final Genre genre) {
+        manager.persist(genre);
+        return genre.getId();
     }
 
     @Override
-    public void update(final Author author) {
-        manager.merge(author);
+    public void update(final Genre genre) {
+        manager.merge(genre);
     }
 
     @Override
-    public Optional<Author> findById(final Long id) {
-        var query = manager.createQuery("select a from Author a where a.id = :id", Author.class);
+    public Optional<Genre> findById(final Long id) {
+        var query = manager.createQuery("select g from Genre g where g.id = :id", Genre.class);
         query.setParameter("id", id);
         try {
             return Optional.ofNullable(query.getSingleResult());
@@ -43,8 +41,8 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     }
 
     @Override
-    public Optional<Author> findByName(final String name) {
-        var query = manager.createQuery("select a from Author a where a.name = :name", Author.class);
+    public Optional<Genre> findByName(final String name) {
+        var query = manager.createQuery("select g from Genre g where g.name = :name", Genre.class);
         query.setParameter("name", name);
         try {
             return Optional.ofNullable(query.getSingleResult());
@@ -55,20 +53,20 @@ public class AuthorRepositoryImpl implements AuthorRepository {
 
     @Override
     public Optional<Long> findIdByName(final String name) {
-        var query = manager.createQuery("select a.id from Author a where a.name = :name", Long.class);
+        var query = manager.createQuery("select g.id from Genre g where g.name = :name", Long.class);
         query.setParameter("name", name);
         return Optional.ofNullable(query.getSingleResult());
     }
 
     //TODO N+1 requests
     @Override
-    public List<Author> findAll() {
-        return manager.createQuery("select a from Author a", Author.class).getResultList();
+    public List<Genre> findAll() {
+        return manager.createQuery("select g from Genre g", Genre.class).getResultList();
     }
 
     @Override
     public void delete(final Long id) {
-        var query = manager.createQuery("delete from Author a where a.id = :id");
+        var query = manager.createQuery("delete from Genre g where g.id = :id");
         query.setParameter("id", id);
         query.executeUpdate();
     }

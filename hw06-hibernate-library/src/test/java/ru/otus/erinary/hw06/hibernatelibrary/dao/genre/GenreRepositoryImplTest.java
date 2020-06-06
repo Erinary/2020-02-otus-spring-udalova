@@ -2,7 +2,6 @@ package ru.otus.erinary.hw06.hibernatelibrary.dao.genre;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Genre;
@@ -13,11 +12,11 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@Import({GenreDaoJdbc.class})
-class GenreDaoJdbcTest {
+@Import({GenreRepositoryImpl.class})
+class GenreRepositoryImplTest {
 
     @Autowired
-    private GenreDaoJdbc repository;
+    private GenreRepositoryImpl repository;
 
     @Test
     void testInsert() {
