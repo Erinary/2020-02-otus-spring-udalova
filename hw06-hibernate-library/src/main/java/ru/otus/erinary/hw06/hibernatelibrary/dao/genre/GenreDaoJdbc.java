@@ -15,11 +15,11 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Имплементация {@link GenreDao}
+ * Имплементация {@link GenreRepository}
  */
 @SuppressWarnings({"SqlResolve"})
 @Repository
-public class GenreDaoJdbc implements GenreDao {
+public class GenreDaoJdbc implements GenreRepository {
 
     private final NamedParameterJdbcOperations jdbcOperations;
     private final GenreRowMapper mapper;

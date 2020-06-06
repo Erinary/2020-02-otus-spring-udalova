@@ -2,7 +2,7 @@ package ru.otus.erinary.hw06.hibernatelibrary.dao.author;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Author;
 
@@ -11,12 +11,12 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@JdbcTest
-@Import({AuthorDaoJdbc.class})
-class AuthorDaoJdbcTest {
+@DataJpaTest
+@Import({AuthorRepositoryImpl.class})
+class AuthorRepositoryImplTest {
 
     @Autowired
-    private AuthorDaoJdbc repository;
+    private AuthorRepositoryImpl repository;
 
     @Test
     void testInsert() {
@@ -50,14 +50,14 @@ class AuthorDaoJdbcTest {
     void testFindById() {
         var author = repository.findById(1L).orElseThrow();
         assertEquals("author1", author.getName());
-        assertNull(author.getBooks());
+        assertFalse(author.getBooks().isEmpty());
     }
 
     @Test
     void testFindByName() {
         var author = repository.findByName("author1").orElseThrow();
         assertEquals(1L, author.getId());
-        assertNull(author.getBooks());
+        assertFalse(author.getBooks().isEmpty());
     }
 
     @Test
@@ -71,7 +71,7 @@ class AuthorDaoJdbcTest {
         var authors = repository.findAll();
         assertFalse(authors.isEmpty());
         assertEquals(3, authors.size());
-        assertNull(authors.get(0).getBooks());
+        assertFalse(authors.get(0).getBooks().isEmpty());
 
         var authorNames = authors.stream().map(Author::getName).collect(Collectors.toList());
         assertTrue(authorNames.containsAll(List.of("author1", "author2", "author3")));

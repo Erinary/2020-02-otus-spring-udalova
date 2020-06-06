@@ -3,6 +3,7 @@ package ru.otus.erinary.hw06.hibernatelibrary.dao.genre;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Genre;
 
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@JdbcTest
+@DataJpaTest
 @Import({GenreDaoJdbc.class})
 class GenreDaoJdbcTest {
 
@@ -50,14 +51,14 @@ class GenreDaoJdbcTest {
     void testFindById() {
         var genre = repository.findById(1L).orElseThrow();
         assertEquals("genre1", genre.getName());
-        assertNull(genre.getBooks());
+        assertFalse(genre.getBooks().isEmpty());
     }
 
     @Test
     void testFindByName() {
         var author = repository.findByName("genre1").orElseThrow();
         assertEquals(1L, author.getId());
-        assertNull(author.getBooks());
+        assertFalse(author.getBooks().isEmpty());
     }
 
     @Test
@@ -71,7 +72,7 @@ class GenreDaoJdbcTest {
         var genres = repository.findAll();
         assertFalse(genres.isEmpty());
         assertEquals(3, genres.size());
-        assertNull(genres.get(0).getBooks());
+        assertFalse(genres.get(0).getBooks().isEmpty());
 
         var genreNames = genres.stream().map(Genre::getName).collect(Collectors.toList());
         assertTrue(genreNames.containsAll(List.of("genre1", "genre2", "genre3")));

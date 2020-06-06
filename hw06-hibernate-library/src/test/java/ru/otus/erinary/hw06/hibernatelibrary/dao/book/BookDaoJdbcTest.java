@@ -3,6 +3,7 @@ package ru.otus.erinary.hw06.hibernatelibrary.dao.book;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Author;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Book;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@JdbcTest
+@DataJpaTest
 @Import({BookDaoJdbc.class})
 class BookDaoJdbcTest {
 

@@ -8,7 +8,7 @@ import java.util.Optional;
 /**
  * Интерфейс репозитория для {@link Genre}
  */
-public interface GenreDao {
+public interface GenreRepository {
 
     Long insert(Genre genre);
 

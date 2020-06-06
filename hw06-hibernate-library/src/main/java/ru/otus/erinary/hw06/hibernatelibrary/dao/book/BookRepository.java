@@ -8,7 +8,7 @@ import java.util.Optional;
 /**
  * Интерфейс репозитория для {@link Book}
  */
-public interface BookDao {
+public interface BookRepository {
 
     Book save(Book book);
 

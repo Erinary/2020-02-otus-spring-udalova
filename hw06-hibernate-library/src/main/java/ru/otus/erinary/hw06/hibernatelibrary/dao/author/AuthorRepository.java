@@ -8,7 +8,7 @@ import java.util.Optional;
 /**
  * Интерфейс репозитория для {@link Author}
  */
-public interface AuthorDao {
+public interface AuthorRepository {
 
     Long insert(Author author);
 

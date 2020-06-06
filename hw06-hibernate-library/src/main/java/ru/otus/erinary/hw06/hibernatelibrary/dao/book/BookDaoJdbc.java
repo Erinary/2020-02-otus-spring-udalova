@@ -16,11 +16,11 @@ import java.sql.SQLException;
 import java.util.*;
 
 /**
- * Имплементация {@link BookDao}
+ * Имплементация {@link BookRepository}
  */
 @SuppressWarnings({"SqlResolve"})
 @Repository
-public class BookDaoJdbc implements BookDao {
+public class BookDaoJdbc implements BookRepository {
 
     private final NamedParameterJdbcOperations jdbcOperations;
     private final BookExtractor extractor;
