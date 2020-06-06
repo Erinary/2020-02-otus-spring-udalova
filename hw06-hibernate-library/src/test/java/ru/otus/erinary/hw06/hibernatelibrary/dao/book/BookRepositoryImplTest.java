@@ -2,7 +2,6 @@ package ru.otus.erinary.hw06.hibernatelibrary.dao.book;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Author;
@@ -15,11 +14,11 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@Import({BookDaoJdbc.class})
-class BookDaoJdbcTest {
+@Import({BookRepositoryImpl.class})
+class BookRepositoryImplTest {
 
     @Autowired
-    private BookDaoJdbc repository;
+    private BookRepositoryImpl repository;
 
     @Test
     void testSaveNew() {
@@ -92,6 +91,15 @@ class BookDaoJdbcTest {
         assertEquals("author1", books.get(0).getAuthor().getName());
         var bookTitles = books.stream().map(Book::getTitle).collect(Collectors.toList());
         assertTrue(bookTitles.containsAll(List.of("title1", "title4")));
+    }
+
+    @Test
+    void testFindAllByGenreId() {
+        var books = repository.findAllByGenreId(2L);
+        assertEquals(2, books.size());
+        assertEquals("genre2", books.get(0).getGenre().getName());
+        var bookTitles = books.stream().map(Book::getTitle).collect(Collectors.toList());
+        assertTrue(bookTitles.containsAll(List.of("title2", "title4")));
     }
 
     @Test

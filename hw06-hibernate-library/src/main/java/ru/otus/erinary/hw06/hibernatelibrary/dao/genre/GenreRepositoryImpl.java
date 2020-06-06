@@ -6,6 +6,7 @@ import ru.otus.erinary.hw06.hibernatelibrary.model.Genre;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import java.util.Optional;
  * Имплементация {@link GenreRepository}
  */
 @Repository
+@Transactional
 public class GenreRepositoryImpl implements GenreRepository {
 
     @PersistenceContext

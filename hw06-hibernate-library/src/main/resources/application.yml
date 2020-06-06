@@ -11,5 +11,5 @@ spring:
       ddl-auto: validate
     properties:
       hibernate:
-        format-sql: true
-    show-sql: true
+        format-sql: false
+    show-sql: false
