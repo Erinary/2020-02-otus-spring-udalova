@@ -2,6 +2,7 @@ package ru.otus.erinary.hw06.hibernatelibrary.service;
 
 import ru.otus.erinary.hw06.hibernatelibrary.model.Author;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Book;
+import ru.otus.erinary.hw06.hibernatelibrary.model.Comment;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Genre;
 
 import java.util.List;
@@ -27,4 +28,10 @@ public interface LibraryService {
     Book saveBook(Long id, String title, int year, String authorName, String genreName);
 
     void deleteBook(Long id);
+
+    List<Comment> getBookComments(Long bookId);
+
+    Long saveComment(String text, String user, Long bookId);
+
+    void deleteComment(Long id);
 }

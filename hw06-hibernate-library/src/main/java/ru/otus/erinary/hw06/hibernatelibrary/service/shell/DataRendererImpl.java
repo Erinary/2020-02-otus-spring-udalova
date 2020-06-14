@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Author;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Book;
+import ru.otus.erinary.hw06.hibernatelibrary.model.Comment;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Genre;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -19,6 +21,10 @@ public class DataRendererImpl implements DataRenderer {
     private static final String[] FULL_BOOK_COLUMNS = {"ID", "TITLE", "YEAR", "AUTHOR", "GENRE"};
     private static final String[] AUTHOR_COLUMNS = {"ID", "NAME"};
     private static final String[] GENRE_COLUMNS = {"ID", "NAME"};
+    private static final String[] COMMENT_COLUMNS = {"ID", "USER", "TEXT", "DATE"};
+
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final String EMPTY_COMMENTS_MESSAGE = "[There are no comments yet]";
 
     @Override
     public String getShortBookTable(final List<Book> books) {
@@ -42,6 +48,16 @@ public class DataRendererImpl implements DataRenderer {
     public String getGenreTable(final List<Genre> genres) {
         var genreData = applyGenreModel(genres);
         return generateTable(genreData);
+    }
+
+    @Override
+    public String getCommentTable(List<Comment> comments) {
+        if (CollectionUtils.isEmpty(comments)) {
+            return EMPTY_COMMENTS_MESSAGE;
+        } else {
+            var commentsData = applyCommentModel(comments);
+            return generateTable(commentsData);
+        }
     }
 
     private String generateTable(final Object[][] data) {
@@ -121,6 +137,21 @@ public class DataRendererImpl implements DataRenderer {
             }
             return genreData;
         }
+    }
+
+    private String[][] applyCommentModel(final List<Comment> comments) {
+        var commentsData = new String[comments.size() + 1][];
+        commentsData[0] = COMMENT_COLUMNS;
+        for (int i = 1; i < commentsData.length; i++) {
+            var comment = comments.get(i - 1);
+            commentsData[i]  = new String[]{
+                    Long.toString(comment.getId()),
+                    comment.getUser(),
+                    comment.getText(),
+                    comment.getDate().format(FORMATTER)
+            };
+        }
+        return commentsData;
     }
 
 }

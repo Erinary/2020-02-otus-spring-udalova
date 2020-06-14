@@ -78,12 +78,22 @@ public class LibraryCommands {
     }
 
     @ShellMethod(key = "book", value = "Get book by id")
-    public String getBook(@ShellOption({"-id"}) final Long id) {
+    public String getBook(
+            @ShellOption({"-id"}) final Long id,
+            @ShellOption(value = {"-c", "-comments"}, defaultValue = "false") final boolean showComments) {
         var book = libraryService.getBookById(id);
         if (book == null) {
             return String.format(NOT_FOUND, "book", "id");
         } else {
-            return dataRenderer.getFullBookTable(Collections.singletonList(book));
+            var bookInfo = dataRenderer.getFullBookTable(Collections.singletonList(book));
+            if (!showComments) {
+                return bookInfo;
+            } else {
+                var comments = libraryService.getBookComments(book.getId());
+                System.out.println(bookInfo);
+                System.out.println("Comments:");
+                return dataRenderer.getCommentTable(comments);
+            }
         }
     }
 
@@ -112,6 +122,25 @@ public class LibraryCommands {
     public void deleteBook(@ShellOption({"-id"}) final Long id) {
         libraryService.deleteBook(id);
         System.out.println(String.format("Book with id [%d] was deleted", id));
+    }
+
+    @ShellMethod(key = "save-comment", value = "Save comment for book")
+    public String addComment(
+            @ShellOption({"-id"}) final Long id,
+            @ShellOption({"-t", "-text"}) final String text,
+            @ShellOption(value = {"-u", "-user"}, defaultValue = "Guest") final String user) {
+        try {
+            Long commentId = libraryService.saveComment(text, user, id);
+            return String.format("New comment with id [%d] was added", commentId);
+        } catch (DaoException e) {
+            return e.getMessage();
+        }
+    }
+
+    @ShellMethod(key = "delete-comment", value = "Delete book comment by id")
+    public void deleteComment(@ShellOption({"-id"}) final Long id) {
+        libraryService.deleteComment(id);
+        System.out.println(String.format("Comment with id [%d] was deleted", id));
     }
 
 }

@@ -12,7 +12,6 @@ import ru.otus.erinary.hw06.hibernatelibrary.model.Book;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Comment;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Genre;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -50,7 +49,7 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public void deleteAuthor(Long id) {
+    public void deleteAuthor(final Long id) {
         authorRepository.delete(id);
     }
 
@@ -70,7 +69,7 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public void deleteGenre(Long id) {
+    public void deleteGenre(final Long id) {
         genreRepository.delete(id);
     }
 
@@ -111,7 +110,25 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public void deleteBook(Long id) {
+    public void deleteBook(final Long id) {
         bookRepository.delete(id);
+    }
+
+    @Override
+    public List<Comment> getBookComments(final Long bookId) {
+        return commentRepository.findAllByBookId(bookId);
+    }
+
+    @Override
+    public Long saveComment(String text, String user, Long bookId) {
+        var book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new DaoException(String.format("Book with id [%d] does not exist", bookId)));
+        var comment = new Comment(text, user, book);
+        return commentRepository.insert(comment);
+    }
+
+    @Override
+    public void deleteComment(final Long id) {
+        commentRepository.delete(id);
     }
 }
