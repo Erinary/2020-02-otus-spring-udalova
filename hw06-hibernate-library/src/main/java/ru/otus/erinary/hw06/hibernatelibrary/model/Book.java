@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Getter
@@ -34,6 +35,9 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "genre_id")
     private Genre genre;
+
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    private List<Comment> comments;
 
     public Book(final String title, final int year, final Author author, final Genre genre) {
         this.title = title;

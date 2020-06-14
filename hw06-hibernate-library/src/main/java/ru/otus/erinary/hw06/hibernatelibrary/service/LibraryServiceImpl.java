@@ -4,24 +4,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.otus.erinary.hw06.hibernatelibrary.dao.author.AuthorRepository;
 import ru.otus.erinary.hw06.hibernatelibrary.dao.book.BookRepository;
+import ru.otus.erinary.hw06.hibernatelibrary.dao.comment.CommentRepository;
+import ru.otus.erinary.hw06.hibernatelibrary.dao.exception.DaoException;
 import ru.otus.erinary.hw06.hibernatelibrary.dao.genre.GenreRepository;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Author;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Book;
+import ru.otus.erinary.hw06.hibernatelibrary.model.Comment;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Genre;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class LibraryServiceImpl implements LibraryService {
+
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final GenreRepository genreRepository;
+    private final CommentRepository commentRepository;
 
     @Autowired
-    public LibraryServiceImpl(final BookRepository bookRepository, final AuthorRepository authorRepository, final GenreRepository genreRepository) {
+    public LibraryServiceImpl(final BookRepository bookRepository,
+                              final AuthorRepository authorRepository,
+                              final GenreRepository genreRepository,
+                              final CommentRepository commentRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.genreRepository = genreRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Override
@@ -88,7 +98,15 @@ public class LibraryServiceImpl implements LibraryService {
                     genreRepository.insert(g);
                     return g;
                 });
-        var book = new Book(id, title, year, author, genre);
+
+        var book = id == null ? new Book() : bookRepository
+                .findById(id)
+                .orElseThrow(() -> new DaoException(String.format("Book with id [%d] does not exist", id)));
+        book.setTitle(title);
+        book.setYear(year);
+        book.setAuthor(author);
+        book.setGenre(genre);
+
         return bookRepository.save(book);
     }
 

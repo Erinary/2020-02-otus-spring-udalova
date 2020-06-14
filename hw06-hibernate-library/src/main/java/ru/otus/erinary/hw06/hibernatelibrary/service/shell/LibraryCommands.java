@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
+import ru.otus.erinary.hw06.hibernatelibrary.dao.exception.DaoException;
 import ru.otus.erinary.hw06.hibernatelibrary.service.LibraryService;
 
 import java.util.Collections;
@@ -94,13 +95,17 @@ public class LibraryCommands {
             @ShellOption({"-a", "-author"}) final String authorName,
             @ShellOption({"-g", "-genre"}) final String genreName
     ) {
-        var book = libraryService.saveBook(id, title, year, authorName, genreName);
-        if (id != null) {
-            System.out.println("Book was updated");
-        } else {
-            System.out.println("New book was saved");
+        try {
+            var book = libraryService.saveBook(id, title, year, authorName, genreName);
+            if (id != null) {
+                System.out.println("Book was updated");
+            } else {
+                System.out.println("New book was saved");
+            }
+            return dataRenderer.getFullBookTable(Collections.singletonList(book));
+        } catch (DaoException e) {
+            return e.getMessage();
         }
-        return dataRenderer.getFullBookTable(Collections.singletonList(book));
     }
 
     @ShellMethod(key = "delete-book", value = "Delete book by id")

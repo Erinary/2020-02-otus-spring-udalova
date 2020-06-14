@@ -25,3 +25,21 @@ values ('title1',
         2018,
         (select id from authors where name = 'author1'),
         (select id from genres where name = 'genre2'));
+
+insert into comments(text, user, date, book_id)
+values ('comment text 1',
+        'user1',
+        '2019-06-16 10:15:30 Europe/Moscow',
+        (select id from books where title = 'title1')),
+       ('comment text 2',
+        'user2',
+        '2019-12-07 18:25:32 Europe/Moscow',
+        (select id from books where title = 'title1')),
+       ('comment text 3',
+        'user3',
+        '2019-04-26 11:05:30 Europe/Moscow',
+        (select id from books where title = 'title1')),
+       ('comment text 4',
+        'user4',
+        '2019-04-15 14:13:03 Europe/Moscow',
+        (select id from books where title = 'title2'));
