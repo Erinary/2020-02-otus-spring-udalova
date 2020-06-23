@@ -6,7 +6,6 @@ import ru.otus.erinary.hw06.hibernatelibrary.model.Genre;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +13,6 @@ import java.util.Optional;
  * Имплементация {@link GenreRepository}
  */
 @Repository
-@Transactional
 public class GenreRepositoryImpl implements GenreRepository {
 
     @PersistenceContext
@@ -33,13 +31,7 @@ public class GenreRepositoryImpl implements GenreRepository {
 
     @Override
     public Optional<Genre> findById(final Long id) {
-        var query = manager.createQuery("select g from Genre g where g.id = :id", Genre.class);
-        query.setParameter("id", id);
-        try {
-            return Optional.ofNullable(query.getSingleResult());
-        } catch (NoResultException e) {
-            return Optional.empty();
-        }
+        return Optional.ofNullable(manager.find(Genre.class, id));
     }
 
     @Override

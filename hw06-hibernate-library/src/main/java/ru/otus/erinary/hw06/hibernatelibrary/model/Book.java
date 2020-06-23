@@ -36,9 +36,6 @@ public class Book {
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
-    private List<Comment> comments;
-
     public Book(final String title, final int year, final Author author, final Genre genre) {
         this.title = title;
         this.year = year;

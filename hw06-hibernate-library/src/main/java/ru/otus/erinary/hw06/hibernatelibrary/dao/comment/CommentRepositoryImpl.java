@@ -4,9 +4,7 @@ import org.springframework.stereotype.Repository;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Comment;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +12,6 @@ import java.util.Optional;
  * Имплементация {@link CommentRepository}
  */
 @Repository
-@Transactional
 public class CommentRepositoryImpl implements CommentRepository {
 
     @PersistenceContext
@@ -28,13 +25,7 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public Optional<Comment> findById(final Long id) {
-        var query = manager.createQuery("select c from Comment c where c.id = :id", Comment.class);
-        query.setParameter("id", id);
-        try {
-            return Optional.ofNullable(query.getSingleResult());
-        } catch (NoResultException e) {
-            return Optional.empty();
-        }
+        return Optional.ofNullable(manager.find(Comment.class, id));
     }
 
     @Override

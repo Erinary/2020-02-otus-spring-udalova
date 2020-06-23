@@ -9,6 +9,7 @@ import ru.otus.erinary.hw06.hibernatelibrary.service.LibraryService;
 
 import java.util.Collections;
 
+@SuppressWarnings("unused")
 @ShellComponent
 public class LibraryCommands {
 

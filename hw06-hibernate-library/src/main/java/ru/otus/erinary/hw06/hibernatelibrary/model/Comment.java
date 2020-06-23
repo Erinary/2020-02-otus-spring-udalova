@@ -32,7 +32,7 @@ public class Comment {
     @Column(name = "date")
     private ZonedDateTime date;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book book;
 

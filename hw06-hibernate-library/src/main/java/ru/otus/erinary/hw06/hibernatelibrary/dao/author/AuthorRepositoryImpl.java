@@ -6,7 +6,6 @@ import ru.otus.erinary.hw06.hibernatelibrary.model.Author;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +13,6 @@ import java.util.Optional;
  * Имплементация {@link AuthorRepository}
  */
 @Repository
-@Transactional
 public class AuthorRepositoryImpl implements AuthorRepository {
 
     @PersistenceContext
@@ -33,13 +31,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
 
     @Override
     public Optional<Author> findById(final Long id) {
-        var query = manager.createQuery("select a from Author a where a.id = :id", Author.class);
-        query.setParameter("id", id);
-        try {
-            return Optional.ofNullable(query.getSingleResult());
-        } catch (NoResultException e) {
-            return Optional.empty();
-        }
+        return Optional.ofNullable(manager.find(Author.class, id));
     }
 
     @Override
