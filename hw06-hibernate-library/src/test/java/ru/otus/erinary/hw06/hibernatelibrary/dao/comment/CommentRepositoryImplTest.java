@@ -44,7 +44,7 @@ class CommentRepositoryImplTest {
         var comment = repository.findById(1L).orElseThrow();
         assertEquals("comment text 1", comment.getText());
         assertEquals("user1", comment.getUser());
-        assertEquals(ZonedDateTime.parse("2019-06-16T10:15:30+03:00[Europe/Moscow]"), comment.getDate());
+        assertEquals(ZonedDateTime.parse("2019-06-16T10:15:30+03:00[Europe/Moscow]").toInstant(), comment.getDate().toInstant());
         assertNotNull(comment.getBook());
         assertEquals(1L, comment.getBook().getId());
     }

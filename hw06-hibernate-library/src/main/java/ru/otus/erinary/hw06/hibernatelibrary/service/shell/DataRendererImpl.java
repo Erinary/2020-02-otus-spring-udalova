@@ -23,7 +23,7 @@ public class DataRendererImpl implements DataRenderer {
     private static final String[] GENRE_COLUMNS = {"ID", "NAME"};
     private static final String[] COMMENT_COLUMNS = {"ID", "USER", "TEXT", "DATE"};
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final String EMPTY_COMMENTS_MESSAGE = "[There are no comments yet]";
 
     @Override

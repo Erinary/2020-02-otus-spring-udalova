@@ -34,19 +34,20 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public List<Book> findAll() {
-        return manager.createQuery("select b from Book b", Book.class).getResultList();
+        return manager.createQuery("select b from Book b join fetch b.author join fetch b.genre", Book.class)
+                .getResultList();
     }
 
     @Override
     public List<Book> findAllByAuthorId(final Long authorId) {
-        var query = manager.createQuery("select b from Book b where b.author.id = :author_id", Book.class);
+        var query = manager.createQuery("select b from Book b join fetch b.author join fetch b.genre where b.author.id = :author_id", Book.class);
         query.setParameter("author_id", authorId);
         return query.getResultList();
     }
 
     @Override
     public List<Book> findAllByGenreId(final Long genreId) {
-        var query = manager.createQuery("select b from Book b where b.genre.id = :genre_id", Book.class);
+        var query = manager.createQuery("select b from Book b join fetch b.author join fetch b.genre where b.genre.id = :genre_id", Book.class);
         query.setParameter("genre_id", genreId);
         return query.getResultList();
     }
