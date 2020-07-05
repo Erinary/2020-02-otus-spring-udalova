@@ -3,7 +3,6 @@ package ru.otus.erinary.hw07.springdatalibrary.dao.author;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import ru.otus.erinary.hw07.springdatalibrary.model.Author;
 
 import java.util.List;
@@ -12,20 +11,19 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@Import({AuthorRepositoryImpl.class})
-class AuthorRepositoryImplTest {
+class AuthorRepositoryTest {
 
     @Autowired
-    private AuthorRepositoryImpl repository;
+    private AuthorRepository repository;
 
     @Test
-    void testInsert() {
+    void testSaveNew() {
         var authors = repository.findAll();
         assertFalse(authors.isEmpty());
         assertEquals(3, authors.size());
 
         var author = new Author("author4");
-        var id = repository.insert(author);
+        var id = repository.save(author).getId();
 
         authors = repository.findAll();
         assertEquals(id, author.getId());
@@ -34,13 +32,13 @@ class AuthorRepositoryImplTest {
     }
 
     @Test
-    void testUpdate() {
+    void testSaveExisted() {
         var author = repository.findById(1L).orElseThrow();
         assertEquals("author1", author.getName());
 
         var newName = "author5";
         author.setName(newName);
-        repository.update(author);
+        repository.save(author);
 
         var loadedAuthor = repository.findById(1L).orElseThrow();
         assertEquals(newName, loadedAuthor.getName());
@@ -83,7 +81,7 @@ class AuthorRepositoryImplTest {
         assertFalse(authors.isEmpty());
         assertEquals(3, authors.size());
 
-        repository.delete(1L);
+        repository.deleteById(1L);
         authors = repository.findAll();
         assertEquals(2, authors.size());
         var authorIds = authors.stream().map(Author::getId).collect(Collectors.toList());
