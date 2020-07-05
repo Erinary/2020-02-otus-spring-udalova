@@ -52,7 +52,6 @@ public class AuthorRepositoryImpl implements AuthorRepository {
         return Optional.ofNullable(query.getSingleResult());
     }
 
-    //TODO N+1 requests
     @Override
     public List<Author> findAll() {
         return manager.createQuery("select a from Author a", Author.class).getResultList();

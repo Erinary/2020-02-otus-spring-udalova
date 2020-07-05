@@ -52,7 +52,6 @@ public class GenreRepositoryImpl implements GenreRepository {
         return Optional.ofNullable(query.getSingleResult());
     }
 
-    //TODO N+1 requests
     @Override
     public List<Genre> findAll() {
         return manager.createQuery("select g from Genre g", Genre.class).getResultList();
