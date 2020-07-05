@@ -3,8 +3,7 @@ package ru.otus.erinary.hw07.springdatalibrary.dao.comment;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
-import ru.otus.erinary.hw07.springdatalibrary.dao.book.BookRepositoryImpl;
+import ru.otus.erinary.hw07.springdatalibrary.dao.book.BookRepository;
 import ru.otus.erinary.hw07.springdatalibrary.model.Comment;
 
 import java.time.ZonedDateTime;
@@ -14,14 +13,13 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@Import({BookRepositoryImpl.class})
 class CommentRepositoryTest {
 
     @Autowired
     private CommentRepository repository;
 
     @Autowired
-    private BookRepositoryImpl bookRepository;
+    private BookRepository bookRepository;
 
     @Test
     void testSaveNew() {

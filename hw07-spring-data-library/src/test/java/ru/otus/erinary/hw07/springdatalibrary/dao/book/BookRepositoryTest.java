@@ -3,7 +3,6 @@ package ru.otus.erinary.hw07.springdatalibrary.dao.book;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import ru.otus.erinary.hw07.springdatalibrary.model.Author;
 import ru.otus.erinary.hw07.springdatalibrary.model.Book;
 import ru.otus.erinary.hw07.springdatalibrary.model.Genre;
@@ -14,11 +13,10 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@Import({BookRepositoryImpl.class})
-class BookRepositoryImplTest {
+class BookRepositoryTest {
 
     @Autowired
-    private BookRepositoryImpl repository;
+    private BookRepository repository;
 
     @Test
     void testSaveNew() {
@@ -108,7 +106,7 @@ class BookRepositoryImplTest {
         assertFalse(books.isEmpty());
         assertEquals(4, books.size());
 
-        repository.delete(1L);
+        repository.deleteById(1L);
         books = repository.findAll();
         assertEquals(3, books.size());
         var bookIds = books.stream().map(Book::getId).collect(Collectors.toList());
