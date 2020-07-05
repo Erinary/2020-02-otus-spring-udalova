@@ -3,7 +3,6 @@ package ru.otus.erinary.hw07.springdatalibrary.dao.genre;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import ru.otus.erinary.hw07.springdatalibrary.model.Genre;
 
 import java.util.List;
@@ -12,20 +11,19 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@Import({GenreRepositoryImpl.class})
-class GenreRepositoryImplTest {
+class GenreRepositoryTest {
 
     @Autowired
-    private GenreRepositoryImpl repository;
+    private GenreRepository repository;
 
     @Test
-    void testInsert() {
+    void testSaveNew() {
         var genres = repository.findAll();
         assertFalse(genres.isEmpty());
         assertEquals(3, genres.size());
 
         var genre = new Genre("genre4");
-        var id = repository.insert(genre);
+        var id = repository.save(genre).getId();
 
         genres = repository.findAll();
         assertEquals(id, genre.getId());
@@ -34,13 +32,13 @@ class GenreRepositoryImplTest {
     }
 
     @Test
-    void testUpdate() {
+    void testSaveExisted() {
         var genre = repository.findById(1L).orElseThrow();
         assertEquals("genre1", genre.getName());
 
         var newName = "genre5";
         genre.setName(newName);
-        repository.update(genre);
+        repository.save(genre);
 
         var loadedGenre = repository.findById(1L).orElseThrow();
         assertEquals(newName, loadedGenre.getName());
@@ -83,7 +81,7 @@ class GenreRepositoryImplTest {
         assertFalse(genres.isEmpty());
         assertEquals(3, genres.size());
 
-        repository.delete(1L);
+        repository.deleteById(1L);
         genres = repository.findAll();
         assertEquals(2, genres.size());
         var genreIds = genres.stream().map(Genre::getId).collect(Collectors.toList());

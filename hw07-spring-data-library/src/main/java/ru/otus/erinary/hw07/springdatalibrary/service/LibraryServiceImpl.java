@@ -77,7 +77,7 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     @Transactional
     public void deleteGenre(final Long id) {
-        genreRepository.delete(id);
+        genreRepository.deleteById(id);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class LibraryServiceImpl implements LibraryService {
         var genre = genreRepository.findByName(genreName)
                 .orElseGet(() -> {
                     var g = new Genre(genreName);
-                    genreRepository.insert(g);
+                    genreRepository.save(g);
                     return g;
                 });
 
