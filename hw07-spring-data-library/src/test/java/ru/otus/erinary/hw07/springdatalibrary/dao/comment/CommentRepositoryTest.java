@@ -14,24 +14,24 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@Import({CommentRepositoryImpl.class, BookRepositoryImpl.class})
-class CommentRepositoryImplTest {
+@Import({BookRepositoryImpl.class})
+class CommentRepositoryTest {
 
     @Autowired
-    private CommentRepositoryImpl repository;
+    private CommentRepository repository;
 
     @Autowired
     private BookRepositoryImpl bookRepository;
 
     @Test
-    void testInsert() {
+    void testSaveNew() {
         var comments = repository.findAll();
         assertFalse(comments.isEmpty());
         assertEquals(4, comments.size());
 
         var book = bookRepository.findById(1L).orElseThrow();
         var comment = new Comment("text", "new_user", book);
-        var id = repository.insert(comment);
+        var id = repository.save(comment).getId();
 
         comments = repository.findAll();
         assertEquals(id, comment.getId());
@@ -76,7 +76,7 @@ class CommentRepositoryImplTest {
         assertFalse(comments.isEmpty());
         assertEquals(4, comments.size());
 
-        repository.delete(1L);
+        repository.deleteById(1L);
         comments = repository.findAll();
         assertEquals(3, comments.size());
         var authorIds = comments.stream().map(Comment::getId).collect(Collectors.toList());

@@ -137,12 +137,12 @@ public class LibraryServiceImpl implements LibraryService {
         var book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new DaoException(String.format("Book with id [%d] does not exist", bookId)));
         var comment = new Comment(text, user, book);
-        return commentRepository.insert(comment);
+        return commentRepository.save(comment).getId();
     }
 
     @Override
     @Transactional
     public void deleteComment(final Long id) {
-        commentRepository.delete(id);
+        commentRepository.deleteById(id);
     }
 }
