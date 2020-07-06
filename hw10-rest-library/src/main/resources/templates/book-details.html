@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="base :: default_head(~{::title})">
+    <title>Book Details</title>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <h2>Book details
+                <a href="book-form.html" class="btn btn-outline-primary btn-sm" role="button"
+                   th:href="@{/library/book/save(id=${bookModel.id})}">Edit</a>
+            </h2>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col">
+            <a href="javascript:history.back()" class="btn btn-info btn-sm" role="button">← Back</a>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col">
+            <a href="books.html" class="btn btn-info btn-sm" role="button" th:href="@{/library/books}">← To book
+                list</a>
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col">
+            <table class="table table-sm">
+                <thead class="thead-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Year</th>
+                    <th>Author</th>
+                    <th>Genre</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${bookModel.id}">1</td>
+                    <td th:text="${bookModel.title}">Book Title</td>
+                    <td th:text="${bookModel.year}">1970</td>
+                    <td th:text="${bookModel.authorName}">John Doe</td>
+                    <td th:text="${bookModel.genreName}">Crime fiction</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <h4>Comments
+                <a href="comment-form.html" class="btn btn-outline-primary btn-sm" role="button"
+                   th:href="@{/library/comment/save(id=${bookModel.id})}">Add new</a>
+            </h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-info" role="alert" th:if="${bookModel.comments.isEmpty()}">There are no comments yet</div>
+            <table class="table" th:unless="${bookModel.comments.isEmpty()}">
+                <thead class="thead-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Text</th>
+                    <th>User</th>
+                    <th>Date</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="comment : ${bookModel.comments}">
+                    <td th:text="${comment.id}">1</td>
+                    <td th:text="${comment.text}">Comment text here</td>
+                    <td th:text="${comment.user}">John Doe</td>
+                    <td th:text="${comment.date}">1970-01-01 00:00:00</td>
+                    <td>
+                        <form method="POST" th:action="@{/library/comment/delete(id=${comment.id})}">
+                            <button class="btn btn-outline-danger btn-sm" type="submit" name="delete" value="delete">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
