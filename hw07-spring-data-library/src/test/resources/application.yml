@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    initialization-mode: always
+    schema: schema.sql
+    data: data.sql
+
+  shell:
+    interactive:
+      enabled: false
+
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format-sql: true
+    show-sql: true
