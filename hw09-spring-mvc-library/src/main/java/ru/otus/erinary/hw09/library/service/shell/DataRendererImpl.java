@@ -1,8 +1,5 @@
 package ru.otus.erinary.hw09.library.service.shell;
 
-import org.springframework.shell.table.ArrayTableModel;
-import org.springframework.shell.table.BorderStyle;
-import org.springframework.shell.table.TableBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import ru.otus.erinary.hw09.library.model.Author;
@@ -61,10 +58,11 @@ public class DataRendererImpl implements DataRenderer {
     }
 
     private String generateTable(final Object[][] data) {
-        var model = new ArrayTableModel(data);
-        var builder = new TableBuilder(model);
-        builder.addFullBorder(BorderStyle.oldschool);
-        return builder.build().render(AVAILABLE_WIDTH);
+//        var model = new ArrayTableModel(data);
+//        var builder = new TableBuilder(model);
+//        builder.addFullBorder(BorderStyle.oldschool);
+//        return builder.build().render(AVAILABLE_WIDTH);
+        return null;
     }
 
     private String[][] applyBookShortModel(final List<Book> books) {

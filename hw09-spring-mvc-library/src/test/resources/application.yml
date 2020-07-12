@@ -1,12 +1,8 @@
 spring:
   datasource:
     initialization-mode: always
-    schema: schema.sql
-    data: data.sql
-
-  shell:
-    interactive:
-      enabled: false
+    schema: classpath:schema.sql
+    data: classpath:data.sql
 
   jpa:
     generate-ddl: false

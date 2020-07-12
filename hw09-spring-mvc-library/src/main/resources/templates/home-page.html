@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Web-Library Home Page</title>
+</head>
+<body>
+    <div>
+        <h1>My Little Library</h1>
+
+        <section>
+            <ul>
+                <li><a href="authors.html" th:href="@{/library/authors}">Authors</a></li>
+                <li><a href="genres.html" th:href="@{/library/genres}">Genres</a></li>
+            </ul>
+        </section>
+    </div>
+</body>
+</html>
