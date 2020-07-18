@@ -50,4 +50,17 @@ public class LibraryController {
         libraryService.deleteGenre(id);
         return "redirect:/library/genres";
     }
+
+    @GetMapping("/books")
+    public String getAllBooks(final Model model) {
+        var books = libraryService.getBooks();
+        model.addAttribute("books", books);
+        return "books";
+    }
+
+    @PostMapping("/book/delete")
+    public String deleteBook(@RequestParam(value = "id") final Long id) {
+        libraryService.deleteBook(id);
+        return "redirect:/library/books";
+    }
 }
