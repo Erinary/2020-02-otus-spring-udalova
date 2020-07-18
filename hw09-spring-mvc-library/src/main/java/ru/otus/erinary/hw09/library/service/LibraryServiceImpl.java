@@ -93,6 +93,11 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
+    public Book saveBook(Book book) {
+        return saveBook(book.getId(), book.getTitle(), book.getYear(), book.getAuthor().getName(), book.getGenre().getName());
+    }
+
+    @Override
     @Transactional
     public Book saveBook(final Long id, final String title, final int year, final String authorName, final String genreName) {
         var author = authorRepository.findByName(authorName)

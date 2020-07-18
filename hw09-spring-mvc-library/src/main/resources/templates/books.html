@@ -7,7 +7,13 @@
 <body>
 <div>
     <h2>Books</h2>
-    <a href="javascript:history.back()">← Back</a>
+    <div>
+        <a href="home-page.html" th:href="@{/library}">← Home</a>
+    </div>
+
+    <div>
+        <a href="book-form.html" th:href="@{/library/book/save}">Save new</a>
+    </div>
 
     <table>
         <thead>
@@ -20,14 +26,16 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="book : ${books}">
-            <td th:text="${book.id}">1</td>
-            <td th:text="${book.title}">Book Title</td>
-            <td th:text="${book.year}">1970</td>
-            <td th:text="${book.author.name}">John Doe</td>
-            <td th:text="${book.genre.name}">Crime fiction</td>
+        <tr th:each="bookModel : ${bookModels}">
+            <td th:text="${bookModel.id}">1</td>
             <td>
-                <form method="POST" th:action="@{/library/book/delete(id=${book.id})}">
+                <a href="book-details.html" th:href="@{/library/book/(id=${bookModel.id})}" th:text="${bookModel.title}">Book Title</a>
+            </td>
+            <td th:text="${bookModel.year}">1970</td>
+            <td th:text="${bookModel.authorName}">John Doe</td>
+            <td th:text="${bookModel.genreName}">Crime fiction</td>
+            <td>
+                <form method="POST" th:action="@{/library/book/delete(id=${bookModel.id})}">
                     <button type="submit" name="delete" value="delete">Delete</button>
                 </form>
             </td>

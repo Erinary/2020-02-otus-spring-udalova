@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Form</title>
+</head>
+<body>
+<div>
+    <h2>Book info</h2>
+    <form method="POST" th:action="@{/library/book/save}" action="javascript:history.back()">
+        <div>
+            <input id="bookId" type="hidden" name="bookId" th:field="${bookModel.id}">
+        </div>
+        <div>
+            <label for="bookTitle">Title </label>
+            <input id="bookTitle" type="text" name="bookTitle" th:field="${bookModel.title}" required>
+        </div>
+        <div>
+            <label for="bookYear">Year</label>
+            <input id="bookYear" type="text" name="bookYear" th:field="${bookModel.year}" pattern="^\d*$" required>
+        </div>
+        <div>
+            <label for="bookAuthor">Author</label>
+            <input id="bookAuthor" type="text" name="bookAuthor" th:field="${bookModel.authorName}" required>
+        </div>
+        <div>
+            <label for="bookGenre">Genre</label>
+            <input id="bookGenre" type="text" name="bookGenre" th:field="${bookModel.genreName}" required>
+        </div>
+        <div>
+            <button type="submit">Save</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

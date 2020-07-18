@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Details</title>
+</head>
+<body>
+<div>
+    <h2>Book details</h2>
+    <div>
+        <a href="books.html" th:href="@{/library/books}">← Back</a>
+    </div>
+    <div>
+        <a href="book-form.html" th:href="@{/library/book/save(id=${bookModel.id})}">Edit</a>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Year</th>
+            <th>Author</th>
+            <th>Genre</th>
+        </tr>
+        </thead>
+        <tr>
+            <td th:text="${bookModel.id}">1</td>
+            <td th:text="${bookModel.title}">Book Title</td>
+            <td th:text="${bookModel.year}">1970</td>
+            <td th:text="${bookModel.authorName}">John Doe</td>
+            <td th:text="${bookModel.genreName}">Crime fiction</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

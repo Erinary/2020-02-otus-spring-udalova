@@ -25,6 +25,8 @@ public interface LibraryService {
 
     Book getBookById(Long id);
 
+    Book saveBook(Book book);
+
     Book saveBook(Long id, String title, int year, String authorName, String genreName);
 
     void deleteBook(Long id);
