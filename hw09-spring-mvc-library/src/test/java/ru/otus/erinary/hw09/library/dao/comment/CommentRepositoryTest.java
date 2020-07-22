@@ -80,4 +80,15 @@ class CommentRepositoryTest {
         var authorIds = comments.stream().map(Comment::getId).collect(Collectors.toList());
         assertFalse(authorIds.contains(1L));
     }
+
+    @Test
+    void testFindBookIdById() {
+        var comment = repository.findById(1L).orElseThrow();
+        assertNotNull(comment);
+        assertNotNull(comment.getBook());
+
+        var bookId = repository.findBookIdById(comment.getId());
+        assertNotNull(bookId);
+        assertEquals(comment.getBook().getId(), bookId);
+    }
 }

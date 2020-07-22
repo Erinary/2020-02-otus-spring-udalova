@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Comment Form</title>
+</head>
+<body>
+<div>
+    <h2>Comment</h2>
+    <form method="POST" th:action="@{/library/comment/save}" action="javascript:history.back()">
+        <div>
+            <input id="commentBookId" type="hidden" name="commentBookId" th:field="${commentModel.bookId}">
+        </div>
+        <div>
+            <label for="commentUser">User</label>
+            <input id="commentUser" type="text" name="commentUser" placeholder="Guest" th:field="${commentModel.user}" >
+        </div>
+        <div>
+            <label for="commentText">Text</label>
+            <textarea id="commentText" rows="7" cols="30" name="commentText" th:field="${commentModel.text}" required></textarea>
+        </div>
+        <div>
+            <button type="submit">Save</button>
+        </div>
+    </form>
+    <div>
+        <a href="javascript:history.back()">Cancel</a>
+    </div>
+</div>
+</body>
+</html>

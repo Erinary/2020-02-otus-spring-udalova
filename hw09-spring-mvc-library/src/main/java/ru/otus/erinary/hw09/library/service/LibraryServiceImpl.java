@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.otus.erinary.hw09.library.dao.author.AuthorRepository;
 import ru.otus.erinary.hw09.library.dao.book.BookRepository;
 import ru.otus.erinary.hw09.library.dao.comment.CommentRepository;
-import ru.otus.erinary.hw09.library.dao.exception.DaoException;
+import ru.otus.erinary.hw09.library.service.exception.LibraryServiceException;
 import ru.otus.erinary.hw09.library.dao.genre.GenreRepository;
 import ru.otus.erinary.hw09.library.model.Author;
 import ru.otus.erinary.hw09.library.model.Book;
@@ -43,7 +43,7 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     public Author getAuthorById(Long id) {
         return authorRepository.findById(id)
-                .orElseThrow(() -> new DaoException(String.format("Author with id [%d] does not exist", id)));
+                .orElseThrow(() -> new LibraryServiceException(String.format("Author with id [%d] does not exist", id)));
     }
 
     @Override
@@ -72,7 +72,7 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     public Genre getGenreById(Long id) {
         return genreRepository.findById(id)
-                .orElseThrow(() -> new DaoException(String.format("Genre with id [%d] does not exist", id)));
+                .orElseThrow(() -> new LibraryServiceException(String.format("Genre with id [%d] does not exist", id)));
     }
 
     @Override
@@ -127,7 +127,7 @@ public class LibraryServiceImpl implements LibraryService {
 
         var book = id == null ? new Book() : bookRepository
                 .findById(id)
-                .orElseThrow(() -> new DaoException(String.format("Book with id [%d] does not exist", id)));
+                .orElseThrow(() -> new LibraryServiceException(String.format("Book with id [%d] does not exist", id)));
         book.setTitle(title);
         book.setYear(year);
         book.setAuthor(author);
@@ -150,11 +150,11 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     @Transactional
-    public Long saveComment(String text, String user, Long bookId) {
+    public Comment saveComment(String text, String user, Long bookId) {
         var book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new DaoException(String.format("Book with id [%d] does not exist", bookId)));
+                .orElseThrow(() -> new LibraryServiceException(String.format("Book with id [%d] does not exist", bookId)));
         var comment = new Comment(text, user, book);
-        return commentRepository.save(comment).getId();
+        return commentRepository.save(comment);
     }
 
     @Override
@@ -162,4 +162,12 @@ public class LibraryServiceImpl implements LibraryService {
     public void deleteComment(final Long id) {
         commentRepository.deleteById(id);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long getBookIdByComment(Long commentId) {
+        return commentRepository.findBookIdById(commentId);
+    }
+
+
 }

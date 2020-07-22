@@ -6,18 +6,23 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.erinary.hw09.library.api.model.AuthorModel;
 import ru.otus.erinary.hw09.library.api.model.BookModel;
+import ru.otus.erinary.hw09.library.api.model.CommentModel;
 import ru.otus.erinary.hw09.library.api.model.GenreModel;
-import ru.otus.erinary.hw09.library.dao.exception.DaoException;
+import ru.otus.erinary.hw09.library.model.Comment;
+import ru.otus.erinary.hw09.library.service.exception.LibraryServiceException;
 import ru.otus.erinary.hw09.library.model.Author;
 import ru.otus.erinary.hw09.library.model.Book;
 import ru.otus.erinary.hw09.library.model.Genre;
 import ru.otus.erinary.hw09.library.service.LibraryService;
 
+import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/library")
 public class LibraryController {
+
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     private final LibraryService libraryService;
 
@@ -34,7 +39,7 @@ public class LibraryController {
     @GetMapping("/authors")
     public String getAllAuthors(final Model model) {
         var authors = libraryService.getAuthors().stream()
-                .map(LibraryController::toAuthorModel)
+                .map(this::toAuthorModel)
                 .collect(Collectors.toList());
         model.addAttribute("authors", authors);
         return "authors";
@@ -76,7 +81,7 @@ public class LibraryController {
     @GetMapping("/books")
     public String getAllBooks(final Model model) {
         var bookModels = libraryService.getBooks().stream()
-                .map(LibraryController::toBookModel)
+                .map(this::toBookModel)
                 .collect(Collectors.toList());
         model.addAttribute("bookModels", bookModels);
         return "books";
@@ -119,12 +124,37 @@ public class LibraryController {
         return "redirect:/library/books";
     }
 
-    @GetMapping("/error")
-    public void testErrorPage() {
-        throw new DaoException("Some exception message");
+    @GetMapping("/comment/save")
+    public String saveBookComment(@RequestParam(value = "id") final Long bookId, final Model model) {
+        var commentModel = new CommentModel();
+        commentModel.setBookId(bookId);
+        model.addAttribute("commentModel", commentModel);
+        return "comment-form";
     }
 
-    private static Book toBookEntity(final BookModel model) {
+    @PostMapping("/comment/save")
+    public String saveBookComment(final CommentModel commentModel) {
+        var userName = commentModel.getUser() != null && !commentModel.getUser().isBlank() ? commentModel.getUser() : "Guest";
+        var comment = libraryService.saveComment(
+                commentModel.getText(),
+                userName,
+                commentModel.getBookId());
+        return String.format("redirect:/library/book?id=%d", comment.getBook().getId());
+    }
+
+    @PostMapping("/comment/delete")
+    public String deleteBookComment(@RequestParam(value = "id") final Long id) {
+        var bookId = libraryService.getBookIdByComment(id);
+        libraryService.deleteComment(id);
+        return String.format("redirect:/library/book?id=%d", bookId);
+    }
+
+    @GetMapping("/error")
+    public void testErrorPage() {
+        throw new LibraryServiceException("Some exception message");
+    }
+
+    private Book toBookEntity(final BookModel model) {
         return new Book(
                 model.getId(),
                 model.getTitle(),
@@ -134,33 +164,46 @@ public class LibraryController {
         );
     }
 
-    private static BookModel toBookModel(final Book book) {
+    private BookModel toBookModel(final Book book) {
         return new BookModel(
                 book.getId(),
                 book.getTitle(),
                 book.getYear(),
                 book.getAuthor().getName(),
-                book.getGenre().getName()
+                book.getGenre().getName(),
+                libraryService.getBookComments(book.getId()).stream()
+                        .map(this::toCommentModel)
+                        .collect(Collectors.toList())
         );
     }
 
-    private static AuthorModel toAuthorModel(final Author author) {
+    private AuthorModel toAuthorModel(final Author author) {
         return new AuthorModel(
                 author.getId(),
                 author.getName(),
                 author.getBooks().stream()
-                        .map(LibraryController::toBookModel)
+                        .map(this::toBookModel)
                         .collect(Collectors.toList())
         );
     }
 
-    private static GenreModel toGenreModel(final Genre genre) {
+    private GenreModel toGenreModel(final Genre genre) {
         return new GenreModel(
                 genre.getId(),
                 genre.getName(),
                 genre.getBooks().stream()
-                        .map(LibraryController::toBookModel)
+                        .map(this::toBookModel)
                         .collect(Collectors.toList())
+        );
+    }
+
+    private CommentModel toCommentModel(final Comment comment) {
+        return new CommentModel(
+                comment.getId(),
+                comment.getText(),
+                comment.getUser(),
+                comment.getDate().format(FORMATTER),
+                comment.getBook().getId()
         );
     }
 }

@@ -5,19 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookModel {
+public class CommentModel {
 
     private Long id;
-    private String title;
-    private Integer year;
-    private String authorName;
-    private String genreName;
-    private List<CommentModel> comments;
-
+    private String text;
+    private String user;
+    private String date;
+    private Long bookId;
 }

@@ -1,7 +1,6 @@
 package ru.otus.erinary.hw09.library.service.shell;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import ru.otus.erinary.hw09.library.dao.exception.DaoException;
+import ru.otus.erinary.hw09.library.service.exception.LibraryServiceException;
 import ru.otus.erinary.hw09.library.service.LibraryService;
 
 import java.util.Collections;
@@ -110,7 +109,7 @@ public class LibraryCommands {
                 System.out.println("New book was saved");
             }
             return dataRenderer.getFullBookTable(Collections.singletonList(book));
-        } catch (DaoException e) {
+        } catch (LibraryServiceException e) {
             return e.getMessage();
         }
     }
@@ -127,9 +126,9 @@ public class LibraryCommands {
             /*@ShellOption({"-t", "-text"})*/ final String text,
             /*@ShellOption(value = {"-u", "-user"}, defaultValue = "Guest")*/ final String user) {
         try {
-            Long commentId = libraryService.saveComment(text, user, id);
-            return String.format("New comment with id [%d] was added", commentId);
-        } catch (DaoException e) {
+            var comment = libraryService.saveComment(text, user, id);
+            return String.format("New comment with id [%d] was added", comment.getId());
+        } catch (LibraryServiceException e) {
             return e.getMessage();
         }
     }

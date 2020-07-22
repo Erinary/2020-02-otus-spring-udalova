@@ -11,6 +11,9 @@
         <a href="javascript:history.back()">← Back</a>
     </div>
     <div>
+        <a href="books.html" th:href="@{/library/books}">← To book list</a>
+    </div>
+    <div>
         <a href="book-form.html" th:href="@{/library/book/save(id=${bookModel.id})}">Edit</a>
     </div>
 
@@ -31,6 +34,37 @@
             <td th:text="${bookModel.year}">1970</td>
             <td th:text="${bookModel.authorName}">John Doe</td>
             <td th:text="${bookModel.genreName}">Crime fiction</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h4>Comments</h4>
+    <div>
+        <a href="comment-form.html" th:href="@{/library/comment/save(id=${bookModel.id})}">Add new</a>
+    </div>
+    <div th:if="${bookModel.comments.isEmpty()}">
+        <p>[There are no comments yet]</p>
+    </div>
+    <table th:unless="${bookModel.comments.isEmpty()}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Text</th>
+            <th>User</th>
+            <th>Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="comment : ${bookModel.comments}">
+            <td th:text="${comment.id}">1</td>
+            <td th:text="${comment.text}">Comment text here</td>
+            <td th:text="${comment.user}">John Doe</td>
+            <td th:text="${comment.date}">1970-01-01 00:00:00</td>
+            <td>
+                <form method="POST" th:action="@{/library/comment/delete(id=${comment.id})}">
+                    <button type="submit" name="delete" value="delete">Delete</button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>

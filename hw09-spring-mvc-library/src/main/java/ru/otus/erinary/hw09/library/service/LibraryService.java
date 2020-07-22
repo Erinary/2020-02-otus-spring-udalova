@@ -37,7 +37,9 @@ public interface LibraryService {
 
     List<Comment> getBookComments(Long bookId);
 
-    Long saveComment(String text, String user, Long bookId);
+    Comment saveComment(String text, String user, Long bookId);
 
     void deleteComment(Long id);
+
+    Long getBookIdByComment(Long commentId);
 }
