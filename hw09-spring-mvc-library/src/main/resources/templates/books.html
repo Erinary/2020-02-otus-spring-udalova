@@ -29,7 +29,7 @@
         <tr th:each="bookModel : ${bookModels}">
             <td th:text="${bookModel.id}">1</td>
             <td>
-                <a href="book-details.html" th:href="@{/library/book/(id=${bookModel.id})}" th:text="${bookModel.title}">Book Title</a>
+                <a href="book-details.html" th:href="@{/library/book(id=${bookModel.id})}" th:text="${bookModel.title}">Book Title</a>
             </td>
             <td th:text="${bookModel.year}">1970</td>
             <td th:text="${bookModel.authorName}">John Doe</td>

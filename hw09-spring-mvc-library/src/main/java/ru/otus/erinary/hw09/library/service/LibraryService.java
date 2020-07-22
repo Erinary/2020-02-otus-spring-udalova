@@ -11,11 +11,15 @@ public interface LibraryService {
 
     List<Author> getAuthors();
 
+    Author getAuthorById(Long id);
+
     Author getAuthorByName(String name);
 
     void deleteAuthor(Long id);
 
     List<Genre> getGenres();
+
+    Genre getGenreById(Long id);
 
     Genre getGenreByName(String name);
 

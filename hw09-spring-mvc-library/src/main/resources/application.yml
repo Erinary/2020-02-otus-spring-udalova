@@ -13,3 +13,7 @@ spring:
       hibernate:
         format-sql: false
     show-sql: false
+
+server:
+  error:
+    include-stacktrace: always

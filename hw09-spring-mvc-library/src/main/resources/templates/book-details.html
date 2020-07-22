@@ -8,7 +8,7 @@
 <div>
     <h2>Book details</h2>
     <div>
-        <a href="books.html" th:href="@{/library/books}">← Back</a>
+        <a href="javascript:history.back()">← Back</a>
     </div>
     <div>
         <a href="book-form.html" th:href="@{/library/book/save(id=${bookModel.id})}">Edit</a>
@@ -24,6 +24,7 @@
             <th>Genre</th>
         </tr>
         </thead>
+        <tbody>
         <tr>
             <td th:text="${bookModel.id}">1</td>
             <td th:text="${bookModel.title}">Book Title</td>
@@ -31,6 +32,7 @@
             <td th:text="${bookModel.authorName}">John Doe</td>
             <td th:text="${bookModel.genreName}">Crime fiction</td>
         </tr>
+        </tbody>
     </table>
 </div>
 </body>

@@ -41,6 +41,12 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
+    public Author getAuthorById(Long id) {
+        return authorRepository.findById(id)
+                .orElseThrow(() -> new DaoException(String.format("Author with id [%d] does not exist", id)));
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Author getAuthorByName(final String name) {
         var author = authorRepository.findByName(name);
@@ -61,6 +67,12 @@ public class LibraryServiceImpl implements LibraryService {
     @Transactional(readOnly = true)
     public List<Genre> getGenres() {
         return genreRepository.findAll();
+    }
+
+    @Override
+    public Genre getGenreById(Long id) {
+        return genreRepository.findById(id)
+                .orElseThrow(() -> new DaoException(String.format("Genre with id [%d] does not exist", id)));
     }
 
     @Override

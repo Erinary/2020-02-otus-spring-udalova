@@ -19,7 +19,9 @@
         <tbody>
         <tr th:each="author : ${authors}">
             <td th:text="${author.id}">1</td>
-            <td th:text="${author.name}">John Doe</td>
+            <td>
+                <a href="author-details.html" th:href="@{/library/author(id=${author.id})}" th:text="${author.name}">John Doe</a>
+            </td>
             <td>
                 <form method="POST" th:action="@{/library/author/delete(id=${author.id})}">
                     <button type="submit" name="delete" value="delete">Delete</button>

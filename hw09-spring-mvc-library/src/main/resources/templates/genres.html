@@ -19,7 +19,9 @@
         <tbody>
         <tr th:each="genre : ${genres}">
             <td th:text="${genre.id}">1</td>
-            <td th:text="${genre.name}">Default Genre</td>
+            <td>
+                <a href="genre-details.html" th:href="@{/library/genre(id=${genre.id})}" th:text="${genre.name}">Crime fiction</a>
+            </td>
             <td>
                 <form method="POST" th:action="@{/library/genre/delete(id=${genre.id})}">
                     <button type="submit" name="delete" value="delete">Delete</button>
