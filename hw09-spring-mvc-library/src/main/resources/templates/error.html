@@ -1,36 +1,43 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+<head th:replace="base :: default_head(~{::title})">
     <title>Error Page</title>
 </head>
 <body>
-<div>
-    <h2>Oops! Something went wrong!</h2>
-    <table>
-        <tr>
-            <td>Date</td>
-            <td th:text="${timestamp}"/>
-        </tr>
-        <tr>
-            <td>Path</td>
-            <td th:text="${path}"/>
-        </tr>
-        <tr>
-            <td>Error</td>
-            <td th:text="${error}"/>
-        </tr>
-        <tr>
-            <td>Status</td>
-            <td th:text="${status}"/>
-        </tr>
-        <tr>
-            <td>Trace</td>
-            <td>
-                <pre th:text="${trace}"/>
-            </td>
-        </tr>
-    </table>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <h2>Oops! Something went wrong!</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <tr>
+                    <td>Date</td>
+                    <td th:text="${timestamp}"/>
+                </tr>
+                <tr>
+                    <td>Path</td>
+                    <td th:text="${path}"/>
+                </tr>
+                <tr>
+                    <td>Error</td>
+                    <td th:text="${error}"/>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td th:text="${status}"/>
+                </tr>
+                <tr>
+                    <td>Trace</td>
+                    <td>
+                        <pre th:text="${trace}"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 </div>
 </body>
 </html>

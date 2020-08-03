@@ -1,38 +1,50 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+<head th:replace="base :: default_head(~{::title})">
     <title>Book Form</title>
 </head>
 <body>
-<div>
-    <h2>Book info</h2>
-    <form method="POST" th:action="@{/library/book/save}" action="javascript:history.back()">
-        <div>
-            <input id="bookId" type="hidden" name="bookId" th:field="${bookModel.id}">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <h2>Book info</h2>
         </div>
-        <div>
-            <label for="bookTitle">Title </label>
-            <input id="bookTitle" type="text" name="bookTitle" th:field="${bookModel.title}" required>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <form method="POST" th:action="@{/library/book/save}" action="javascript:history.back()">
+                <div>
+                    <input id="bookId" type="hidden" name="bookId" th:field="${bookModel.id}">
+                </div>
+                <div class="form-group">
+                    <label for="bookTitle">Title </label>
+                    <input class="form-control" id="bookTitle" type="text" name="bookTitle"
+                           th:field="${bookModel.title}"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="bookYear">Year</label>
+                    <input class="form-control" id="bookYear" type="text" name="bookYear" th:field="${bookModel.year}"
+                           pattern="^\d*$" required>
+                </div>
+                <div class="form-group">
+                    <label for="bookAuthor">Author</label>
+                    <input class="form-control" id="bookAuthor" type="text" name="bookAuthor"
+                           th:field="${bookModel.authorName}"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="bookGenre">Genre</label>
+                    <input class="form-control" id="bookGenre" type="text" name="bookGenre"
+                           th:field="${bookModel.genreName}"
+                           required>
+                </div>
+                <div>
+                    <button class="btn btn-info btn-sm" type="submit">Save</button>
+                    <a href="javascript:history.back()" class="btn btn-info btn-sm" role="button">Cancel</a>
+                </div>
+            </form>
         </div>
-        <div>
-            <label for="bookYear">Year</label>
-            <input id="bookYear" type="text" name="bookYear" th:field="${bookModel.year}" pattern="^\d*$" required>
-        </div>
-        <div>
-            <label for="bookAuthor">Author</label>
-            <input id="bookAuthor" type="text" name="bookAuthor" th:field="${bookModel.authorName}" required>
-        </div>
-        <div>
-            <label for="bookGenre">Genre</label>
-            <input id="bookGenre" type="text" name="bookGenre" th:field="${bookModel.genreName}" required>
-        </div>
-        <div>
-            <button type="submit">Save</button>
-        </div>
-    </form>
-    <div>
-        <a href="javascript:history.back()">Cancel</a>
     </div>
 </div>
 </body>

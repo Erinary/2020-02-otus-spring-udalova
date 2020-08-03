@@ -1,35 +1,49 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+<head th:replace="base :: default_head(~{::title})">
     <title>Authors List</title>
 </head>
 <body>
-<div>
-    <h2>Authors</h2>
-    <a href="home-page.html" th:href="@{/library}">← Home</a>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <h2>Authors</h2>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col">
+            <a href="home-page.html" class="btn btn-info btn-sm" role="button" th:href="@{/library}">← Home</a>
+        </div>
+    </div>
 
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="author : ${authors}">
-            <td th:text="${author.id}">1</td>
-            <td>
-                <a href="author-details.html" th:href="@{/library/author(id=${author.id})}" th:text="${author.name}">John Doe</a>
-            </td>
-            <td>
-                <form method="POST" th:action="@{/library/author/delete(id=${author.id})}">
-                    <button type="submit" name="delete" value="delete">Delete</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="author : ${authors}">
+                    <td th:text="${author.id}">1</td>
+                    <td>
+                        <a href="author-details.html" th:href="@{/library/author(id=${author.id})}"
+                           th:text="${author.name}">John
+                            Doe</a>
+                    </td>
+                    <td>
+                        <form method="POST" th:action="@{/library/author/delete(id=${author.id})}">
+                            <button class="btn btn-outline-danger btn-sm" type="submit" name="delete" value="delete">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 </body>
 </html>

@@ -16,6 +16,7 @@ import ru.otus.erinary.hw09.library.model.Genre;
 import ru.otus.erinary.hw09.library.service.LibraryService;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -169,8 +170,8 @@ public class LibraryController {
                 book.getId(),
                 book.getTitle(),
                 book.getYear(),
-                book.getAuthor().getName(),
-                book.getGenre().getName(),
+                Optional.ofNullable(book.getAuthor()).map(Author::getName).orElse("NOT SPECIFIED"),
+                Optional.ofNullable(book.getGenre()).map(Genre::getName).orElse("NOT SPECIFIED"),
                 libraryService.getBookComments(book.getId()).stream()
                         .map(this::toCommentModel)
                         .collect(Collectors.toList())

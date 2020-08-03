@@ -1,47 +1,60 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+<head th:replace="base :: default_head(~{::title})">
     <title>Books List</title>
 </head>
 <body>
-<div>
-    <h2>Books</h2>
-    <div>
-        <a href="home-page.html" th:href="@{/library}">← Home</a>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <h2>Books
+                <a href="book-form.html" class="btn btn-outline-primary btn-sm" role="button"
+                   th:href="@{/library/book/save}">Save new</a>
+            </h2>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col">
+            <a href="home-page.html" class="btn btn-info btn-sm" role="button" th:href="@{/library}">← Home</a>
+        </div>
     </div>
 
-    <div>
-        <a href="book-form.html" th:href="@{/library/book/save}">Save new</a>
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Year</th>
+                    <th>Author</th>
+                    <th>Genre</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="bookModel : ${bookModels}">
+                    <td th:text="${bookModel.id}">1</td>
+                    <td>
+                        <a href="book-details.html" th:href="@{/library/book(id=${bookModel.id})}"
+                           th:text="${bookModel.title}">Book
+                            Title</a>
+                    </td>
+                    <td th:text="${bookModel.year}">1970</td>
+                    <td th:text="${bookModel.authorName}">John Doe</td>
+                    <td th:text="${bookModel.genreName}">Crime fiction</td>
+                    <td>
+                        <form method="POST" th:action="@{/library/book/delete(id=${bookModel.id})}">
+                            <button class="btn btn-outline-danger btn-sm" type="submit" name="delete" value="delete">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Year</th>
-            <th>Author</th>
-            <th>Genre</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="bookModel : ${bookModels}">
-            <td th:text="${bookModel.id}">1</td>
-            <td>
-                <a href="book-details.html" th:href="@{/library/book(id=${bookModel.id})}" th:text="${bookModel.title}">Book Title</a>
-            </td>
-            <td th:text="${bookModel.year}">1970</td>
-            <td th:text="${bookModel.authorName}">John Doe</td>
-            <td th:text="${bookModel.genreName}">Crime fiction</td>
-            <td>
-                <form method="POST" th:action="@{/library/book/delete(id=${bookModel.id})}">
-                    <button type="submit" name="delete" value="delete">Delete</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
 </div>
 </body>
 </html>
