@@ -1,17 +1,14 @@
 package ru.otus.erinary.hw10.library.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import ru.otus.erinary.hw10.library.api.model.GenreModel;
 import ru.otus.erinary.hw10.library.service.LibraryService;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
-@Controller
+@RestController
 @RequestMapping("/library")
 public class GenreController {
 
@@ -22,25 +19,21 @@ public class GenreController {
         this.libraryService = libraryService;
     }
 
-    @GetMapping("/genres")
-    public String getAllGenres(final Model model) {
-        var genres = libraryService.getGenres().stream()
+    @GetMapping("/genre")
+    public List<GenreModel> getAllGenres() {
+        return libraryService.getGenres().stream()
                 .map(ModelConverter::toGenreModel)
                 .collect(Collectors.toList());
-        model.addAttribute("genres", genres);
-        return "genres";
     }
 
-    @GetMapping("/genre")
-    public String getGenre(@RequestParam(value = "id") final Long id, final Model model) {
+    @GetMapping("/genre/{id}")
+    public GenreModel getGenre(@PathVariable(value = "id") final Long id) {
         var genre = libraryService.getGenreById(id);
-        model.addAttribute("genre", ModelConverter.toGenreModel(genre));
-        return "genre-details";
+        return ModelConverter.toGenreModel(genre);
     }
 
-    @PostMapping("/genre/delete")
-    public String deleteGenre(@RequestParam(value = "id") final Long id) {
+    @DeleteMapping("/genre/{id}")
+    public void deleteGenre(@PathVariable(value = "id") final Long id) {
         libraryService.deleteGenre(id);
-        return "redirect:/library/genres";
     }
 }

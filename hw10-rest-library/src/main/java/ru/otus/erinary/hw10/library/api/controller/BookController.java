@@ -1,18 +1,14 @@
 package ru.otus.erinary.hw10.library.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.otus.erinary.hw10.library.api.model.BookModel;
 import ru.otus.erinary.hw10.library.service.LibraryService;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
-@Controller
+@RestController
 @RequestMapping("/library")
 public class BookController {
 
@@ -29,55 +25,49 @@ public class BookController {
         return "home-page";
     }
 
-    @GetMapping("/books")
-    public String getAllBooks(final Model model) {
-        var bookModels = libraryService.getBooks().stream()
-                .map(b -> {
-                    var comments = libraryService.getBookComments(b.getId());
-                    return ModelConverter.toBookModel(b, comments);
-                })
+    @GetMapping("/book")
+    public List<BookModel> getAllBooks() {
+        return libraryService.getBooks().stream()
+                .map(ModelConverter::toShortBookModel)
                 .collect(Collectors.toList());
-        model.addAttribute("bookModels", bookModels);
-        return "books";
     }
 
-    @GetMapping("/book")
-    public String getBook(@RequestParam(value = "id") final Long id, final Model model) {
+    @GetMapping("/book/{id}")
+    public BookModel getBook(@PathVariable(value = "id") final Long id) {
         var book = libraryService.getBookById(id);
         var comments = libraryService.getBookComments(id);
-        model.addAttribute("bookModel", ModelConverter.toBookModel(book, comments));
-        return "book-details";
+        return ModelConverter.toBookModel(book, comments);
     }
 
-    @GetMapping("/book/save")
-    public String saveBook(@RequestParam(value = "id", required = false) final Long id, final Model model) {
-        BookModel bookModel;
-        if (id != null) {
-            var book = libraryService.getBookById(id);
-            var comments = libraryService.getBookComments(id);
-            bookModel = ModelConverter.toBookModel(book, comments);
-        } else {
-            bookModel = new BookModel();
-        }
-        model.addAttribute("bookModel", bookModel);
-        return "book-form";
-    }
+//    @GetMapping("/book/save")
+//    public String saveBook(@RequestParam(value = "id", required = false) final Long id, final Model model) {
+//        BookModel bookModel;
+//        if (id != null) {
+//            var book = libraryService.getBookById(id);
+//            var comments = libraryService.getBookComments(id);
+//            bookModel = ModelConverter.toBookModel(book, comments);
+//        } else {
+//            bookModel = new BookModel();
+//        }
+//        model.addAttribute("bookModel", bookModel);
+//        return "book-form";
+//    }
 
-    @PostMapping("/book/save")
-    public String saveBook(final Model model, final BookModel bookModel) {
+    @PostMapping("/book")
+    public BookModel saveBook(final BookModel bookModel) {
         var book = libraryService.saveBook(ModelConverter.toBookEntity(bookModel));
-        if (bookModel.getId() == null) {
-            return "redirect:/library/books";
-        } else {
-            var comments = libraryService.getBookComments(book.getId());
-            model.addAttribute("bookModel", ModelConverter.toBookModel(book, comments));
-            return "book-details";
-        }
+        return ModelConverter.toShortBookModel(book);
     }
 
-    @PostMapping("/book/delete")
-    public String deleteBook(@RequestParam(value = "id") final Long id) {
+    @PutMapping("/book/{id}")
+    public BookModel updateBook(@PathVariable(value = "id") final Long id, final BookModel bookModel) {
+        var book = libraryService.saveBook(ModelConverter.toBookEntity(bookModel));
+        var comments = libraryService.getBookComments(id);
+        return ModelConverter.toBookModel(book, comments);
+    }
+
+    @DeleteMapping("/book/{id}")
+    public void deleteBook(@PathVariable(value = "id") final Long id) {
         libraryService.deleteBook(id);
-        return "redirect:/library/books";
     }
 }

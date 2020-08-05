@@ -17,8 +17,6 @@ import java.util.stream.Collectors;
 
 public class ModelConverter {
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     static Book toBookEntity(final BookModel model) {
         return new Book(
                 model.getId(),
@@ -49,7 +47,7 @@ public class ModelConverter {
                 book.getYear(),
                 Optional.ofNullable(book.getAuthor()).map(Author::getName).orElse("NOT SPECIFIED"),
                 Optional.ofNullable(book.getGenre()).map(Genre::getName).orElse("NOT SPECIFIED"),
-                Collections.emptyList()
+                null
         );
     }
 
@@ -78,7 +76,7 @@ public class ModelConverter {
                 comment.getId(),
                 comment.getText(),
                 comment.getUser(),
-                comment.getDate().format(FORMATTER),
+                comment.getDate(),
                 comment.getBook().getId()
         );
     }
