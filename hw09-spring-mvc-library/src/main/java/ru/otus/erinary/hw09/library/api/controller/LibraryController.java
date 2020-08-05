@@ -61,7 +61,9 @@ public class LibraryController {
 
     @GetMapping("/genres")
     public String getAllGenres(final Model model) {
-        var genres = libraryService.getGenres();
+        var genres = libraryService.getGenres().stream()
+                .map(this::toGenreModel)
+                .collect(Collectors.toList());
         model.addAttribute("genres", genres);
         return "genres";
     }
