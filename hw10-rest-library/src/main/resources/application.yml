@@ -17,3 +17,4 @@ spring:
 server:
   error:
     include-stacktrace: always
+  port: 8085
