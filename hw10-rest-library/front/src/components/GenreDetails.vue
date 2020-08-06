@@ -2,16 +2,16 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <h2>Author Details</h2>
+                <h2>Genre Details</h2>
             </div>
         </div>
         <div class="row mb-1">
             <div class="col">
-                <router-link :to="{name: 'authors'}" class="btn btn-info btn-sm" role="button">← Back</router-link>
+                <router-link :to="{name: 'genres'}" class="btn btn-info btn-sm" role="button">← Back</router-link>
             </div>
         </div>
 
-        <div class="row mb-2">
+        <div class="row">
             <div class="col-8">
                 <table class="table table-sm">
                     <thead class="thead-light">
@@ -22,8 +22,8 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td>{{author.id}}</td>
-                        <td>{{author.name}}</td>
+                        <td>{{genre.id}}</td>
+                        <td>{{genre.name}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -41,10 +41,10 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="book in author.books" :key="book.id">
+                    <tr v-for="book in genre.books" :key="book.id">
                         <td>{{book.id}}</td>
                         <td>
-                            <router-link :to="{name: 'book-details', params: {id: book.id}}"> {{book.title}}</router-link>
+                            <router-link :to="{name: 'book-details', params: {id: book.id}}">{{book.title}}</router-link>
                         </td>
                         <td>{{book.year}}</td>
                     </tr>
@@ -59,34 +59,33 @@
     import {client} from '../controller/api.js';
 
     export default {
-        name: "AuthorDetails",
+        name: "GenreDetails",
 
         data() {
             return {
-                author:
-                    {
-                        id: 1,
-                        name: "John Doe",
-                        books: [
-                            {
-                                id: 1,
-                                title: "Book Title",
-                                year: 1970
-                            }
-                        ]
-                    }
+                genre: {
+                    id: 1,
+                    name: "Crime fiction",
+                    books: [
+                        {
+                            id: 1,
+                            title: "Book Title",
+                            year: 1970
+                        }
+                    ]
+                }
             }
         },
 
         mounted() {
-            this.loadAuthor(this.$route.params.id);
+            this.loadGenre(this.$route.params.id);
         },
 
         methods: {
-            loadAuthor(id) {
-                client.getAuthor(id)
-                    .then(author => {
-                        this.author = author;
+            loadGenre(id) {
+                client.getGenre(id)
+                    .then(genre => {
+                        this.genre = genre;
                     });
             }
         }

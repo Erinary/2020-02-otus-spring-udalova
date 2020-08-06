@@ -31,8 +31,6 @@ public interface LibraryService {
 
     Book saveBook(Book book);
 
-    Book saveBook(Long id, String title, int year, String authorName, String genreName);
-
     void deleteBook(Long id);
 
     List<Comment> getBookComments(Long bookId);

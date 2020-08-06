@@ -16,16 +16,8 @@ public class CommentController {
         this.libraryService = libraryService;
     }
 
-//    @GetMapping("/comment/save")
-//    public String saveBookComment(@RequestParam(value = "id") final Long bookId, final Model model) {
-//        var commentModel = new CommentModel();
-//        commentModel.setBookId(bookId);
-//        model.addAttribute("commentModel", commentModel);
-//        return "comment-form";
-//    }
-
     @PostMapping("/comment")
-    public CommentModel saveBookComment(final CommentModel commentModel) {
+    public CommentModel saveBookComment(@RequestBody final CommentModel commentModel) {
         var userName = commentModel.getUser() != null && !commentModel.getUser().isBlank() ? commentModel.getUser() : "Guest";
         var comment = libraryService.saveComment(
                 commentModel.getText(),

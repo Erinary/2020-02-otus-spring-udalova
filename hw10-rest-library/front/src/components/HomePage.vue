@@ -9,17 +9,22 @@
         <div class="row">
             <div class="col">
                 <ul>
-                    <li><a href="books.html" th:href="@{/library/books}">Books</a></li>
+                    <li>
+                        <router-link :to="{name: 'books'}">Books</router-link>
+                    </li>
                     <li>
                         <router-link :to="{name: 'authors'}">Authors</router-link>
                     </li>
-                    <li><a href="genres.html" th:href="@{/library/genres}">Genres</a></li>
+                    <li>
+                        <router-link :to="{name: 'genres'}">Genres</router-link>
+                    </li>
                 </ul>
             </div>
         </div>
 
         <div class="row">
             <div class="col text-right">
+            <!--TODO cybertruck-->
                 <img class="w-50" th:src="@{/img/cybertruck.jpg}" alt="Oops!"/>
             </div>
         </div>

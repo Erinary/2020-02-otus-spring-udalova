@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <h2>Authors</h2>
+                <h2>Genres</h2>
             </div>
         </div>
         <div class="row mb-1">
@@ -22,15 +22,15 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="author in authors" :key="author.id">
-                        <td>{{author.id}}</td>
+                    <tr v-for="genre in genres" :key="genre.id">
+                        <td>{{genre.id}}</td>
                         <td>
-                            <router-link :to="{name: 'author-details', params: {id: author.id}}">{{author.name}}
+                            <router-link :to="{name: 'genre-details', params: {id: genre.id}}">{{genre.name}}
                             </router-link>
                         </td>
                         <td>
                             <div class="btn btn-outline-danger btn-sm" role="button"
-                                 v-on:click="deleteAuthor(author.id)">Delete
+                                 v-on:click="deleteGenre(genre.id)">Delete
                             </div>
                         </td>
                     </tr>
@@ -45,31 +45,31 @@
     import {client} from '../controller/api.js';
 
     export default {
-        name: "AuthorList",
+        name: "GenreList",
 
         data() {
             return {
-                authors: [
-                    {id: 1, name: "John Doe"}
+                genres: [
+                    {id: 1, name: "Crime fiction"}
                 ]
             };
         },
 
         mounted() {
-            this.loadAuthors();
+            this.loadGenres();
         },
 
         methods: {
-            loadAuthors() {
-                client.getAuthorList()
-                    .then(authorList => {
-                        this.authors = authorList;
+            loadGenres() {
+                client.getGenreList()
+                    .then(genreList => {
+                        this.genres = genreList
                     });
             },
 
-            deleteAuthor(id) {
-                client.deleteAuthor(id)
-                    .then(() => this.loadAuthors());
+            deleteGenre(id) {
+                client.deleteGenre(id)
+                    .then(() => this.loadGenres());
             }
         }
     }

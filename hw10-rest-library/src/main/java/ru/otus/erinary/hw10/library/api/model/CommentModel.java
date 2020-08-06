@@ -25,7 +25,7 @@ public class CommentModel {
     private String user;
 
     @JsonProperty("date")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private ZonedDateTime date;
 
     @JsonProperty("bookId")

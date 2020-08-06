@@ -19,12 +19,6 @@ public class BookController {
         this.libraryService = libraryService;
     }
 
-    //TODO remove
-    @GetMapping
-    public String getHomePage() {
-        return "home-page";
-    }
-
     @GetMapping("/book")
     public List<BookModel> getAllBooks() {
         return libraryService.getBooks().stream()
@@ -39,28 +33,14 @@ public class BookController {
         return ModelConverter.toBookModel(book, comments);
     }
 
-//    @GetMapping("/book/save")
-//    public String saveBook(@RequestParam(value = "id", required = false) final Long id, final Model model) {
-//        BookModel bookModel;
-//        if (id != null) {
-//            var book = libraryService.getBookById(id);
-//            var comments = libraryService.getBookComments(id);
-//            bookModel = ModelConverter.toBookModel(book, comments);
-//        } else {
-//            bookModel = new BookModel();
-//        }
-//        model.addAttribute("bookModel", bookModel);
-//        return "book-form";
-//    }
-
     @PostMapping("/book")
-    public BookModel saveBook(final BookModel bookModel) {
+    public BookModel saveBook(@RequestBody final BookModel bookModel) {
         var book = libraryService.saveBook(ModelConverter.toBookEntity(bookModel));
         return ModelConverter.toShortBookModel(book);
     }
 
     @PutMapping("/book/{id}")
-    public BookModel updateBook(@PathVariable(value = "id") final Long id, final BookModel bookModel) {
+    public BookModel editBook(@PathVariable(value = "id") final Long id, @RequestBody final BookModel bookModel) {
         var book = libraryService.saveBook(ModelConverter.toBookEntity(bookModel));
         var comments = libraryService.getBookComments(id);
         return ModelConverter.toBookModel(book, comments);

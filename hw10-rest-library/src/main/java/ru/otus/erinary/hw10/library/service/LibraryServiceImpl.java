@@ -105,35 +105,30 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public Book saveBook(Book book) {
-        return saveBook(book.getId(), book.getTitle(), book.getYear(), book.getAuthor().getName(), book.getGenre().getName());
-    }
-
-    @Override
     @Transactional
-    public Book saveBook(final Long id, final String title, final int year, final String authorName, final String genreName) {
-        var author = authorRepository.findByName(authorName)
+    public Book saveBook(Book book) {
+        var author = authorRepository.findByName(book.getAuthor().getName())
                 .orElseGet(() -> {
-                    var a = new Author(authorName);
+                    var a = new Author(book.getAuthor().getName());
                     authorRepository.save(a);
                     return a;
                 });
-        var genre = genreRepository.findByName(genreName)
+        var genre = genreRepository.findByName(book.getGenre().getName())
                 .orElseGet(() -> {
-                    var g = new Genre(genreName);
+                    var g = new Genre(book.getGenre().getName());
                     genreRepository.save(g);
                     return g;
                 });
 
-        var book = id == null ? new Book() : bookRepository
-                .findById(id)
-                .orElseThrow(() -> new LibraryServiceException(String.format("Book with id [%d] does not exist", id)));
-        book.setTitle(title);
-        book.setYear(year);
-        book.setAuthor(author);
-        book.setGenre(genre);
+        var savedBook = book.getId() == null ? new Book() : bookRepository
+                .findById(book.getId())
+                .orElseThrow(() -> new LibraryServiceException(String.format("Book with id [%d] does not exist", book.getId())));
+        savedBook.setTitle(book.getTitle());
+        savedBook.setYear(book.getYear());
+        savedBook.setAuthor(author);
+        savedBook.setGenre(genre);
 
-        return bookRepository.save(book);
+        return bookRepository.save(savedBook);
     }
 
     @Override
