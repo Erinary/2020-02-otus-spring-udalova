@@ -15,6 +15,9 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 public class CommentModel {
 
+    @JsonProperty("id")
+    private Long id;
+
     @JsonProperty("text")
     private String text;
 

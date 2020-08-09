@@ -47,7 +47,7 @@ class CommentControllerTest {
                                     book);
                         }
                 );
-        var commentModel = new CommentModel("example", "guest", null, 1L);
+        var commentModel = new CommentModel(1L, "example", "guest", null, 1L);
 
         mvc.perform(post("/library/comment")
                 .contentType(MediaType.APPLICATION_JSON)

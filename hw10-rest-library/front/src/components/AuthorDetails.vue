@@ -1,17 +1,25 @@
 <template>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
-                <h2>Author Details</h2>
-            </div>
-        </div>
-        <div class="row mb-1">
-            <div class="col">
-                <router-link :to="{name: 'authors'}" class="btn btn-info btn-sm" role="button">← Back</router-link>
-            </div>
-        </div>
+    <b-container fluid>
+        <b-row>
+            <b-col>
+                <h2>Author Details
+                    <b-spinner v-if="loadingState === 'loading'" class="ml-2"/>
+                </h2>
+            </b-col>
+        </b-row>
+        <b-row>
+            <b-col>
+                <b-alert v-model="showErrorAlert" dismissible variant="danger">{{error}}</b-alert>
+            </b-col>
+        </b-row>
+        <b-row class="mb-1">
+            <b-col>
+                <router-link :to="{name: 'authors'}" class="btn btn-info btn-sm" role="button">← To author list
+                </router-link>
+            </b-col>
+        </b-row>
 
-        <div class="row mb-2">
+        <b-row class="mb-2" v-if="loadingState === 'ok'">
             <div class="col-8">
                 <table class="table table-sm">
                     <thead class="thead-light">
@@ -28,9 +36,9 @@
                     </tbody>
                 </table>
             </div>
-        </div>
+        </b-row>
 
-        <div class="row">
+        <b-row v-if="loadingState === 'ok'">
             <div class="col-8">
                 <table class="table">
                     <thead class="thead-light">
@@ -44,15 +52,16 @@
                     <tr v-for="book in author.books" :key="book.id">
                         <td>{{book.id}}</td>
                         <td>
-                            <router-link :to="{name: 'book-details', params: {id: book.id}}"> {{book.title}}</router-link>
+                            <router-link :to="{name: 'book-details', params: {id: book.id}}"> {{book.title}}
+                            </router-link>
                         </td>
                         <td>{{book.year}}</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
-        </div>
-    </div>
+        </b-row>
+    </b-container>
 </template>
 
 <script>
@@ -63,6 +72,9 @@
 
         data() {
             return {
+                showErrorAlert: false,
+                loadingState: "ok",
+                error: "",
                 author:
                     {
                         id: 1,
@@ -84,9 +96,16 @@
 
         methods: {
             loadAuthor(id) {
+                this.loadingState = 'loading';
                 client.getAuthor(id)
                     .then(author => {
                         this.author = author;
+                        this.loadingState = 'ok';
+                    })
+                    .catch(e => {
+                        this.error = e.toString();
+                        this.loadingState = 'error';
+                        this.showErrorAlert = true;
                     });
             }
         }

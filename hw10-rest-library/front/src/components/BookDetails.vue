@@ -1,23 +1,29 @@
 <template>
-    <div class="container-fluid">
-        <div class="row">
+    <b-container fluid>
+        <b-row>
             <div class="col">
                 <h2>Book details
                     <router-link :to="{name: 'book-edit', params: {id: book.id}}"
                                  class="btn btn-outline-primary btn-sm" role="button">Edit
                     </router-link>
+                    <b-spinner v-if="loadingState === 'loading'" class="ml-2"/>
                 </h2>
             </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col">
+        </b-row>
+        <b-row>
+            <b-col>
+                <b-alert v-model="showErrorAlert" dismissible variant="danger">{{error}}</b-alert>
+            </b-col>
+        </b-row>
+        <b-row class="mb-2">
+            <b-col>
                 <router-link :to="{name: 'books'}" class="btn btn-info btn-sm" role="button">
                     ← To book list
                 </router-link>
-            </div>
-        </div>
+            </b-col>
+        </b-row>
 
-        <div class="row mb-2">
+        <b-row class="mb-2" v-if="loadingState === 'ok'">
             <div class="col">
                 <table class="table table-sm">
                     <thead class="thead-light">
@@ -40,18 +46,14 @@
                     </tbody>
                 </table>
             </div>
-        </div>
+        </b-row>
 
-        <div class="row">
+        <b-row v-if="loadingState === 'ok'">
             <div class="col">
                 <h4>Comments</h4>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="alert alert-info" role="alert" v-if="book.comments.length === 0">There are no comments
+                <b-alert show variant="info" v-if="book.comments.length === 0">There are no comments
                     yet
-                </div>
+                </b-alert>
                 <table class="table" v-else>
                     <thead class="thead-light">
                     <tr>
@@ -78,24 +80,24 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-5">
-                <form>
-                    <div class="form-group">
-                        <textarea class="form-control" v-model="newComment.text"
-                                  placeholder="Your text here"></textarea>
-                    </div>
-                </form>
-                <form class="form-inline">
-                    <div class="form-group">
-                        <input class="form-control" v-model="newComment.user">
-                    </div>
-                    <button class="btn btn-info ml-2" v-on:click="saveComment()">Add new</button>
-                </form>
-            </div>
-        </div>
-    </div>
+        </b-row>
+        <b-row v-if="loadingState === 'ok'">
+            <b-col class="col-5">
+                <b-form>
+                    <b-form-group>
+                        <b-form-textarea v-model="newComment.text"
+                                         placeholder="Your text here"></b-form-textarea>
+                    </b-form-group>
+                </b-form>
+                <b-form inline @submit="saveComment()">
+                    <b-form-group>
+                        <b-form-input v-model="newComment.user"></b-form-input>
+                    </b-form-group>
+                    <b-button class="btn btn-info ml-2" type="submit">Add new</b-button>
+                </b-form>
+            </b-col>
+        </b-row>
+    </b-container>
 </template>
 
 <script>
@@ -107,6 +109,9 @@
 
         data() {
             return {
+                showErrorAlert: false,
+                loadingState: "ok",
+                error: "",
                 book: {
                     id: 1,
                     title: "Book Title",
@@ -135,15 +140,26 @@
 
         methods: {
             loadBook(id) {
+                this.loadingState = 'loading';
                 client.getBookDetails(id)
                     .then(book => {
                         this.book = book;
+                        this.loadingState = 'ok';
+                    })
+                    .catch(e => {
+                        this.error = e.toString();
+                        this.loadingState = 'error';
+                        this.showErrorAlert = true;
                     });
             },
 
             deleteComment(id) {
                 client.deleteComment(id)
-                    .then(() => this.loadBook(this.$route.params.id));
+                    .then(() => this.loadBook(this.$route.params.id))
+                    .catch(e => {
+                        this.error = e.toString();
+                        this.showErrorAlert = true;
+                    });
             },
 
             saveComment() {
@@ -158,6 +174,10 @@
                         this.loadBook(this.$route.params.id);
                         this.newComment.text = "";
                     })
+                    .catch(e => {
+                        this.error = e.toString();
+                        this.showErrorAlert = true;
+                    });
             }
         }
     }

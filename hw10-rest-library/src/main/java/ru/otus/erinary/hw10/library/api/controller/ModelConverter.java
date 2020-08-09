@@ -71,6 +71,7 @@ public class ModelConverter {
 
     static CommentModel toCommentModel(final Comment comment) {
         return new CommentModel(
+                comment.getId(),
                 comment.getText(),
                 comment.getUser(),
                 comment.getDate(),

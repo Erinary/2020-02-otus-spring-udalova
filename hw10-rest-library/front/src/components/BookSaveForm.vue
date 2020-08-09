@@ -1,37 +1,40 @@
 <template>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
-                <h2>Book info</h2>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-6">
-                <form>
-                    <div class="form-group">
-                        <label for="bookTitle">Title </label>
-                        <input class="form-control" id="bookTitle" type="text" v-model="book.title">
-                    </div>
-                    <div class="form-group">
-                        <label for="bookYear">Year</label>
-                        <input class="form-control" id="bookYear" type="number" v-model="book.year">
-                    </div>
-                    <div class="form-group">
-                        <label for="bookAuthor">Author</label>
-                        <input class="form-control" id="bookAuthor" type="text" v-model="book.author">
-                    </div>
-                    <div class="form-group">
-                        <label for="bookGenre">Genre</label>
-                        <input class="form-control" id="bookGenre" type="text" v-model="book.genre">
-                    </div>
+    <b-container fluid>
+        <b-row>
+            <b-col>
+                <h2>Book info
+                    <b-spinner v-if="loadingState === 'loading'" class="ml-2"/>
+                </h2>
+            </b-col>
+        </b-row>
+        <b-row>
+            <b-col>
+                <b-alert v-model="showErrorAlert" dismissible variant="danger">{{error}}</b-alert>
+            </b-col>
+        </b-row>
+        <b-row v-if="loadingState === 'ok'">
+            <b-col class="col-6">
+                <b-form @submit="saveBook()" @reset="back()">
+                    <b-form-group label="Title" label-for="bookTitle">
+                        <b-form-input id="bookTitle" type="text" v-model="book.title"></b-form-input>
+                    </b-form-group>
+                    <b-form-group label="Year" label-for="bookYear">
+                        <b-form-input id="bookYear" type="number" v-model="book.year"></b-form-input>
+                    </b-form-group>
+                    <b-form-group label="Author" label-for="bookAuthor">
+                        <b-form-input id="bookAuthor" type="text" v-model="book.author"></b-form-input>
+                    </b-form-group>
+                    <b-form-group label="Genre" label-for="bookGenre">
+                        <b-form-input id="bookGenre" type="text" v-model="book.genre"></b-form-input>
+                    </b-form-group>
                     <div>
-                        <button v-on:click="saveBook()" class="btn btn-info btn-sm">Save</button>
-                        <button v-on:click="back()" class="btn btn-info btn-sm ml-2">Cancel</button>
+                        <b-button type="submit" class="btn btn-info btn-sm">Save</b-button>
+                        <b-button type="reset" class="btn btn-info btn-sm ml-2">Cancel</b-button>
                     </div>
-                </form>
-            </div>
-        </div>
-    </div>
+                </b-form>
+            </b-col>
+        </b-row>
+    </b-container>
 </template>
 
 <script>
@@ -42,6 +45,9 @@
 
         data() {
             return {
+                showErrorAlert: false,
+                loadingState: "ok",
+                error: "",
                 book: {
                     title: "Title",
                     year: 1970,
@@ -64,9 +70,16 @@
             },
 
             loadBook(id) {
+                this.loadingState = 'loading';
                 client.getBookDetails(id)
                     .then(book => {
                         this.book = book;
+                        this.loadingState = 'ok';
+                    })
+                    .catch(e => {
+                        this.error = e.toString();
+                        this.loadingState = 'error';
+                        this.showErrorAlert = true;
                     });
             },
 
@@ -85,6 +98,10 @@
                         } else {
                             this.$router.push({name: 'books'});
                         }
+                    })
+                    .catch(e => {
+                        this.error = e.toString();
+                        this.showErrorAlert = true;
                     });
             },
 

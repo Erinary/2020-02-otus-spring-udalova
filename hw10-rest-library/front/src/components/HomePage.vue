@@ -1,13 +1,13 @@
 <template>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
+    <b-container fluid>
+        <b-row>
+            <b-col>
                 <h1>My Little Library</h1>
-            </div>
-        </div>
+            </b-col>
+        </b-row>
 
-        <div class="row">
-            <div class="col">
+        <b-row>
+            <b-col>
                 <ul>
                     <li>
                         <router-link :to="{name: 'books'}">Books</router-link>
@@ -19,16 +19,15 @@
                         <router-link :to="{name: 'genres'}">Genres</router-link>
                     </li>
                 </ul>
-            </div>
-        </div>
+            </b-col>
+        </b-row>
 
-        <div class="row">
-            <div class="col text-right">
-            <!--TODO cybertruck-->
-                <img class="w-50" th:src="@{/img/cybertruck.jpg}" alt="Oops!"/>
-            </div>
-        </div>
-    </div>
+        <b-row>
+            <b-col class="text-right">
+                <img class="w-50" src="../assets/cybertruck.jpg" alt="Oops!"/>
+            </b-col>
+        </b-row>
+    </b-container>
 </template>
 
 <script>

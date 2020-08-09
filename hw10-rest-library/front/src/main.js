@@ -1,5 +1,6 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import Vue from 'vue'
 import VueRouter from "vue-router";
 import App from './App.vue'
@@ -14,16 +15,18 @@ import GenreDetails from "./components/GenreDetails";
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
+Vue.use(BootstrapVue)
+Vue.use(IconsPlugin)
 
 const routes = [
     {path: '/', name: 'home', component: HomePage},
-    {path: '/books', name: 'books', component: BookList},
+    {path: '/book/all', name: 'books', component: BookList},
     {path: '/book/all/:id', name: 'book-details', component: BookDetails},
     {path: '/book/new', name: 'book-new', component: BookSaveForm},
     {path: '/book/all/:id/edit', name: 'book-edit', component: BookSaveForm},
-    {path: '/authors', name: 'authors', component: AuthorList},
+    {path: '/author/all', name: 'authors', component: AuthorList},
     {path: '/author/:id', name: 'author-details', component: AuthorDetails},
-    {path: '/genres', name: 'genres', component: GenreList},
+    {path: '/genre/all', name: 'genres', component: GenreList},
     {path: '/genre/:id', name: 'genre-details', component: GenreDetails}
 ]
 

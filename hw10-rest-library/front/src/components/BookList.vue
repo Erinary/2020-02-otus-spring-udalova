@@ -1,21 +1,27 @@
 <template>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
+    <b-container fluid>
+        <b-row>
+            <b-col>
                 <h2>Books
                     <router-link :to="{name: 'book-new'}" class="btn btn-outline-primary btn-sm" role="button">
                         Save new
                     </router-link>
+                    <b-spinner v-if="loadingState === 'loading'" class="ml-2"/>
                 </h2>
-            </div>
-        </div>
-        <div class="row mb-1">
-            <div class="col">
+            </b-col>
+        </b-row>
+        <b-row>
+            <b-col>
+                <b-alert v-model="showErrorAlert" dismissible variant="danger">{{error}}</b-alert>
+            </b-col>
+        </b-row>
+        <b-row class="mb-1">
+            <b-col>
                 <router-link :to="{name: 'home'}" class="btn btn-info btn-sm" role="button">← Home</router-link>
-            </div>
-        </div>
+            </b-col>
+        </b-row>
 
-        <div class="row">
+        <b-row v-if="loadingState === 'ok'">
             <div class="col">
                 <table class="table">
                     <thead class="thead-light">
@@ -48,8 +54,8 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-    </div>
+        </b-row>
+    </b-container>
 </template>
 
 <script>
@@ -60,6 +66,9 @@
 
         data() {
             return {
+                showErrorAlert: false,
+                loadingState: "ok",
+                error: "",
                 books: [
                     {
                         id: 1,
@@ -78,15 +87,26 @@
 
         methods: {
             loadBooks() {
+                this.loadingState = 'loading';
                 client.getBookList()
                     .then(bookList => {
                         this.books = bookList;
+                        this.loadingState = 'ok';
+                    })
+                    .catch(e => {
+                        this.error = e.toString();
+                        this.loadingState = 'error';
+                        this.showErrorAlert = true;
                     });
             },
 
             deleteBook(id) {
                 client.deleteBook(id)
-                    .then(() => this.loadBooks());
+                    .then(() => this.loadBooks())
+                    .catch(e => {
+                        this.error = e.toString();
+                        this.showErrorAlert = true;
+                    });
             }
         }
     }
