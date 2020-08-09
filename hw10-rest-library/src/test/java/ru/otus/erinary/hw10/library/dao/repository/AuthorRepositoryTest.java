@@ -1,9 +1,10 @@
-package ru.otus.erinary.hw10.library.dao.author;
+package ru.otus.erinary.hw10.library.dao.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import ru.otus.erinary.hw10.library.model.Author;
+import ru.otus.erinary.hw10.library.dao.model.Author;
+import ru.otus.erinary.hw10.library.dao.repository.AuthorRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;

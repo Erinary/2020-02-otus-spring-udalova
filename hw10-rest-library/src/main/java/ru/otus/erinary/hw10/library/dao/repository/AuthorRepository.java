@@ -1,9 +1,9 @@
-package ru.otus.erinary.hw10.library.dao.author;
+package ru.otus.erinary.hw10.library.dao.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ru.otus.erinary.hw10.library.model.Author;
+import ru.otus.erinary.hw10.library.dao.model.Author;
 
 import java.util.Optional;
 

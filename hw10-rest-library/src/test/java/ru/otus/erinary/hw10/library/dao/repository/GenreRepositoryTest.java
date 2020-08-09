@@ -1,9 +1,10 @@
-package ru.otus.erinary.hw10.library.dao.genre;
+package ru.otus.erinary.hw10.library.dao.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import ru.otus.erinary.hw10.library.model.Genre;
+import ru.otus.erinary.hw10.library.dao.model.Genre;
+import ru.otus.erinary.hw10.library.dao.repository.GenreRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;

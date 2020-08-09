@@ -4,10 +4,10 @@ import ru.otus.erinary.hw10.library.api.model.AuthorModel;
 import ru.otus.erinary.hw10.library.api.model.BookModel;
 import ru.otus.erinary.hw10.library.api.model.CommentModel;
 import ru.otus.erinary.hw10.library.api.model.GenreModel;
-import ru.otus.erinary.hw10.library.model.Author;
-import ru.otus.erinary.hw10.library.model.Book;
-import ru.otus.erinary.hw10.library.model.Comment;
-import ru.otus.erinary.hw10.library.model.Genre;
+import ru.otus.erinary.hw10.library.dao.model.Author;
+import ru.otus.erinary.hw10.library.dao.model.Book;
+import ru.otus.erinary.hw10.library.dao.model.Comment;
+import ru.otus.erinary.hw10.library.dao.model.Genre;
 
 import java.util.List;
 import java.util.Optional;
@@ -71,7 +71,6 @@ public class ModelConverter {
 
     static CommentModel toCommentModel(final Comment comment) {
         return new CommentModel(
-                comment.getId(),
                 comment.getText(),
                 comment.getUser(),
                 comment.getDate(),

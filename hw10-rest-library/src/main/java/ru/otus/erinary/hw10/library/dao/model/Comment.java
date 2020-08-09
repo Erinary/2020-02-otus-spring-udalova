@@ -1,4 +1,4 @@
-package ru.otus.erinary.hw10.library.model;
+package ru.otus.erinary.hw10.library.dao.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
