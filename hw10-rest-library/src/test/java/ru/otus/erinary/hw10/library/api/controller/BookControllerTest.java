@@ -10,7 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.otus.erinary.hw10.library.api.model.BookModel;
+import ru.otus.erinary.hw10.library.api.model.BookDto;
 import ru.otus.erinary.hw10.library.dao.model.Author;
 import ru.otus.erinary.hw10.library.dao.model.Book;
 import ru.otus.erinary.hw10.library.dao.model.Comment;
@@ -105,7 +105,7 @@ class BookControllerTest {
                             );
                         }
                 );
-        var bookModel = new BookModel(1L, "title", 1970, "author", "genre", null);
+        var bookModel = new BookDto(1L, "title", 1970, "author", "genre", null);
 
         mvc.perform(post("/library/book")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -136,7 +136,7 @@ class BookControllerTest {
                 );
         Mockito.when(libraryService.getBookComments(Mockito.anyLong()))
                 .thenReturn(List.of(new Comment("text", "user", new Book())));
-        var bookModel = new BookModel(1L, "title", 1970, "author", "genre", null);
+        var bookModel = new BookDto(1L, "title", 1970, "author", "genre", null);
 
         mvc.perform(put("/library/book/{id}", 1L)
                 .contentType(MediaType.APPLICATION_JSON)

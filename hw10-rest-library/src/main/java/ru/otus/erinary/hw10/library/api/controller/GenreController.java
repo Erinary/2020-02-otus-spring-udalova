@@ -2,7 +2,7 @@ package ru.otus.erinary.hw10.library.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.otus.erinary.hw10.library.api.model.GenreModel;
+import ru.otus.erinary.hw10.library.api.model.GenreDto;
 import ru.otus.erinary.hw10.library.service.LibraryService;
 
 import java.util.List;
@@ -20,14 +20,14 @@ public class GenreController {
     }
 
     @GetMapping("/genre")
-    public List<GenreModel> getAllGenres() {
+    public List<GenreDto> getAllGenres() {
         return libraryService.getGenres().stream()
                 .map(ModelConverter::toGenreModel)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/genre/{id}")
-    public GenreModel getGenre(@PathVariable(value = "id") final Long id) {
+    public GenreDto getGenre(@PathVariable(value = "id") final Long id) {
         var genre = libraryService.getGenreById(id);
         return ModelConverter.toGenreModel(genre);
     }

@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookModel {
+public class BookDto {
 
     @JsonProperty("id")
     private Long id;
@@ -32,6 +32,6 @@ public class BookModel {
 
     @JsonProperty("comments")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<CommentModel> comments;
+    private List<CommentDto> comments;
 
 }

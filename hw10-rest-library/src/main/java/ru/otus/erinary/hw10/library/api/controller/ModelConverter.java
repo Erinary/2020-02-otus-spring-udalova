@@ -1,9 +1,9 @@
 package ru.otus.erinary.hw10.library.api.controller;
 
-import ru.otus.erinary.hw10.library.api.model.AuthorModel;
-import ru.otus.erinary.hw10.library.api.model.BookModel;
-import ru.otus.erinary.hw10.library.api.model.CommentModel;
-import ru.otus.erinary.hw10.library.api.model.GenreModel;
+import ru.otus.erinary.hw10.library.api.model.AuthorDto;
+import ru.otus.erinary.hw10.library.api.model.BookDto;
+import ru.otus.erinary.hw10.library.api.model.CommentDto;
+import ru.otus.erinary.hw10.library.api.model.GenreDto;
 import ru.otus.erinary.hw10.library.dao.model.Author;
 import ru.otus.erinary.hw10.library.dao.model.Book;
 import ru.otus.erinary.hw10.library.dao.model.Comment;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class ModelConverter {
 
-    static Book toBookEntity(final BookModel model) {
+    static Book toBookEntity(final BookDto model) {
         return new Book(
                 model.getId(),
                 model.getTitle(),
@@ -25,8 +25,8 @@ public class ModelConverter {
         );
     }
 
-    static BookModel toBookModel(final Book book, final List<Comment> comments) {
-        return new BookModel(
+    static BookDto toBookModel(final Book book, final List<Comment> comments) {
+        return new BookDto(
                 book.getId(),
                 book.getTitle(),
                 book.getYear(),
@@ -38,8 +38,8 @@ public class ModelConverter {
         );
     }
 
-    static BookModel toShortBookModel(final Book book) {
-        return new BookModel(
+    static BookDto toShortBookModel(final Book book) {
+        return new BookDto(
                 book.getId(),
                 book.getTitle(),
                 book.getYear(),
@@ -49,8 +49,8 @@ public class ModelConverter {
         );
     }
 
-    static AuthorModel toAuthorModel(final Author author) {
-        return new AuthorModel(
+    static AuthorDto toAuthorModel(final Author author) {
+        return new AuthorDto(
                 author.getId(),
                 author.getName(),
                 author.getBooks().stream()
@@ -59,8 +59,8 @@ public class ModelConverter {
         );
     }
 
-    static GenreModel toGenreModel(final Genre genre) {
-        return new GenreModel(
+    static GenreDto toGenreModel(final Genre genre) {
+        return new GenreDto(
                 genre.getId(),
                 genre.getName(),
                 genre.getBooks().stream()
@@ -69,8 +69,8 @@ public class ModelConverter {
         );
     }
 
-    static CommentModel toCommentModel(final Comment comment) {
-        return new CommentModel(
+    static CommentDto toCommentModel(final Comment comment) {
+        return new CommentDto(
                 comment.getId(),
                 comment.getText(),
                 comment.getUser(),

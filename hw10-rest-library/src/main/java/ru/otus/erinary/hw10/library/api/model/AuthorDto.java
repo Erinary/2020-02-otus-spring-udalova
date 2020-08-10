@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthorModel {
+public class AuthorDto {
 
     @JsonProperty("id")
     private Long id;
@@ -21,6 +21,6 @@ public class AuthorModel {
     private String name;
 
     @JsonProperty("books")
-    private List<BookModel> books;
+    private List<BookDto> books;
     
 }

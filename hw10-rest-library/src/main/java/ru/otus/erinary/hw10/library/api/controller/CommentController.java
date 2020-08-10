@@ -2,7 +2,7 @@ package ru.otus.erinary.hw10.library.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.otus.erinary.hw10.library.api.model.CommentModel;
+import ru.otus.erinary.hw10.library.api.model.CommentDto;
 import ru.otus.erinary.hw10.library.service.LibraryService;
 
 @RestController
@@ -17,12 +17,12 @@ public class CommentController {
     }
 
     @PostMapping("/comment")
-    public CommentModel saveBookComment(@RequestBody final CommentModel commentModel) {
-        var userName = commentModel.getUser() != null && !commentModel.getUser().isBlank() ? commentModel.getUser() : "Guest";
+    public CommentDto saveBookComment(@RequestBody final CommentDto commentDto) {
+        var userName = commentDto.getUser() != null && !commentDto.getUser().isBlank() ? commentDto.getUser() : "Guest";
         var comment = libraryService.saveComment(
-                commentModel.getText(),
+                commentDto.getText(),
                 userName,
-                commentModel.getBookId());
+                commentDto.getBookId());
         return ModelConverter.toCommentModel(comment);
     }
 

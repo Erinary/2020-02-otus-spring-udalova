@@ -13,7 +13,7 @@ import java.time.ZonedDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentModel {
+public class CommentDto {
 
     @JsonProperty("id")
     private Long id;

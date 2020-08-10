@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GenreModel {
+public class GenreDto {
 
     @JsonProperty("id")
     private Long id;
@@ -21,5 +21,5 @@ public class GenreModel {
     private String name;
 
     @JsonProperty("books")
-    private List<BookModel> books;
+    private List<BookDto> books;
 }

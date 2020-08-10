@@ -10,7 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.otus.erinary.hw10.library.api.model.CommentModel;
+import ru.otus.erinary.hw10.library.api.model.CommentDto;
 import ru.otus.erinary.hw10.library.dao.model.Book;
 import ru.otus.erinary.hw10.library.dao.model.Comment;
 import ru.otus.erinary.hw10.library.service.LibraryService;
@@ -47,7 +47,7 @@ class CommentControllerTest {
                                     book);
                         }
                 );
-        var commentModel = new CommentModel(1L, "example", "guest", null, 1L);
+        var commentModel = new CommentDto(1L, "example", "guest", null, 1L);
 
         mvc.perform(post("/library/comment")
                 .contentType(MediaType.APPLICATION_JSON)
