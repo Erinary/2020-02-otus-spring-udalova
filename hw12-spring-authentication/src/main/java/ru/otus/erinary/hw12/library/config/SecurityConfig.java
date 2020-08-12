@@ -16,7 +16,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         web.ignoring()
-                .antMatchers("/img/**");
+                .antMatchers("/img/**")
+                .antMatchers("/webjars/**");
     }
 
     @Override
@@ -24,9 +25,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/**").authenticated()
+                .antMatchers("/library/login").permitAll()
+                .antMatchers("/auth_check").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                .httpBasic();
+                .formLogin()
+                .usernameParameter("username")
+                .usernameParameter("password")
+                .loginPage("/library/login")
+                .loginProcessingUrl("/auth_check")
+                .defaultSuccessUrl("/library");
     }
 
     @Bean
