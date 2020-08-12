@@ -3,9 +3,9 @@ package ru.otus.erinary.hw12.library.dao.book;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import ru.otus.erinary.hw12.library.model.Author;
-import ru.otus.erinary.hw12.library.model.Book;
-import ru.otus.erinary.hw12.library.model.Genre;
+import ru.otus.erinary.hw12.library.dao.model.Author;
+import ru.otus.erinary.hw12.library.dao.model.Book;
+import ru.otus.erinary.hw12.library.dao.model.Genre;
 import ru.otus.erinary.hw12.library.dao.repository.BookRepository;
 
 import java.util.List;

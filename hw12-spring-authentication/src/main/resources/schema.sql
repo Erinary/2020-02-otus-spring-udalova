@@ -1,3 +1,12 @@
+CREATE TABLE users
+(
+    id BIGINT AUTO_INCREMENT,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE (username)
+);
+
 CREATE TABLE genres
 (
     id   BIGINT AUTO_INCREMENT,

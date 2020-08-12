@@ -1,9 +1,9 @@
 package ru.otus.erinary.hw12.library.service;
 
-import ru.otus.erinary.hw12.library.model.Author;
-import ru.otus.erinary.hw12.library.model.Book;
-import ru.otus.erinary.hw12.library.model.Comment;
-import ru.otus.erinary.hw12.library.model.Genre;
+import ru.otus.erinary.hw12.library.dao.model.Author;
+import ru.otus.erinary.hw12.library.dao.model.Book;
+import ru.otus.erinary.hw12.library.dao.model.Comment;
+import ru.otus.erinary.hw12.library.dao.model.Genre;
 
 import java.util.List;
 

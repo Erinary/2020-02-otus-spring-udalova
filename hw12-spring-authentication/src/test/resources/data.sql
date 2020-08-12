@@ -1,3 +1,7 @@
+insert into users(username, password)
+values ( 'admin', 'admin' ),
+       ('test', 'qwerty');
+
 insert into genres (name)
 values ('genre1'),
        ('genre2'),

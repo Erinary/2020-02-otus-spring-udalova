@@ -1,3 +1,8 @@
+insert into users(username, password)
+values ( 'admin', 'admin' ),
+       ('Ваня', 'qwerty'),
+       ('Юрий', 'qwerty');
+
 insert into genres (name)
 values ('Программирование'),
        ('Фэнтези'),
@@ -32,10 +37,10 @@ values ('Книга содержит много отличных советов 
         '2019-12-07 18:25:32 Asia/Novosibirsk',
         (select id from books where title = 'Совершенный код')),
        ('Отличная книга, можно сказать, классика. Всем рекомендую.',
-        'Максим',
+        'Guest',
         '2019-04-26 11:05:30 Europe/Moscow',
         (select id from books where title = 'Совершенный код')),
        ('Остроумная, абсурдная антиутопия служит замечательной иллюстрацией доведенного до крайности общества потребления.',
-        'Фатима',
+        'Guest',
         '2019-04-15 14:13:03 Europe/Moscow',
         (select id from books where title = 'О дивный новый мир'));

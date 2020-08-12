@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import ru.otus.erinary.hw12.library.dao.repository.BookRepository;
-import ru.otus.erinary.hw12.library.model.Comment;
+import ru.otus.erinary.hw12.library.dao.model.Comment;
 import ru.otus.erinary.hw12.library.dao.repository.CommentRepository;
 
 import java.time.ZonedDateTime;

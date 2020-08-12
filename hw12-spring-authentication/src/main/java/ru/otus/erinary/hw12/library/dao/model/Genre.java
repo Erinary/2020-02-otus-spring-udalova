@@ -1,4 +1,4 @@
-package ru.otus.erinary.hw12.library.model;
+package ru.otus.erinary.hw12.library.dao.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,8 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "authors")
-public class Author {
+@Table(name = "genres")
+public class Genre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +25,10 @@ public class Author {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "genre", fetch = FetchType.LAZY)
     private List<Book> books;
 
-    public Author(final String name) {
+    public Genre(final String name) {
         this.name = name;
     }
 }
