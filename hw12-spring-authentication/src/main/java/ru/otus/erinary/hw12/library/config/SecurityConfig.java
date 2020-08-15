@@ -25,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/library/login").permitAll()
+                .antMatchers("/library/login/**").permitAll()
                 .antMatchers("/auth_check").permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -34,11 +34,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("password")
                 .loginPage("/library/login")
                 .loginProcessingUrl("/auth_check")
-                .defaultSuccessUrl("/library");
+                .defaultSuccessUrl("/library")
+                .failureUrl("/library/login/failed")
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/library/login");
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+        //TODO нормальный encoder
         return NoOpPasswordEncoder.getInstance();
     }
 }

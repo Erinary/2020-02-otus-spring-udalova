@@ -7,6 +7,15 @@
     <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </head>
 <body>
-
+<div th:fragment="header(header_text)" class="row">
+    <div class="col">
+        <h2 th:text="${header_text}">Header Text</h2>
+    </div>
+    <div class="col text-right">
+        <form method="POST" action="/logout" class="mt-2 mr-1">
+            <button class="btn btn-primary btn-sm" type="submit">Logout</button>
+        </form>
+    </div>
+</div>
 </body>
 </html>

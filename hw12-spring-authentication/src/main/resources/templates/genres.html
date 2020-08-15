@@ -5,11 +5,7 @@
 </head>
 <body>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col">
-            <h2>Genres</h2>
-        </div>
-    </div>
+    <div th:replace="base :: header('Genres')"></div>
     <div class="row mb-1">
         <div class="col">
             <a href="home-page.html" class="btn btn-info btn-sm" role="button" th:href="@{/library}">← Home</a>

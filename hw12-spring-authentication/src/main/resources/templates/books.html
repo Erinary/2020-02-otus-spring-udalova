@@ -5,17 +5,16 @@
 </head>
 <body>
 <div class="container-fluid">
-    <div class="row">
+    <div th:replace="base :: header('Books')"></div>
+    <div class="row mb-1">
         <div class="col">
-            <h2>Books
-                <a href="book-form.html" class="btn btn-outline-primary btn-sm" role="button"
-                   th:href="@{/library/book/save}">Save new</a>
-            </h2>
+            <a href="home-page.html" class="btn btn-info btn-sm" role="button" th:href="@{/library}">← Home</a>
         </div>
     </div>
     <div class="row mb-1">
         <div class="col">
-            <a href="home-page.html" class="btn btn-info btn-sm" role="button" th:href="@{/library}">← Home</a>
+            <a href="book-form.html" class="btn btn-outline-primary btn-sm" role="button"
+               th:href="@{/library/book/save}">Save new</a>
         </div>
     </div>
 

@@ -10,6 +10,11 @@
             <h2>Login</h2>
         </div>
     </div>
+    <div class="row" th:if="${message != null && !message.isBlank()}">
+        <div class="col">
+            <div class="alert alert-warning" role="alert" th:text="${message}">Error message</div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-6">
             <form method="POST" action="/auth_check">

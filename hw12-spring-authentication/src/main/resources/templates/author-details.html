@@ -5,14 +5,10 @@
 </head>
 <body>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col">
-            <h2>Author Details</h2>
-        </div>
-    </div>
+    <div th:replace="base :: header('Author Details')"></div>
     <div class="row mb-1">
         <div class="col">
-            <a href="authors.html" class="btn btn-info btn-sm" role="button" th:href="@{/library/authors}">← Back</a>
+            <a href="authors.html" class="btn btn-info btn-sm" role="button" th:href="@{/library/authors}">← To author list</a>
         </div>
     </div>
 

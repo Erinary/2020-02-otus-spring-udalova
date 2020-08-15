@@ -5,11 +5,7 @@
 </head>
 <body>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col">
-            <h2>Authors</h2>
-        </div>
-    </div>
+    <div th:replace="base :: header('Authors')"></div>
     <div class="row mb-1">
         <div class="col">
             <a href="home-page.html" class="btn btn-info btn-sm" role="button" th:href="@{/library}">← Home</a>
@@ -36,7 +32,9 @@
                     </td>
                     <td>
                         <form method="POST" th:action="@{/library/author/delete(id=${author.id})}">
-                            <button class="btn btn-outline-danger btn-sm" type="submit" name="delete" value="delete">Delete</button>
+                            <button class="btn btn-outline-danger btn-sm" type="submit" name="delete" value="delete">
+                                Delete
+                            </button>
                         </form>
                     </td>
                 </tr>

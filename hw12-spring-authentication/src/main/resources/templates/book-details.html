@@ -5,23 +5,17 @@
 </head>
 <body>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col">
-            <h2>Book details
-                <a href="book-form.html" class="btn btn-outline-primary btn-sm" role="button"
-                   th:href="@{/library/book/save(id=${book.id})}">Edit</a>
-            </h2>
-        </div>
-    </div>
-    <div class="row mb-1">
-        <div class="col">
-            <a href="javascript:history.back()" class="btn btn-info btn-sm" role="button">← Back</a>
-        </div>
-    </div>
+    <div th:replace="base :: header('Book details')"></div>
     <div class="row mb-1">
         <div class="col">
             <a href="books.html" class="btn btn-info btn-sm" role="button" th:href="@{/library/books}">← To book
                 list</a>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col">
+            <a href="book-form.html" class="btn btn-outline-primary btn-sm" role="button"
+            th:href="@{/library/book/save(id=${book.id})}">Edit</a>
         </div>
     </div>
 
@@ -60,7 +54,8 @@
     </div>
     <div class="row">
         <div class="col">
-            <div class="alert alert-info" role="alert" th:if="${book.comments.isEmpty()}">There are no comments yet</div>
+            <div class="alert alert-info" role="alert" th:if="${book.comments.isEmpty()}">There are no comments yet
+            </div>
             <table class="table" th:unless="${book.comments.isEmpty()}">
                 <thead class="thead-light">
                 <tr>
