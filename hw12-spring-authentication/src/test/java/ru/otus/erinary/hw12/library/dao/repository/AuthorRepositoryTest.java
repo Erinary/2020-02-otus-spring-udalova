@@ -1,4 +1,4 @@
-package ru.otus.erinary.hw12.library.dao.author;
+package ru.otus.erinary.hw12.library.dao.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
