@@ -39,7 +39,7 @@ CREATE TABLE comments
 (
     id      BIGINT AUTO_INCREMENT,
     text    CLOB,
-    user    VARCHAR(255) NOT NULL,
+    user_id    BIGINT NOT NULL,
     date    TIMESTAMP WITH TIME ZONE,
     book_id BIGINT NOT NULL,
     PRIMARY KEY (id),

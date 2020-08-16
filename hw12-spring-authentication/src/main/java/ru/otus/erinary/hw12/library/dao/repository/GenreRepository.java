@@ -12,8 +12,6 @@ import java.util.Optional;
  */
 public interface GenreRepository extends JpaRepository<Genre, Long> {
 
-    Optional<Genre> findById(Long id);
-
     Optional<Genre> findByName(String name);
 
     @Query("select g.id from Genre g where g.name = :name")

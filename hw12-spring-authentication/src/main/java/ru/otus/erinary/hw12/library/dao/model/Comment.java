@@ -24,8 +24,9 @@ public class Comment {
     @Column(name = "text", columnDefinition = "CLOB")
     private String text;
 
-    @Column(name = "user")
-    private String user;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "date")
     private ZonedDateTime date;
@@ -34,7 +35,7 @@ public class Comment {
     @JoinColumn(name = "book_id")
     private Book book;
 
-    public Comment(final String text, final String user, final Book book) {
+    public Comment(final String text, final User user, final Book book) {
         this.text = text;
         this.user = user;
         this.date = ZonedDateTime.now();

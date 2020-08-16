@@ -3,6 +3,7 @@ package ru.otus.erinary.hw12.library.dao.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import ru.otus.erinary.hw12.library.dao.model.User;
 import ru.otus.erinary.hw12.library.dao.repository.BookRepository;
 import ru.otus.erinary.hw12.library.dao.model.Comment;
 import ru.otus.erinary.hw12.library.dao.repository.CommentRepository;
@@ -22,6 +23,9 @@ class CommentRepositoryTest {
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Test
     void testSaveNew() {
         var comments = repository.findAll();
@@ -29,7 +33,8 @@ class CommentRepositoryTest {
         assertEquals(4, comments.size());
 
         var book = bookRepository.findById(1L).orElseThrow();
-        var comment = new Comment("text", "new_user", book);
+        var user = userRepository.findById(1L).orElseThrow();
+        var comment = new Comment("text", user, book);
         var id = repository.save(comment).getId();
 
         comments = repository.findAll();
@@ -42,7 +47,7 @@ class CommentRepositoryTest {
     void testFindById() {
         var comment = repository.findById(1L).orElseThrow();
         assertEquals("comment text 1", comment.getText());
-        assertEquals("user1", comment.getUser());
+        assertEquals("user1", comment.getUser().getUsername());
         assertEquals(ZonedDateTime.parse("2019-06-16T10:15:30+03:00[Europe/Moscow]").toInstant(), comment.getDate().toInstant());
         assertNotNull(comment.getBook());
         assertEquals(1L, comment.getBook().getId());
@@ -55,8 +60,10 @@ class CommentRepositoryTest {
         assertEquals(4, comments.size());
         assertNotNull(comments.get(0).getBook());
 
-        var users = comments.stream().map(Comment::getUser).collect(Collectors.toList());
-        assertTrue(users.containsAll(List.of("user1", "user2", "user3", "user4")));
+        var users = comments.stream()
+                .map(c -> c.getUser().getUsername())
+                .collect(Collectors.toList());
+        assertTrue(users.containsAll(List.of("user1", "user2")));
     }
 
     @Test
@@ -65,8 +72,10 @@ class CommentRepositoryTest {
         assertFalse(comments.isEmpty());
         assertEquals(3, comments.size());
 
-        var users = comments.stream().map(Comment::getUser).collect(Collectors.toList());
-        assertTrue(users.containsAll(List.of("user1", "user2", "user3")));
+        var users = comments.stream()
+                .map(c -> c.getUser().getUsername())
+                .collect(Collectors.toList());
+        assertTrue(users.containsAll(List.of("user1", "user2")));
     }
 
     @Test

@@ -13,8 +13,6 @@ import java.util.Optional;
  */
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    Optional<Comment> findById(Long id);
-
     List<Comment> findAllByBookId(Long bookId);
 
     @Query("select c.book.id from Comment c where c.id = :id")

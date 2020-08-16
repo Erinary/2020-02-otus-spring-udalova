@@ -3,10 +3,7 @@ package ru.otus.erinary.hw12.library.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.erinary.hw12.library.dao.repository.AuthorRepository;
-import ru.otus.erinary.hw12.library.dao.repository.BookRepository;
-import ru.otus.erinary.hw12.library.dao.repository.CommentRepository;
-import ru.otus.erinary.hw12.library.dao.repository.GenreRepository;
+import ru.otus.erinary.hw12.library.dao.repository.*;
 import ru.otus.erinary.hw12.library.dao.model.Author;
 import ru.otus.erinary.hw12.library.dao.model.Book;
 import ru.otus.erinary.hw12.library.dao.model.Comment;
@@ -22,16 +19,19 @@ public class LibraryServiceImpl implements LibraryService {
     private final AuthorRepository authorRepository;
     private final GenreRepository genreRepository;
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public LibraryServiceImpl(final BookRepository bookRepository,
                               final AuthorRepository authorRepository,
                               final GenreRepository genreRepository,
-                              final CommentRepository commentRepository) {
+                              final CommentRepository commentRepository,
+                              final UserRepository userRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.genreRepository = genreRepository;
         this.commentRepository = commentRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -150,9 +150,10 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     @Transactional
-    public Comment saveComment(String text, String user, Long bookId) {
+    public Comment saveComment(String text, String username, Long bookId) {
         var book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new LibraryServiceException(String.format("Book with id [%d] does not exist", bookId)));
+        var user = userRepository.findByUsername(username).orElseThrow(() -> new LibraryServiceException("User not found"));
         var comment = new Comment(text, user, book);
         return commentRepository.save(comment);
     }

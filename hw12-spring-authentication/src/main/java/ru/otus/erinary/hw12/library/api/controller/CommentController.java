@@ -34,8 +34,7 @@ public class CommentController {
     @PostMapping("/comment/save")
     public String saveBookComment(final CommentDto commentDto) {
         var userDetails = (UserDetails) (SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        var userName = userDetails.getUsername() != null && !userDetails.getUsername().isBlank()
-                ? userDetails.getUsername() : "Guest";
+        var userName = userDetails.getUsername();
         var comment = libraryService.saveComment(
                 commentDto.getText(),
                 userName,

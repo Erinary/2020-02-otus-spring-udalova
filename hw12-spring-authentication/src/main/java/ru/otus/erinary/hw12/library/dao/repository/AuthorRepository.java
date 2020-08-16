@@ -12,8 +12,6 @@ import java.util.Optional;
  */
 public interface AuthorRepository extends JpaRepository<Author, Long> {
 
-    Optional<Author> findById(Long id);
-
     Optional<Author> findByName(String name);
 
     @Query("select a.id from Author a where a.name = :name")

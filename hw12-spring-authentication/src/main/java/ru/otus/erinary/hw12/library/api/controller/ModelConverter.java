@@ -76,7 +76,7 @@ public class ModelConverter {
         return new CommentDto(
                 comment.getId(),
                 comment.getText(),
-                comment.getUser(),
+                comment.getUser().getUsername(),
                 comment.getDate().format(FORMATTER),
                 comment.getBook().getId()
         );

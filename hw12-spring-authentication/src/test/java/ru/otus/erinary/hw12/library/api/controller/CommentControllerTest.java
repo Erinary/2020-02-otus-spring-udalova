@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.erinary.hw12.library.api.model.CommentDto;
 import ru.otus.erinary.hw12.library.dao.model.Book;
 import ru.otus.erinary.hw12.library.dao.model.Comment;
+import ru.otus.erinary.hw12.library.dao.model.User;
 import ru.otus.erinary.hw12.library.service.LibraryService;
 
 import static org.hamcrest.Matchers.hasProperty;
@@ -53,9 +54,10 @@ class CommentControllerTest {
                         {
                             var book = new Book();
                             book.setId(invocation.getArgument(2));
+                            var user = new User(1L, invocation.getArgument(1), "pwd");
                             return new Comment(
                                     invocation.getArgument(0),
-                                    invocation.getArgument(1),
+                                    user,
                                     book);
                         }
                 );

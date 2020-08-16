@@ -1,6 +1,7 @@
 insert into users(username, password)
-values ( 'admin', 'admin' ),
-       ('test', 'qwerty');
+values ('admin', 'admin' ),
+       ('user1', 'qwerty'),
+       ('user2', 'qwerty');
 
 insert into genres (name)
 values ('genre1'),
@@ -30,20 +31,20 @@ values ('title1',
         (select id from authors where name = 'author1'),
         (select id from genres where name = 'genre2'));
 
-insert into comments(text, user, date, book_id)
+insert into comments(text, user_id, date, book_id)
 values ('comment text 1',
-        'user1',
+        (select id from users where username = 'user1'),
         '2019-06-16 10:15:30 Europe/Moscow',
         (select id from books where title = 'title1')),
        ('comment text 2',
-        'user2',
+        (select id from users where username = 'user2'),
         '2019-12-07 18:25:32 Asia/Novosibirsk',
         (select id from books where title = 'title1')),
        ('comment text 3',
-        'user3',
+        (select id from users where username = 'user1'),
         '2019-04-26 11:05:30 Europe/Moscow',
         (select id from books where title = 'title1')),
        ('comment text 4',
-        'user4',
+        (select id from users where username = 'user2'),
         '2019-04-15 14:13:03 Europe/Moscow',
         (select id from books where title = 'title2'));
