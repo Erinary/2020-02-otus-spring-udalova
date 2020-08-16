@@ -1,6 +1,8 @@
 package ru.otus.erinary.hw12.library.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +33,9 @@ public class CommentController {
 
     @PostMapping("/comment/save")
     public String saveBookComment(final CommentDto commentDto) {
-        var userName = commentDto.getUser() != null && !commentDto.getUser().isBlank() ? commentDto.getUser() : "Guest";
+        var userDetails = (UserDetails) (SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        var userName = userDetails.getUsername() != null && !userDetails.getUsername().isBlank()
+                ? userDetails.getUsername() : "Guest";
         var comment = libraryService.saveComment(
                 commentDto.getText(),
                 userName,

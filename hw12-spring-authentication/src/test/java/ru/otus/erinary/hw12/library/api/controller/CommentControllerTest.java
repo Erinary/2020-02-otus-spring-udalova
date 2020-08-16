@@ -46,7 +46,7 @@ class CommentControllerTest {
 
     @Test
     void saveBookComment() throws Exception {
-        var comment = new CommentDto(1L, "example", "guest", null, 1L);
+        var comment = new CommentDto(1L, "example", null, null, 1L);
 
         Mockito.when(libraryService.saveComment(Mockito.anyString(), Mockito.anyString(), Mockito.anyLong()))
                 .thenAnswer(invocation ->
@@ -63,11 +63,12 @@ class CommentControllerTest {
         mvc.perform(post("/library/comment/save")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("text", comment.getText())
-                .param("user", comment.getUser())
                 .param("bookId", comment.getBookId().toString()))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(String.format("/library/book?id=%d", comment.getBookId())));
+
+        Mockito.verify(libraryService).saveComment(comment.getText(), "admin", comment.getBookId());
     }
 
     @Test

@@ -13,11 +13,6 @@
                     <input id="commentBookId" type="hidden" name="commentBookId" th:field="${comment.bookId}">
                 </div>
                 <div class="form-group">
-                    <label for="commentUser">User</label>
-                    <input class="form-control" id="commentUser" type="text" name="commentUser" placeholder="Guest"
-                           th:field="${comment.user}">
-                </div>
-                <div class="form-group">
                     <label for="commentText">Text</label>
                     <textarea class="form-control" id="commentText" rows="7" cols="30" name="commentText"
                               th:field="${comment.text}"
