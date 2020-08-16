@@ -1,7 +1,7 @@
 insert into users(username, password)
-values ( 'admin', 'admin' ),
-       ('Ваня', 'qwerty'),
-       ('Юрий', 'qwerty');
+values ( 'admin', '$2a$10$441wHYiAgIrvDOwJT.yob.6PThPNTcEPi54pDUqMie0D2s69upu26' ),
+       ('Perry', '$2a$10$arrB8.9C5UMBoKlltrTq8Oz7hL7aAla9rVfL8rwxkTB0WJ55w6YUC'),
+       ('Nancy', '$2a$10$dpjGTg4JEuOpuq/owpFJtux2k4PYR7wx1Orx1DeLUy5mELSzIFfX6');
 
 insert into genres (name)
 values ('Программирование'),
@@ -29,11 +29,11 @@ values ('Совершенный код',
 
 insert into comments(text, user, date, book_id)
 values ('Книга содержит много отличных советов и рекомендаций, которые действительно помогают писать код лучше.',
-        'Ваня',
+        'Perry',
         '2019-06-16 10:15:30 Europe/Moscow',
         (select id from books where title = 'Совершенный код')),
        ('Отличная книга для понимания многих важных вещей в мире программирования.',
-        'Юрий',
+        'Nancy',
         '2019-12-07 18:25:32 Asia/Novosibirsk',
         (select id from books where title = 'Совершенный код')),
        ('Отличная книга, можно сказать, классика. Всем рекомендую.',
