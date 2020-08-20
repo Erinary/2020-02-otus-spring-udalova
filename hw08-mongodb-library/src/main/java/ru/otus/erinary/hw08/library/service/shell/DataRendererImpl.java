@@ -5,10 +5,10 @@ import org.springframework.shell.table.BorderStyle;
 import org.springframework.shell.table.TableBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import ru.otus.erinary.hw08.library.model.Author;
-import ru.otus.erinary.hw08.library.model.Book;
-import ru.otus.erinary.hw08.library.model.Comment;
-import ru.otus.erinary.hw08.library.model.Genre;
+import ru.otus.erinary.hw08.library.dao.model.Author;
+import ru.otus.erinary.hw08.library.dao.model.Book;
+import ru.otus.erinary.hw08.library.dao.model.Comment;
+import ru.otus.erinary.hw08.library.dao.model.Genre;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -113,7 +113,7 @@ public class DataRendererImpl implements DataRenderer {
             for (int i = 1; i < authorData.length; i++) {
                 var author = authors.get(i - 1);
                 authorData[i] = new String[]{
-                        Long.toString(author.getId()),
+                        author.getId(),
                         author.getName()
                 };
             }

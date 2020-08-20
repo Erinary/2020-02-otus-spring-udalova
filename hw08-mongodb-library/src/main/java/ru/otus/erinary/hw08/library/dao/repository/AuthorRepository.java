@@ -1,22 +1,24 @@
 package ru.otus.erinary.hw08.library.dao.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ru.otus.erinary.hw08.library.model.Author;
+import ru.otus.erinary.hw08.library.dao.model.Author;
 
 import java.util.Optional;
 
 /**
  * Интерфейс репозитория для {@link Author}
  */
-public interface AuthorRepository extends JpaRepository<Author, Long> {
+public interface AuthorRepository extends MongoRepository<Author, String> {
 
-    Optional<Author> findById(Long id);
+    Optional<Author> findById(String id);
 
     Optional<Author> findByName(String name);
 
-    @Query("select a.id from Author a where a.name = :name")
-    Optional<Long> findIdByName(@Param("name") String name);
+    @Query("{'name' : :#{#name}}")
+    Optional<String> findIdByName(@Param("name") String name);
+
+    void deleteById(String id);
 
 }

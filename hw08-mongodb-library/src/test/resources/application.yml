@@ -1,18 +1,13 @@
 spring:
-  datasource:
-    initialization-mode: always
-    schema: schema.sql
-    data: data.sql
-
   shell:
     interactive:
       enabled: false
+  data:
+    mongodb:
+      database: test-library
+      host: localhost
 
-  jpa:
-    generate-ddl: false
-    hibernate:
-      ddl-auto: validate
-    properties:
-      hibernate:
-        format-sql: true
-    show-sql: true
+mongock:
+  change-logs-scan-package: ru.otus.erinary.hw08.library.dao.changelog.test
+  runner-type: initializingbean
+

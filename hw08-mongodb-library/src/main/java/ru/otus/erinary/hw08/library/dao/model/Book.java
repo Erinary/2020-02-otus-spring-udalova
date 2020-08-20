@@ -1,38 +1,39 @@
-package ru.otus.erinary.hw08.library.model;
+package ru.otus.erinary.hw08.library.dao.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
-
-@SuppressWarnings("JpaDataSourceORMInspection")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "books")
+//@Entity
+//@Table(name = "books")
+@Document(collection = "books")
 public class Book {
 
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "id")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "title")
+//    @Column(name = "title")
     private String title;
 
-    @Column(name = "year")
+//    @Column(name = "year")
     private int year;
 
-    @ManyToOne
-    @JoinColumn(name = "author_id")
+//    @ManyToOne
+//    @JoinColumn(name = "author_id")
     private Author author;
 
-    @ManyToOne
-    @JoinColumn(name = "genre_id")
+//    @ManyToOne
+//    @JoinColumn(name = "genre_id")
     private Genre genre;
 
     public Book(final String title, final int year, final Author author, final Genre genre) {

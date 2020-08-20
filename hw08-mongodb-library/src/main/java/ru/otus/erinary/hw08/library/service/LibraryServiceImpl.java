@@ -3,15 +3,15 @@ package ru.otus.erinary.hw08.library.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.erinary.hw08.library.dao.model.Author;
+import ru.otus.erinary.hw08.library.dao.model.Book;
+import ru.otus.erinary.hw08.library.dao.model.Comment;
+import ru.otus.erinary.hw08.library.dao.model.Genre;
 import ru.otus.erinary.hw08.library.dao.repository.AuthorRepository;
 import ru.otus.erinary.hw08.library.dao.repository.BookRepository;
 import ru.otus.erinary.hw08.library.dao.repository.CommentRepository;
-import ru.otus.erinary.hw08.library.dao.exception.DaoException;
 import ru.otus.erinary.hw08.library.dao.repository.GenreRepository;
-import ru.otus.erinary.hw08.library.model.Author;
-import ru.otus.erinary.hw08.library.model.Book;
-import ru.otus.erinary.hw08.library.model.Comment;
-import ru.otus.erinary.hw08.library.model.Genre;
+import ru.otus.erinary.hw08.library.service.exception.LibraryException;
 
 import java.util.List;
 
@@ -53,7 +53,7 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     @Transactional
-    public void deleteAuthor(final Long id) {
+    public void deleteAuthor(final String id) {
         authorRepository.deleteById(id);
     }
 
@@ -110,7 +110,7 @@ public class LibraryServiceImpl implements LibraryService {
 
         var book = id == null ? new Book() : bookRepository
                 .findById(id)
-                .orElseThrow(() -> new DaoException(String.format("Book with id [%d] does not exist", id)));
+                .orElseThrow(() -> new LibraryException(String.format("Book with id [%d] does not exist", id)));
         book.setTitle(title);
         book.setYear(year);
         book.setAuthor(author);
@@ -135,7 +135,7 @@ public class LibraryServiceImpl implements LibraryService {
     @Transactional
     public Long saveComment(String text, String user, Long bookId) {
         var book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new DaoException(String.format("Book with id [%d] does not exist", bookId)));
+                .orElseThrow(() -> new LibraryException(String.format("Book with id [%d] does not exist", bookId)));
         var comment = new Comment(text, user, book);
         return commentRepository.save(comment).getId();
     }

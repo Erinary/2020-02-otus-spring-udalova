@@ -1,9 +1,9 @@
 package ru.otus.erinary.hw08.library.service;
 
-import ru.otus.erinary.hw08.library.model.Author;
-import ru.otus.erinary.hw08.library.model.Book;
-import ru.otus.erinary.hw08.library.model.Comment;
-import ru.otus.erinary.hw08.library.model.Genre;
+import ru.otus.erinary.hw08.library.dao.model.Author;
+import ru.otus.erinary.hw08.library.dao.model.Book;
+import ru.otus.erinary.hw08.library.dao.model.Comment;
+import ru.otus.erinary.hw08.library.dao.model.Genre;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public interface LibraryService {
 
     Author getAuthorByName(String name);
 
-    void deleteAuthor(Long id);
+    void deleteAuthor(String id);
 
     List<Genre> getGenres();
 

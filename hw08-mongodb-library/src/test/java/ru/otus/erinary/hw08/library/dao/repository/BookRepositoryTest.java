@@ -2,18 +2,18 @@ package ru.otus.erinary.hw08.library.dao.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import ru.otus.erinary.hw08.library.model.Author;
-import ru.otus.erinary.hw08.library.model.Book;
-import ru.otus.erinary.hw08.library.model.Genre;
-import ru.otus.erinary.hw08.library.dao.repository.BookRepository;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import ru.otus.erinary.hw08.library.dao.model.Author;
+import ru.otus.erinary.hw08.library.dao.model.Book;
+import ru.otus.erinary.hw08.library.dao.model.Genre;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+@DataMongoTest
 class BookRepositoryTest {
 
     @Autowired
@@ -26,7 +26,7 @@ class BookRepositoryTest {
         assertEquals(4, books.size());
 
         var book = new Book("newTitle", 2018,
-                new Author(1L, "author1", null),
+                new Author(UUID.randomUUID().toString(), "author1", null),
                 new Genre(1L, "genre1", null));
         repository.save(book);
         assertNotEquals(0L, book.getId());
@@ -85,7 +85,7 @@ class BookRepositoryTest {
 
     @Test
     void testFindAllByAuthorId() {
-        var books = repository.findAllByAuthorId(1L);
+        var books = repository.findAllByAuthorId(UUID.randomUUID().toString());
         assertEquals(2, books.size());
         assertEquals("author1", books.get(0).getAuthor().getName());
         var bookTitles = books.stream().map(Book::getTitle).collect(Collectors.toList());

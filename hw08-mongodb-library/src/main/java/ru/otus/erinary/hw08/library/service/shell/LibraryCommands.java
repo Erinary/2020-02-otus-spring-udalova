@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
-import ru.otus.erinary.hw08.library.dao.exception.DaoException;
+import ru.otus.erinary.hw08.library.service.exception.LibraryException;
 import ru.otus.erinary.hw08.library.service.LibraryService;
 
 import java.util.Collections;
@@ -36,16 +36,16 @@ public class LibraryCommands {
         if (author == null) {
             return String.format(NOT_FOUND, "author", "name");
         } else {
-            System.out.println(String.format("ID: %d", author.getId()));
+            System.out.println(String.format("ID: %s", author.getId()));
             System.out.println(String.format("NAME: %s", author.getName()));
             return dataRenderer.getShortBookTable(author.getBooks());
         }
     }
 
     @ShellMethod(key = "delete-author", value = "Delete author by id")
-    public void deleteAuthor(@ShellOption({"-id"}) final Long id) {
+    public void deleteAuthor(@ShellOption({"-id"}) final String id) {
         libraryService.deleteAuthor(id);
-        System.out.println(String.format("Author with id [%d] was deleted", id));
+        System.out.println(String.format("Author with id [%s] was deleted", id));
     }
 
     @ShellMethod(key = "all-genres", value = "Get all genres in library")
@@ -114,7 +114,7 @@ public class LibraryCommands {
                 System.out.println("New book was saved");
             }
             return dataRenderer.getFullBookTable(Collections.singletonList(book));
-        } catch (DaoException e) {
+        } catch (LibraryException e) {
             return e.getMessage();
         }
     }
@@ -133,7 +133,7 @@ public class LibraryCommands {
         try {
             Long commentId = libraryService.saveComment(text, user, id);
             return String.format("New comment with id [%d] was added", commentId);
-        } catch (DaoException e) {
+        } catch (LibraryException e) {
             return e.getMessage();
         }
     }

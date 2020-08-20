@@ -2,17 +2,20 @@ package ru.otus.erinary.hw08.library.dao.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import ru.otus.erinary.hw08.library.model.Author;
-import ru.otus.erinary.hw08.library.dao.repository.AuthorRepository;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.transaction.annotation.Transactional;
+import ru.otus.erinary.hw08.library.dao.model.Author;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+@DataMongoTest
+@Transactional("MongoTransactionManager")
 class AuthorRepositoryTest {
+
+    private final String testAuthorId = "183accc8-e32a-11ea-87d0-0242ac130003";
 
     @Autowired
     private AuthorRepository repository;
@@ -29,25 +32,26 @@ class AuthorRepositoryTest {
         authors = repository.findAll();
         assertEquals(id, author.getId());
         assertEquals(4, authors.size());
-        assertTrue(authors.contains(author));
+        var authorsName = authors.stream().map(Author::getName).collect(Collectors.toList());
+        assertTrue(authorsName.contains(author.getName()));
     }
 
     @Test
     void testSaveExisted() {
-        var author = repository.findById(1L).orElseThrow();
+        var author = repository.findById(testAuthorId).orElseThrow();
         assertEquals("author1", author.getName());
 
         var newName = "author5";
         author.setName(newName);
         repository.save(author);
 
-        var loadedAuthor = repository.findById(1L).orElseThrow();
+        var loadedAuthor = repository.findById(testAuthorId).orElseThrow();
         assertEquals(newName, loadedAuthor.getName());
     }
 
     @Test
     void testFindById() {
-        var author = repository.findById(1L).orElseThrow();
+        var author = repository.findById(testAuthorId).orElseThrow();
         assertEquals("author1", author.getName());
         assertFalse(author.getBooks().isEmpty());
     }
@@ -55,14 +59,14 @@ class AuthorRepositoryTest {
     @Test
     void testFindByName() {
         var author = repository.findByName("author1").orElseThrow();
-        assertEquals(1L, author.getId());
+        assertEquals(testAuthorId, author.getId());
         assertFalse(author.getBooks().isEmpty());
     }
 
     @Test
     void testFindIdByName() {
         var id = repository.findIdByName("author1").orElseThrow();
-        assertEquals(1L, id);
+        assertNotNull(id);
     }
 
     @Test
@@ -70,7 +74,8 @@ class AuthorRepositoryTest {
         var authors = repository.findAll();
         assertFalse(authors.isEmpty());
         assertEquals(3, authors.size());
-        assertFalse(authors.get(0).getBooks().isEmpty());
+        assertNotNull(authors.get(0).getBooks());
+        assertTrue(authors.get(0).getBooks().isEmpty());
 
         var authorNames = authors.stream().map(Author::getName).collect(Collectors.toList());
         assertTrue(authorNames.containsAll(List.of("author1", "author2", "author3")));
@@ -82,10 +87,11 @@ class AuthorRepositoryTest {
         assertFalse(authors.isEmpty());
         assertEquals(3, authors.size());
 
-        repository.deleteById(1L);
+        var deletedAuthor = authors.iterator().next();
+        repository.deleteById(deletedAuthor.getId());
         authors = repository.findAll();
         assertEquals(2, authors.size());
         var authorIds = authors.stream().map(Author::getId).collect(Collectors.toList());
-        assertFalse(authorIds.contains(1L));
+        assertFalse(authorIds.contains(deletedAuthor.getId()));
     }
 }

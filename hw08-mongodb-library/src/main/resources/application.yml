@@ -1,15 +1,15 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:library
-    initialization-mode: always
-    schema: schema.sql
-    data: data.sql
+  data:
+    #TODO configure
+    mongodb:
+      database: library
+      authentication-database:
+      username:
+      password:
+      host: localhost
+      port:
 
-  jpa:
-    generate-ddl: false
-    hibernate:
-      ddl-auto: validate
-    properties:
-      hibernate:
-        format-sql: false
-    show-sql: false
+mongock:
+  change-logs-scan-package: ru.otus.erinary.hw08.library.dao.changelog
+  runner-type: initializingbean
+
