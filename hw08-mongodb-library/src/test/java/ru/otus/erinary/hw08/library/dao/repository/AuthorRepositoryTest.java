@@ -1,9 +1,11 @@
 package ru.otus.erinary.hw08.library.dao.repository;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.otus.erinary.hw08.library.dao.model.Author;
 
 import java.util.List;
@@ -11,8 +13,9 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(SpringExtension.class)
 @DataMongoTest
-@Transactional("MongoTransactionManager")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class AuthorRepositoryTest {
 
     private final String testAuthorId = "183accc8-e32a-11ea-87d0-0242ac130003";
@@ -53,14 +56,14 @@ class AuthorRepositoryTest {
     void testFindById() {
         var author = repository.findById(testAuthorId).orElseThrow();
         assertEquals("author1", author.getName());
-        assertFalse(author.getBooks().isEmpty());
+        assertTrue(author.getBooks().isEmpty());
     }
 
     @Test
     void testFindByName() {
         var author = repository.findByName("author1").orElseThrow();
         assertEquals(testAuthorId, author.getId());
-        assertFalse(author.getBooks().isEmpty());
+        assertTrue(author.getBooks().isEmpty());
     }
 
     @Test
