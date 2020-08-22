@@ -5,8 +5,10 @@ import com.github.cloudyrock.mongock.ChangeSet;
 import com.github.cloudyrock.mongock.driver.mongodb.springdata.v3.decorator.impl.MongockTemplate;
 import ru.otus.erinary.hw08.library.dao.model.Author;
 import ru.otus.erinary.hw08.library.dao.model.Book;
+import ru.otus.erinary.hw08.library.dao.model.Comment;
 import ru.otus.erinary.hw08.library.dao.model.Genre;
 import ru.otus.erinary.hw08.library.dao.repository.AuthorRepository;
+import ru.otus.erinary.hw08.library.dao.repository.BookRepository;
 import ru.otus.erinary.hw08.library.dao.repository.GenreRepository;
 
 import java.util.Collections;
@@ -77,5 +79,35 @@ public class MongockChangeLog {
         mongockTemplate.insert(List.of(firstBook, secondBook, thirdBook), Book.class);
         authorRepository.saveAll(List.of(firstAuthor, secondAuthor, thirdAuthor));
         genreRepository.saveAll(List.of(firstGenre, secondGenre, thirdGenre));
+    }
+
+    @ChangeSet(order = "004", id = "insertCommentsCollection", author = "Erinary")
+    public void insertComments(final MongockTemplate mongockTemplate, final BookRepository bookRepository) {
+        var firstBook = bookRepository.findByTitle("Совершенный код").orElseThrow();
+        var firstComment = new Comment(
+                "Книга содержит много отличных советов и рекомендаций, которые действительно помогают писать код лучше.",
+                "Ваня",
+                firstBook
+        );
+
+        var secondComment = new Comment(
+                "Отличная книга для понимания многих важных вещей в мире программирования.",
+                "Юрий",
+                firstBook
+        );
+
+        var thirdComment = new Comment(
+                "Отличная книга, можно сказать, классика. Всем рекомендую.",
+                "Максим",
+                firstBook
+        );
+
+        var secondBook = bookRepository.findByTitle("О дивный новый мир").orElseThrow();
+        var fourthComment = new Comment(
+                "Остроумная, абсурдная антиутопия служит замечательной иллюстрацией доведенного до крайности общества потребления.",
+                "Фатима",
+                secondBook
+        );
+        mongockTemplate.insert(List.of(firstComment, secondComment, thirdComment, fourthComment), Comment.class);
     }
 }

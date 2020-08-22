@@ -127,21 +127,21 @@ public class LibraryCommands {
 
     @ShellMethod(key = "save-comment", value = "Save comment for book")
     public String addComment(
-            @ShellOption({"-id"}) final String id,
+            @ShellOption({"-id", "-bookId"}) final String bookId,
             @ShellOption({"-t", "-text"}) final String text,
             @ShellOption(value = {"-u", "-user"}, defaultValue = "Guest") final String user) {
         try {
-            Long commentId = libraryService.saveComment(text, user, id);
-            return String.format("New comment with id [%d] was added", commentId);
+            String commentId = libraryService.saveComment(text, user, bookId);
+            return String.format("New comment with id [%s] was added", commentId);
         } catch (LibraryException e) {
             return e.getMessage();
         }
     }
 
     @ShellMethod(key = "delete-comment", value = "Delete book comment by id")
-    public void deleteComment(@ShellOption({"-id"}) final Long id) {
+    public void deleteComment(@ShellOption({"-id"}) final String id) {
         libraryService.deleteComment(id);
-        System.out.println(String.format("Comment with id [%d] was deleted", id));
+        System.out.println(String.format("Comment with id [%s] was deleted", id));
     }
 
 }

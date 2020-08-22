@@ -1,6 +1,5 @@
 spring:
   data:
-    #TODO configure
     mongodb:
       database: library
       host: localhost

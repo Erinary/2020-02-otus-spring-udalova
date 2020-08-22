@@ -14,7 +14,6 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "authors")
 public class Author {
@@ -28,6 +27,10 @@ public class Author {
     @DBRef(lazy = true)
     @Field(name = "books")
     private List<Book> books;
+
+    public Author() {
+        this.id = UUID.randomUUID().toString();
+    }
 
     public Author(final String name) {
         this.id = UUID.randomUUID().toString();

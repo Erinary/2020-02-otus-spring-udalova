@@ -14,7 +14,6 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "genres")
 public class Genre {
@@ -28,6 +27,10 @@ public class Genre {
     @DBRef(lazy = true)
     @Field(name = "books")
     private List<Book> books;
+
+    public Genre() {
+        this.id = UUID.randomUUID().toString();
+    }
 
     public Genre(final String name) {
         this.id = UUID.randomUUID().toString();

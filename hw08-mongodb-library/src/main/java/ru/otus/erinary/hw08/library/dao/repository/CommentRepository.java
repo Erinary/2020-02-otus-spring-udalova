@@ -9,10 +9,13 @@ import java.util.Optional;
 /**
  * Интерфейс репозитория для {@link Comment}
  */
-public interface CommentRepository extends MongoRepository<Comment, Long> {
+@SuppressWarnings("NullableProblems")
+public interface CommentRepository extends MongoRepository<Comment, String> {
 
-    Optional<Comment> findById(Long id);
+    Optional<Comment> findById(String id);
 
     List<Comment> findAllByBookId(String bookId);
+
+    void deleteById(String id);
 
 }

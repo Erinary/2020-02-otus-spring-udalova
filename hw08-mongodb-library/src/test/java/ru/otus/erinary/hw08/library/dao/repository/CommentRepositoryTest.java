@@ -1,18 +1,26 @@
 package ru.otus.erinary.hw08.library.dao.repository;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import ru.otus.erinary.hw08.library.config.MongoConfig;
 import ru.otus.erinary.hw08.library.dao.model.Comment;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static ru.otus.erinary.hw08.library.dao.changelog.test.MongockTestChangeLog.*;
 
+@ExtendWith(SpringExtension.class)
+@Import({MongoConfig.class})
 @DataMongoTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class CommentRepositoryTest {
 
     @Autowired
@@ -27,24 +35,26 @@ class CommentRepositoryTest {
         assertFalse(comments.isEmpty());
         assertEquals(4, comments.size());
 
-        var book = bookRepository.findById(UUID.randomUUID().toString()).orElseThrow();
+        var book = bookRepository.findById(testBookId).orElseThrow();
         var comment = new Comment("text", "new_user", book);
         var id = repository.save(comment).getId();
 
         comments = repository.findAll();
         assertEquals(id, comment.getId());
         assertEquals(5, comments.size());
-        assertTrue(comments.contains(comment));
+        var users = comments.stream().map(Comment::getUser).collect(Collectors.toList());
+        assertTrue(users.contains(comment.getUser()));
     }
 
     @Test
     void testFindById() {
-        var comment = repository.findById(1L).orElseThrow();
+        var comment = repository.findById(testCommentId).orElseThrow();
         assertEquals("comment text 1", comment.getText());
         assertEquals("user1", comment.getUser());
-        assertEquals(ZonedDateTime.parse("2019-06-16T10:15:30+03:00[Europe/Moscow]").toInstant(), comment.getDate().toInstant());
+        //TODO fix assert
+        assertEquals(testCommentDate.toInstant(), comment.getDate().toInstant());
         assertNotNull(comment.getBook());
-        assertEquals(1L, comment.getBook().getId());
+        assertEquals(testBookId, comment.getBook().getId());
     }
 
     @Test
@@ -60,7 +70,7 @@ class CommentRepositoryTest {
 
     @Test
     void testFindAllByBookId() {
-        var comments = repository.findAllByBookId(UUID.randomUUID().toString());
+        var comments = repository.findAllByBookId(testBookId);
         assertFalse(comments.isEmpty());
         assertEquals(3, comments.size());
 
@@ -74,10 +84,10 @@ class CommentRepositoryTest {
         assertFalse(comments.isEmpty());
         assertEquals(4, comments.size());
 
-        repository.deleteById(1L);
+        repository.deleteById(testCommentId);
         comments = repository.findAll();
         assertEquals(3, comments.size());
         var authorIds = comments.stream().map(Comment::getId).collect(Collectors.toList());
-        assertFalse(authorIds.contains(1L));
+        assertFalse(authorIds.contains(testCommentId));
     }
 }

@@ -69,7 +69,7 @@ public class DataRendererImpl implements DataRenderer {
 
     private String[][] applyBookShortModel(final List<Book> books) {
         if (CollectionUtils.isEmpty(books)) {
-            return new String[][] {BOOK_COLUMNS};
+            return new String[][]{BOOK_COLUMNS};
         } else {
             var bookData = new String[books.size() + 1][];
             bookData[0] = BOOK_COLUMNS;
@@ -86,7 +86,7 @@ public class DataRendererImpl implements DataRenderer {
 
     private String[][] applyBookFullModel(final List<Book> books) {
         if (CollectionUtils.isEmpty(books)) {
-            return new String[][] {FULL_BOOK_COLUMNS};
+            return new String[][]{FULL_BOOK_COLUMNS};
         } else {
             var bookData = new String[books.size() + 1][];
             bookData[0] = FULL_BOOK_COLUMNS;
@@ -106,7 +106,7 @@ public class DataRendererImpl implements DataRenderer {
     @SuppressWarnings("DuplicatedCode")
     private String[][] applyAuthorModel(final List<Author> authors) {
         if (CollectionUtils.isEmpty(authors)) {
-            return new String[][] {AUTHOR_COLUMNS};
+            return new String[][]{AUTHOR_COLUMNS};
         } else {
             var authorData = new String[authors.size() + 1][];
             authorData[0] = AUTHOR_COLUMNS;
@@ -124,7 +124,7 @@ public class DataRendererImpl implements DataRenderer {
     @SuppressWarnings("DuplicatedCode")
     private String[][] applyGenreModel(final List<Genre> genres) {
         if (CollectionUtils.isEmpty(genres)) {
-            return new String[][] {GENRE_COLUMNS};
+            return new String[][]{GENRE_COLUMNS};
         } else {
             var genreData = new String[genres.size() + 1][];
             genreData[0] = GENRE_COLUMNS;
@@ -144,8 +144,8 @@ public class DataRendererImpl implements DataRenderer {
         commentsData[0] = COMMENT_COLUMNS;
         for (int i = 1; i < commentsData.length; i++) {
             var comment = comments.get(i - 1);
-            commentsData[i]  = new String[]{
-                    Long.toString(comment.getId()),
+            commentsData[i] = new String[]{
+                    comment.getId(),
                     comment.getUser(),
                     comment.getText(),
                     comment.getDate().format(FORMATTER)

@@ -111,6 +111,8 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     public void deleteBook(final String id) {
+        var comments = commentRepository.findAllByBookId(id);
+        commentRepository.deleteAll(comments);
         bookRepository.deleteById(id);
     }
 
@@ -120,15 +122,15 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public Long saveComment(String text, String user, String bookId) {
+    public String saveComment(String text, String user, String bookId) {
         var book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new LibraryException(String.format("Book with id [%d] does not exist", bookId)));
+                .orElseThrow(() -> new LibraryException(String.format("Book with id [%s] does not exist", bookId)));
         var comment = new Comment(text, user, book);
         return commentRepository.save(comment).getId();
     }
 
     @Override
-    public void deleteComment(final Long id) {
+    public void deleteComment(final String id) {
         commentRepository.deleteById(id);
     }
 }

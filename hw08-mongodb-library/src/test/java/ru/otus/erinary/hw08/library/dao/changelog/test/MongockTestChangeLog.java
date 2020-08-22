@@ -5,10 +5,13 @@ import com.github.cloudyrock.mongock.ChangeSet;
 import com.github.cloudyrock.mongock.driver.mongodb.springdata.v3.decorator.impl.MongockTemplate;
 import ru.otus.erinary.hw08.library.dao.model.Author;
 import ru.otus.erinary.hw08.library.dao.model.Book;
+import ru.otus.erinary.hw08.library.dao.model.Comment;
 import ru.otus.erinary.hw08.library.dao.model.Genre;
 import ru.otus.erinary.hw08.library.dao.repository.AuthorRepository;
+import ru.otus.erinary.hw08.library.dao.repository.BookRepository;
 import ru.otus.erinary.hw08.library.dao.repository.GenreRepository;
 
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -19,6 +22,8 @@ public class MongockTestChangeLog {
     public static final String testAuthorId = UUID.randomUUID().toString();
     public static final String testGenreId = UUID.randomUUID().toString();
     public static final String testBookId = UUID.randomUUID().toString();
+    public static final String testCommentId = UUID.randomUUID().toString();
+    public static final ZonedDateTime testCommentDate = ZonedDateTime.now();
 
     @ChangeSet(order = "001", id = "insertAuthorsCollection", author = "Erinary")
     public void insertAuthors(final MongockTemplate mongockTemplate) {
@@ -89,5 +94,37 @@ public class MongockTestChangeLog {
         mongockTemplate.insert(List.of(firstBook, secondBook, thirdBook, fourthBook), Book.class);
         authorRepository.saveAll(List.of(firstAuthor, secondAuthor, thirdAuthor));
         genreRepository.saveAll(List.of(firstGenre, secondGenre, thirdGenre));
+    }
+
+    @ChangeSet(order = "004", id = "insertCommentsCollection", author = "Erinary")
+    public void insertComments(final MongockTemplate mongockTemplate, final BookRepository bookRepository) {
+        var firstBook = bookRepository.findByTitle("title1").orElseThrow();
+        var firstComment = new Comment(
+                testCommentId,
+                "comment text 1",
+                "user1",
+                testCommentDate,
+                firstBook
+        );
+
+        var secondComment = new Comment(
+                "comment text 2",
+                "user2",
+                firstBook
+        );
+
+        var thirdComment = new Comment(
+                "comment text 3",
+                "user3",
+                firstBook
+        );
+
+        var secondBook = bookRepository.findByTitle("title2").orElseThrow();
+        var fourthComment = new Comment(
+                "comment text 4",
+                "user4",
+                secondBook
+        );
+        mongockTemplate.insert(List.of(firstComment, secondComment, thirdComment, fourthComment), Comment.class);
     }
 }

@@ -1,42 +1,45 @@
 package ru.otus.erinary.hw08.library.dao.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
-@NoArgsConstructor
-//@Entity
-//@Table(name = "comments")
+@AllArgsConstructor
 @Document(collection = "comments")
 public class Comment {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "id")
     @Id
-    private Long id;
+    private String id;
 
-//    @Lob
-//    @Column(name = "text", columnDefinition = "CLOB")
+    @Field(name = "text")
     private String text;
 
-//    @Column(name = "user")
+    @Field(name = "user")
     private String user;
 
-//    @Column(name = "date")
+    @Field(name = "date")
     private ZonedDateTime date;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "book_id")
+    @DBRef(lazy = true)
+    @Field(name = "book")
     private Book book;
 
+    public Comment() {
+        this.id = UUID.randomUUID().toString();
+    }
+
     public Comment(final String text, final String user, final Book book) {
+        this.id = UUID.randomUUID().toString();
         this.text = text;
         this.user = user;
         this.date = ZonedDateTime.now();
