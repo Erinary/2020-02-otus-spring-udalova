@@ -9,12 +9,15 @@ import java.util.Optional;
 /**
  * Интерфейс репозитория для {@link Book}
  */
-public interface BookRepository extends MongoRepository<Book, Long> {
+@SuppressWarnings("NullableProblems")
+public interface BookRepository extends MongoRepository<Book, String> {
 
-    Optional<Book> findById(Long id);
+    Optional<Book> findById(String id);
 
     List<Book> findAllByAuthorId(String authorId);
 
-    List<Book> findAllByGenreId(Long genreId);
+    List<Book> findAllByGenreId(String genreId);
+
+    void deleteById(String id);
 
 }

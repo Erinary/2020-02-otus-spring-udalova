@@ -5,38 +5,38 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
+import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@Entity
-//@Table(name = "books")
 @Document(collection = "books")
 public class Book {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "id")
     @Id
-    private Long id;
+    private String id;
 
-//    @Column(name = "title")
+    @Field(name = "title")
     private String title;
 
-//    @Column(name = "year")
+    @Field(name = "year")
     private int year;
 
-//    @ManyToOne
-//    @JoinColumn(name = "author_id")
+    @DBRef
+    @Field(name = "author")
     private Author author;
 
-//    @ManyToOne
-//    @JoinColumn(name = "genre_id")
+    @DBRef
+    @Field(name = "genre")
     private Genre genre;
 
     public Book(final String title, final int year, final Author author, final Genre genre) {
+        this.id = UUID.randomUUID().toString();
         this.title = title;
         this.year = year;
         this.author = author;

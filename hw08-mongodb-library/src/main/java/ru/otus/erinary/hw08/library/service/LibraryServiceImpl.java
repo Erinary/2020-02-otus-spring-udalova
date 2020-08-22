@@ -2,7 +2,6 @@ package ru.otus.erinary.hw08.library.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.erinary.hw08.library.dao.model.Author;
 import ru.otus.erinary.hw08.library.dao.model.Book;
 import ru.otus.erinary.hw08.library.dao.model.Comment;
@@ -35,13 +34,11 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Author> getAuthors() {
         return authorRepository.findAll();
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Author getAuthorByName(final String name) {
         var author = authorRepository.findByName(name);
         author.ifPresent(a -> {
@@ -52,19 +49,16 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    @Transactional
     public void deleteAuthor(final String id) {
         authorRepository.deleteById(id);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Genre> getGenres() {
         return genreRepository.findAll();
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Genre getGenreByName(final String name) {
         var genre = genreRepository.findByName(name);
         genre.ifPresent(g -> {
@@ -75,26 +69,22 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    @Transactional
-    public void deleteGenre(final Long id) {
+    public void deleteGenre(final String id) {
         genreRepository.deleteById(id);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Book> getBooks() {
         return bookRepository.findAll();
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public Book getBookById(final Long id) {
+    public Book getBookById(final String id) {
         return bookRepository.findById(id).orElse(null);
     }
 
     @Override
-    @Transactional
-    public Book saveBook(final Long id, final String title, final int year, final String authorName, final String genreName) {
+    public Book saveBook(final String id, final String title, final int year, final String authorName, final String genreName) {
         var author = authorRepository.findByName(authorName)
                 .orElseGet(() -> {
                     var a = new Author(authorName);
@@ -110,7 +100,7 @@ public class LibraryServiceImpl implements LibraryService {
 
         var book = id == null ? new Book() : bookRepository
                 .findById(id)
-                .orElseThrow(() -> new LibraryException(String.format("Book with id [%d] does not exist", id)));
+                .orElseThrow(() -> new LibraryException(String.format("Book with id [%s] does not exist", id)));
         book.setTitle(title);
         book.setYear(year);
         book.setAuthor(author);
@@ -120,20 +110,17 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    @Transactional
-    public void deleteBook(final Long id) {
+    public void deleteBook(final String id) {
         bookRepository.deleteById(id);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<Comment> getBookComments(final Long bookId) {
+    public List<Comment> getBookComments(final String bookId) {
         return commentRepository.findAllByBookId(bookId);
     }
 
     @Override
-    @Transactional
-    public Long saveComment(String text, String user, Long bookId) {
+    public Long saveComment(String text, String user, String bookId) {
         var book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new LibraryException(String.format("Book with id [%d] does not exist", bookId)));
         var comment = new Comment(text, user, book);
@@ -141,7 +128,6 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    @Transactional
     public void deleteComment(final Long id) {
         commentRepository.deleteById(id);
     }

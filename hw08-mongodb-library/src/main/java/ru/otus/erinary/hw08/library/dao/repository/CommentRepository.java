@@ -13,6 +13,6 @@ public interface CommentRepository extends MongoRepository<Comment, Long> {
 
     Optional<Comment> findById(Long id);
 
-    List<Comment> findAllByBookId(Long bookId);
+    List<Comment> findAllByBookId(String bookId);
 
 }

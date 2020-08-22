@@ -10,14 +10,12 @@ import java.util.Optional;
 /**
  * Интерфейс репозитория для {@link Author}
  */
+@SuppressWarnings("NullableProblems")
 public interface AuthorRepository extends MongoRepository<Author, String> {
 
     Optional<Author> findById(String id);
 
     Optional<Author> findByName(String name);
-
-    @Query("{'name' : :#{#name}}")
-    Optional<String> findIdByName(@Param("name") String name);
 
     void deleteById(String id);
 

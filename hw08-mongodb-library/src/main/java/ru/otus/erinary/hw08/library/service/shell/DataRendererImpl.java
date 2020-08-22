@@ -76,7 +76,7 @@ public class DataRendererImpl implements DataRenderer {
             for (int i = 1; i < bookData.length; i++) {
                 var book = books.get(i - 1);
                 bookData[i] = new String[]{
-                        Long.toString(book.getId()),
+                        book.getId(),
                         book.getTitle(),
                         Integer.toString(book.getYear())};
             }
@@ -93,7 +93,7 @@ public class DataRendererImpl implements DataRenderer {
             for (int i = 1; i < bookData.length; i++) {
                 var book = books.get(i - 1);
                 bookData[i] = new String[]{
-                        Long.toString(book.getId()),
+                        book.getId(),
                         book.getTitle(),
                         Integer.toString(book.getYear()),
                         book.getAuthor().getName(),
@@ -131,7 +131,7 @@ public class DataRendererImpl implements DataRenderer {
             for (int i = 1; i < genreData.length; i++) {
                 var genre = genres.get(i - 1);
                 genreData[i] = new String[]{
-                        Long.toString(genre.getId()),
+                        genre.getId(),
                         genre.getName()
                 };
             }

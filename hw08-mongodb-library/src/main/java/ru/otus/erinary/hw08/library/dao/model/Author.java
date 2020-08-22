@@ -20,7 +20,6 @@ import java.util.UUID;
 public class Author {
 
     @Id
-    @Field(name = "id")
     private String id;
 
     @Field(name = "name")

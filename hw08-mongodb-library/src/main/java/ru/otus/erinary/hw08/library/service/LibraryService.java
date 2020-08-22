@@ -19,19 +19,19 @@ public interface LibraryService {
 
     Genre getGenreByName(String name);
 
-    void deleteGenre(Long id);
+    void deleteGenre(String id);
 
     List<Book> getBooks();
 
-    Book getBookById(Long id);
+    Book getBookById(String id);
 
-    Book saveBook(Long id, String title, int year, String authorName, String genreName);
+    Book saveBook(String id, String title, int year, String authorName, String genreName);
 
-    void deleteBook(Long id);
+    void deleteBook(String id);
 
-    List<Comment> getBookComments(Long bookId);
+    List<Comment> getBookComments(String bookId);
 
-    Long saveComment(String text, String user, Long bookId);
+    Long saveComment(String text, String user, String bookId);
 
     void deleteComment(Long id);
 }

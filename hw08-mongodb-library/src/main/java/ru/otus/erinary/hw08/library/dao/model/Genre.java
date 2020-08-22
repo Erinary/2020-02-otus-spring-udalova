@@ -5,32 +5,32 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@Entity
-//@Table(name = "genres")
 @Document(collection = "genres")
 public class Genre {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "id")
     @Id
-    private Long id;
+    private String id;
 
-//    @Column(name = "name")
+    @Field(name = "name")
     private String name;
 
-//    @OneToMany(mappedBy = "genre", fetch = FetchType.LAZY)
+    @DBRef(lazy = true)
+    @Field(name = "books")
     private List<Book> books;
 
     public Genre(final String name) {
+        this.id = UUID.randomUUID().toString();
         this.name = name;
     }
 }

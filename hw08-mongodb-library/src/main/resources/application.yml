@@ -3,11 +3,8 @@ spring:
     #TODO configure
     mongodb:
       database: library
-      authentication-database:
-      username:
-      password:
       host: localhost
-      port:
+      port: 27017
 
 mongock:
   change-logs-scan-package: ru.otus.erinary.hw08.library.dao.changelog

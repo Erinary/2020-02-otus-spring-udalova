@@ -1,19 +1,26 @@
 package ru.otus.erinary.hw08.library.dao.repository;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.otus.erinary.hw08.library.dao.model.Author;
 import ru.otus.erinary.hw08.library.dao.model.Book;
 import ru.otus.erinary.hw08.library.dao.model.Genre;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static ru.otus.erinary.hw08.library.dao.changelog.test.MongockTestChangeLog.*;
 
+@ExtendWith(SpringExtension.class)
 @DataMongoTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class BookRepositoryTest {
 
     @Autowired
@@ -26,14 +33,15 @@ class BookRepositoryTest {
         assertEquals(4, books.size());
 
         var book = new Book("newTitle", 2018,
-                new Author(UUID.randomUUID().toString(), "author1", null),
-                new Genre(1L, "genre1", null));
+                new Author(UUID.randomUUID().toString(), "author1", Collections.emptyList()),
+                new Genre(UUID.randomUUID().toString(), "genre1", Collections.emptyList()));
         repository.save(book);
-        assertNotEquals(0L, book.getId());
+        assertNotNull(book.getId());
 
         books = repository.findAll();
         assertEquals(5, books.size());
-        assertTrue(books.contains(book));
+        var booksTitles = books.stream().map(Book::getTitle).collect(Collectors.toList());
+        assertTrue(booksTitles.contains(book.getTitle()));
     }
 
     @Test
@@ -41,20 +49,20 @@ class BookRepositoryTest {
         var books = repository.findAll();
         assertEquals(4, books.size());
 
-        var book = repository.findById(1L).orElseThrow();
+        var book = repository.findById(testBookId).orElseThrow();
         assertEquals("title1", book.getTitle());
 
         var newTitle = "newTitle";
         book.setTitle(newTitle);
         repository.save(book);
 
-        var loadedBook = repository.findById(1L).orElseThrow();
+        var loadedBook = repository.findById(testBookId).orElseThrow();
         assertEquals(newTitle, loadedBook.getTitle());
     }
 
     @Test
     void testFindById() {
-        var book = repository.findById(1L).orElseThrow();
+        var book = repository.findById(testBookId).orElseThrow();
         assertEquals("title1", book.getTitle());
         assertEquals(2020, book.getYear());
 
@@ -74,7 +82,7 @@ class BookRepositoryTest {
         assertNotNull(books.get(0).getGenre());
 
         var bookTitles = books.stream().map(Book::getTitle).collect(Collectors.toList());
-        assertTrue(bookTitles.containsAll(List.of("title1", "title2", "title3")));
+        assertTrue(bookTitles.containsAll(List.of("title1", "title2", "title3", "title4")));
 
         var authorNames = books.stream().map(book -> book.getAuthor().getName()).collect(Collectors.toList());
         assertTrue(authorNames.containsAll(List.of("author1", "author2", "author3")));
@@ -85,7 +93,7 @@ class BookRepositoryTest {
 
     @Test
     void testFindAllByAuthorId() {
-        var books = repository.findAllByAuthorId(UUID.randomUUID().toString());
+        var books = repository.findAllByAuthorId(testAuthorId);
         assertEquals(2, books.size());
         assertEquals("author1", books.get(0).getAuthor().getName());
         var bookTitles = books.stream().map(Book::getTitle).collect(Collectors.toList());
@@ -94,11 +102,11 @@ class BookRepositoryTest {
 
     @Test
     void testFindAllByGenreId() {
-        var books = repository.findAllByGenreId(2L);
+        var books = repository.findAllByGenreId(testGenreId);
         assertEquals(2, books.size());
-        assertEquals("genre2", books.get(0).getGenre().getName());
+        assertEquals("genre1", books.get(0).getGenre().getName());
         var bookTitles = books.stream().map(Book::getTitle).collect(Collectors.toList());
-        assertTrue(bookTitles.containsAll(List.of("title2", "title4")));
+        assertTrue(bookTitles.containsAll(List.of("title1", "title4")));
     }
 
     @Test
@@ -107,11 +115,11 @@ class BookRepositoryTest {
         assertFalse(books.isEmpty());
         assertEquals(4, books.size());
 
-        repository.deleteById(1L);
+        repository.deleteById(testBookId);
         books = repository.findAll();
         assertEquals(3, books.size());
         var bookIds = books.stream().map(Book::getId).collect(Collectors.toList());
-        assertFalse(bookIds.contains(1L));
+        assertFalse(bookIds.contains(testBookId));
     }
 
 }

@@ -1,16 +1,22 @@
 package ru.otus.erinary.hw08.library.dao.repository;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.otus.erinary.hw08.library.dao.model.Genre;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static ru.otus.erinary.hw08.library.dao.changelog.test.MongockTestChangeLog.testGenreId;
 
+@ExtendWith(SpringExtension.class)
 @DataMongoTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class GenreRepositoryTest {
 
     @Autowired
@@ -28,40 +34,35 @@ class GenreRepositoryTest {
         genres = repository.findAll();
         assertEquals(id, genre.getId());
         assertEquals(4, genres.size());
-        assertTrue(genres.contains(genre));
+        var genresNames = genres.stream().map(Genre::getName).collect(Collectors.toList());
+        assertTrue(genresNames.contains(genre.getName()));
     }
 
     @Test
     void testSaveExisted() {
-        var genre = repository.findById(1L).orElseThrow();
+        var genre = repository.findById(testGenreId).orElseThrow();
         assertEquals("genre1", genre.getName());
 
         var newName = "genre5";
         genre.setName(newName);
         repository.save(genre);
 
-        var loadedGenre = repository.findById(1L).orElseThrow();
+        var loadedGenre = repository.findById(testGenreId).orElseThrow();
         assertEquals(newName, loadedGenre.getName());
     }
 
     @Test
     void testFindById() {
-        var genre = repository.findById(1L).orElseThrow();
+        var genre = repository.findById(testGenreId).orElseThrow();
         assertEquals("genre1", genre.getName());
         assertFalse(genre.getBooks().isEmpty());
     }
 
     @Test
     void testFindByName() {
-        var author = repository.findByName("genre1").orElseThrow();
-        assertEquals(1L, author.getId());
-        assertFalse(author.getBooks().isEmpty());
-    }
-
-    @Test
-    void testFindIdByName() {
-        var id = repository.findIdByName("genre1").orElseThrow();
-        assertEquals(1L, id);
+        var genre = repository.findByName("genre1").orElseThrow();
+        assertEquals(testGenreId, genre.getId());
+        assertFalse(genre.getBooks().isEmpty());
     }
 
     @Test
@@ -81,10 +82,10 @@ class GenreRepositoryTest {
         assertFalse(genres.isEmpty());
         assertEquals(3, genres.size());
 
-        repository.deleteById(1L);
+        repository.deleteById(testGenreId);
         genres = repository.findAll();
         assertEquals(2, genres.size());
         var genreIds = genres.stream().map(Genre::getId).collect(Collectors.toList());
-        assertFalse(genreIds.contains(1L));
+        assertFalse(genreIds.contains(testGenreId));
     }
 }

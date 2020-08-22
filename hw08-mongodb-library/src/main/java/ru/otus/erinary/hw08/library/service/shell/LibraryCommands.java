@@ -60,16 +60,16 @@ public class LibraryCommands {
         if (genre == null) {
             return String.format(NOT_FOUND, "genre", "name");
         } else {
-            System.out.println(String.format("ID: %d", genre.getId()));
+            System.out.println(String.format("ID: %s", genre.getId()));
             System.out.println(String.format("NAME: %s", genre.getName()));
             return dataRenderer.getShortBookTable(genre.getBooks());
         }
     }
 
     @ShellMethod(key = "delete-genre", value = "Delete genre by id")
-    public void deleteGenre(@ShellOption({"-id"}) final Long id) {
+    public void deleteGenre(@ShellOption({"-id"}) final String id) {
         libraryService.deleteGenre(id);
-        System.out.println(String.format("Genre with id [%d] was deleted", id));
+        System.out.println(String.format("Genre with id [%s] was deleted", id));
     }
 
     @ShellMethod(key = "all-books", value = "Get all books")
@@ -80,7 +80,7 @@ public class LibraryCommands {
 
     @ShellMethod(key = "book", value = "Get book by id")
     public String getBook(
-            @ShellOption({"-id"}) final Long id,
+            @ShellOption({"-id"}) final String id,
             @ShellOption(value = {"-c", "-comments"}, defaultValue = "false") final boolean showComments) {
         var book = libraryService.getBookById(id);
         if (book == null) {
@@ -100,7 +100,7 @@ public class LibraryCommands {
 
     @ShellMethod(key = "save-book", value = "Create new book or update existing")
     public String saveBook(
-            @ShellOption(value = {"-id"}, defaultValue = ShellOption.NULL) final Long id,
+            @ShellOption(value = {"-id"}, defaultValue = ShellOption.NULL) final String id,
             @ShellOption({"-t", "-title"}) final String title,
             @ShellOption({"-y", "-year"}) final int year,
             @ShellOption({"-a", "-author"}) final String authorName,
@@ -120,14 +120,14 @@ public class LibraryCommands {
     }
 
     @ShellMethod(key = "delete-book", value = "Delete book by id")
-    public void deleteBook(@ShellOption({"-id"}) final Long id) {
+    public void deleteBook(@ShellOption({"-id"}) final String id) {
         libraryService.deleteBook(id);
-        System.out.println(String.format("Book with id [%d] was deleted", id));
+        System.out.println(String.format("Book with id [%s] was deleted", id));
     }
 
     @ShellMethod(key = "save-comment", value = "Save comment for book")
     public String addComment(
-            @ShellOption({"-id"}) final Long id,
+            @ShellOption({"-id"}) final String id,
             @ShellOption({"-t", "-text"}) final String text,
             @ShellOption(value = {"-u", "-user"}, defaultValue = "Guest") final String user) {
         try {

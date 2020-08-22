@@ -7,6 +7,7 @@ import ru.otus.erinary.hw08.library.dao.model.Comment;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,7 +27,7 @@ class CommentRepositoryTest {
         assertFalse(comments.isEmpty());
         assertEquals(4, comments.size());
 
-        var book = bookRepository.findById(1L).orElseThrow();
+        var book = bookRepository.findById(UUID.randomUUID().toString()).orElseThrow();
         var comment = new Comment("text", "new_user", book);
         var id = repository.save(comment).getId();
 
@@ -59,7 +60,7 @@ class CommentRepositoryTest {
 
     @Test
     void testFindAllByBookId() {
-        var comments = repository.findAllByBookId(1L);
+        var comments = repository.findAllByBookId(UUID.randomUUID().toString());
         assertFalse(comments.isEmpty());
         assertEquals(3, comments.size());
 
