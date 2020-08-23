@@ -4,8 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import ru.otus.erinary.hw08.library.config.MongoConfig;
 import ru.otus.erinary.hw08.library.dao.model.Author;
 import ru.otus.erinary.hw08.library.dao.model.Book;
 import ru.otus.erinary.hw08.library.dao.model.Genre;
@@ -19,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static ru.otus.erinary.hw08.library.dao.changelog.test.MongockTestChangeLog.*;
 
 @ExtendWith(SpringExtension.class)
+@Import({MongoConfig.class})
 @DataMongoTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class BookRepositoryTest {

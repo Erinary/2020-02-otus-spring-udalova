@@ -11,7 +11,6 @@ import ru.otus.erinary.hw08.library.config.MongoConfig;
 import ru.otus.erinary.hw08.library.dao.model.Comment;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,8 +50,7 @@ class CommentRepositoryTest {
         var comment = repository.findById(testCommentId).orElseThrow();
         assertEquals("comment text 1", comment.getText());
         assertEquals("user1", comment.getUser());
-        //TODO fix assert
-        assertEquals(testCommentDate.toInstant(), comment.getDate().toInstant());
+        assertEquals(testCommentDate.withNano(0).toInstant(), comment.getDate().withNano(0).toInstant());
         assertNotNull(comment.getBook());
         assertEquals(testBookId, comment.getBook().getId());
     }
