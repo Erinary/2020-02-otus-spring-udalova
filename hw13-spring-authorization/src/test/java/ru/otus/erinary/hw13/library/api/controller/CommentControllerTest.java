@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WithMockUser(username = "admin")
+@WithMockUser(username = "admin", roles = {"ADMIN"})
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(CommentController.class)
 class CommentControllerTest {
@@ -55,7 +55,7 @@ class CommentControllerTest {
                         {
                             var book = new Book();
                             book.setId(invocation.getArgument(2));
-                            var user = new User(1L, invocation.getArgument(1), "pwd");
+                            var user = new User(1L, invocation.getArgument(1), "pwd", false);
                             return new Comment(
                                     invocation.getArgument(0),
                                     user,
@@ -87,5 +87,20 @@ class CommentControllerTest {
                 .andExpect(redirectedUrl(String.format("/library/book?id=%d", 1)));
 
         Mockito.verify(libraryService).deleteComment(Mockito.anyLong());
+    }
+
+    @Test
+    @WithMockUser("user1")
+    void deleteBookCommentForbidden() throws Exception {
+        Mockito.when(libraryService.getBookIdByComment(Mockito.any()))
+                .thenReturn(1L);
+
+        mvc.perform(post("/library/comment/delete")
+                .param("id", "1")
+                .contentType(MediaType.TEXT_HTML))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+
+        Mockito.verify(libraryService, Mockito.never()).deleteComment(Mockito.anyLong());
     }
 }

@@ -1,7 +1,7 @@
-insert into users(username, password)
-values ('admin', '$2a$10$441wHYiAgIrvDOwJT.yob.6PThPNTcEPi54pDUqMie0D2s69upu26'),
-       ('Perry', '$2a$10$arrB8.9C5UMBoKlltrTq8Oz7hL7aAla9rVfL8rwxkTB0WJ55w6YUC'),
-       ('Nancy', '$2a$10$dpjGTg4JEuOpuq/owpFJtux2k4PYR7wx1Orx1DeLUy5mELSzIFfX6');
+insert into users(username, password, admin_role)
+values ('admin', '$2a$10$441wHYiAgIrvDOwJT.yob.6PThPNTcEPi54pDUqMie0D2s69upu26', true),
+       ('Perry', '$2a$10$arrB8.9C5UMBoKlltrTq8Oz7hL7aAla9rVfL8rwxkTB0WJ55w6YUC', false),
+       ('Nancy', '$2a$10$dpjGTg4JEuOpuq/owpFJtux2k4PYR7wx1Orx1DeLUy5mELSzIFfX6', false);
 
 insert into genres (name)
 values ('Программирование'),

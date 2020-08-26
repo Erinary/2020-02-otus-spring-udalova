@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="base :: default_head(~{::title})">
     <title>Books List</title>
 </head>
@@ -11,7 +12,7 @@
             <a href="home-page.html" class="btn btn-info btn-sm" role="button" th:href="@{/library}">← Home</a>
         </div>
     </div>
-    <div class="row mb-1">
+    <div class="row mb-1" sec:authorize="hasRole('ROLE_ADMIN')">
         <div class="col">
             <a href="book-form.html" class="btn btn-outline-primary btn-sm" role="button"
                th:href="@{/library/book/save}">Save new</a>
@@ -43,7 +44,7 @@
                     <td th:text="${book.authorName}">John Doe</td>
                     <td th:text="${book.genreName}">Crime fiction</td>
                     <td>
-                        <form method="POST" th:action="@{/library/book/delete(id=${book.id})}">
+                        <form method="POST" th:action="@{/library/book/delete(id=${book.id})}" sec:authorize="hasRole('ROLE_ADMIN')">
                             <button class="btn btn-outline-danger btn-sm" type="submit" name="delete" value="delete">
                                 Delete
                             </button>

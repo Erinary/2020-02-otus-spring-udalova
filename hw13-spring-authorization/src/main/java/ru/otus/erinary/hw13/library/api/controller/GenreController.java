@@ -1,6 +1,7 @@
 package ru.otus.erinary.hw13.library.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +39,7 @@ public class GenreController {
         return "genre-details";
     }
 
+    @Secured({"ROLE_ADMIN"})
     @PostMapping("/genre/delete")
     public String deleteGenre(@RequestParam(value = "id") final Long id) {
         libraryService.deleteGenre(id);

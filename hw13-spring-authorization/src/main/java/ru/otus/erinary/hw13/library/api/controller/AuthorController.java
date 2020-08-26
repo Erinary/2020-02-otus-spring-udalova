@@ -1,6 +1,7 @@
 package ru.otus.erinary.hw13.library.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +39,7 @@ public class AuthorController {
         return "author-details";
     }
 
+    @Secured({"ROLE_ADMIN"})
     @PostMapping("/author/delete")
     public String deleteAuthor(@RequestParam(value = "id") final Long id) {
         libraryService.deleteAuthor(id);

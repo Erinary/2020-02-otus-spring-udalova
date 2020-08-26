@@ -1,7 +1,7 @@
-insert into users(username, password)
-values ('admin', 'admin' ),
-       ('user1', 'qwerty'),
-       ('user2', 'qwerty');
+insert into users(username, password, admin_role)
+values ('admin', 'admin', true),
+       ('user1', 'qwerty', false),
+       ('user2', 'qwerty', false);
 
 insert into genres (name)
 values ('genre1'),

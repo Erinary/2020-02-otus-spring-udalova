@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WithMockUser(username = "admin")
+@WithMockUser(username = "admin", roles = {"ADMIN"})
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(GenreController.class)
 class GenreControllerTest {
@@ -80,5 +80,17 @@ class GenreControllerTest {
                 .andExpect(redirectedUrl("/library/genres"));
 
         Mockito.verify(libraryService).deleteGenre(Mockito.anyLong());
+    }
+
+    @Test
+    @WithMockUser("user1")
+    void deleteGenreForbidden() throws Exception {
+        mvc.perform(post("/library/genre/delete")
+                .param("id", "1")
+                .contentType(MediaType.TEXT_HTML))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+
+        Mockito.verify(libraryService, Mockito.never()).deleteGenre(Mockito.anyLong());
     }
 }

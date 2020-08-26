@@ -3,6 +3,7 @@ CREATE TABLE users
     id BIGINT AUTO_INCREMENT,
     username VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
+    admin_role BOOLEAN DEFAULT FALSE NOT NULL,
     PRIMARY KEY (id),
     UNIQUE (username)
 );

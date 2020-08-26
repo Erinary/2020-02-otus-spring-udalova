@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="base :: default_head(~{::title})">
     <title>Genres List</title>
 </head>
@@ -31,7 +32,7 @@
                             fiction</a>
                     </td>
                     <td>
-                        <form method="POST" th:action="@{/library/genre/delete(id=${genre.id})}">
+                        <form method="POST" th:action="@{/library/genre/delete(id=${genre.id})}" sec:authorize="hasRole('ROLE_ADMIN')">
                             <button class="btn btn-outline-danger btn-sm" type="submit" name="delete" value="delete">Delete</button>
                         </form>
                     </td>

@@ -1,6 +1,7 @@
 package ru.otus.erinary.hw13.library.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -42,6 +43,7 @@ public class CommentController {
         return String.format("redirect:/library/book?id=%d", comment.getBook().getId());
     }
 
+    @Secured({"ROLE_ADMIN"})
     @PostMapping("/comment/delete")
     public String deleteBookComment(@RequestParam(value = "id") final Long id) {
         var bookId = libraryService.getBookIdByComment(id);

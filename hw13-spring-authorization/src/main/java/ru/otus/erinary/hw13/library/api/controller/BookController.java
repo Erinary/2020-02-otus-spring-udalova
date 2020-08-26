@@ -1,6 +1,7 @@
 package ru.otus.erinary.hw13.library.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +41,7 @@ public class BookController {
         return "book-details";
     }
 
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/book/save")
     public String saveBookView(@RequestParam(value = "id", required = false) final Long id, final Model model) {
         BookDto bookDto;
@@ -53,6 +55,7 @@ public class BookController {
         return "book-form";
     }
 
+    @Secured({"ROLE_ADMIN"})
     @PostMapping("/book/save")
     public String saveBook(final Model model, final BookDto bookDto) {
         var book = libraryService.saveBook(ModelConverter.toBookEntity(bookDto));
@@ -65,6 +68,7 @@ public class BookController {
         }
     }
 
+    @Secured({"ROLE_ADMIN"})
     @PostMapping("/book/delete")
     public String deleteBook(@RequestParam(value = "id") final Long id) {
         libraryService.deleteBook(id);

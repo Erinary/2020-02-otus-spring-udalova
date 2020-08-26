@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WithMockUser(username = "admin")
+@WithMockUser(username = "admin", roles = {"ADMIN"})
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(BookController.class)
 class BookControllerTest {
@@ -124,6 +124,16 @@ class BookControllerTest {
     }
 
     @Test
+    @WithMockUser("user1")
+    void saveBookViewForbidden() throws Exception {
+        mvc.perform(get("/library/book/save")
+                .param("id", "1")
+                .contentType(MediaType.TEXT_HTML))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     void saveBook() throws Exception {
         Mockito.when(libraryService.saveBook(Mockito.any(Book.class)))
                 .thenAnswer(invocation ->
@@ -158,6 +168,22 @@ class BookControllerTest {
     }
 
     @Test
+    @WithMockUser("user1")
+    void saveBookForbidden() throws Exception {
+        mvc.perform(post("/library/book/save")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("id", "1")
+                .param("title", "title")
+                .param("year", "1970")
+                .param("authorName", "author")
+                .param("genreName", "genre"))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+
+        Mockito.verify(libraryService, Mockito.never()).saveBook(Mockito.any(Book.class));
+    }
+
+    @Test
     void deleteBook() throws Exception {
         mvc.perform(post("/library/book/delete")
                 .param("id", "1")
@@ -167,6 +193,18 @@ class BookControllerTest {
                 .andExpect(redirectedUrl("/library/books"));
 
         Mockito.verify(libraryService).deleteBook(Mockito.anyLong());
+    }
+
+    @Test
+    @WithMockUser("user1")
+    void deleteBookForbidden() throws Exception {
+        mvc.perform(post("/library/book/delete")
+                .param("id", "1")
+                .contentType(MediaType.TEXT_HTML))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+
+        Mockito.verify(libraryService, Mockito.never()).deleteBook(Mockito.anyLong());
     }
 
     private Book createBook(final String title, final int year, final String authorName, final String genreName) {
