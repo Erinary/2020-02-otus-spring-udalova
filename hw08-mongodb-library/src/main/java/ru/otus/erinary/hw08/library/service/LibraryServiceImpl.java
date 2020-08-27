@@ -50,6 +50,9 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     public void deleteAuthor(final String id) {
+        var books = bookRepository.findAllByAuthorId(id);
+        books.forEach(book -> book.setAuthor(null));
+        bookRepository.saveAll(books);
         authorRepository.deleteById(id);
     }
 
@@ -70,6 +73,9 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     public void deleteGenre(final String id) {
+        var books = bookRepository.findAllByGenreId(id);
+        books.forEach(book -> book.setGenre(null));
+        bookRepository.saveAll(books);
         genreRepository.deleteById(id);
     }
 

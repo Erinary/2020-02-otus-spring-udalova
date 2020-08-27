@@ -12,6 +12,7 @@ import ru.otus.erinary.hw08.library.dao.model.Genre;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DataRendererImpl implements DataRenderer {
@@ -96,8 +97,8 @@ public class DataRendererImpl implements DataRenderer {
                         book.getId(),
                         book.getTitle(),
                         Integer.toString(book.getYear()),
-                        book.getAuthor().getName(),
-                        book.getGenre().getName()};
+                        Optional.ofNullable(book.getAuthor()).map(Author::getName).orElse("NOT SPECIFIED"),
+                        Optional.ofNullable(book.getGenre()).map(Genre::getName).orElse("NOT SPECIFIED")};
             }
             return bookData;
         }

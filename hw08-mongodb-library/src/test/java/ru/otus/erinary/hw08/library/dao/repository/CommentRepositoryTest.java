@@ -19,7 +19,6 @@ import static ru.otus.erinary.hw08.library.dao.changelog.test.MongockTestChangeL
 @ExtendWith(SpringExtension.class)
 @Import({MongoConfig.class})
 @DataMongoTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class CommentRepositoryTest {
 
     @Autowired
@@ -29,6 +28,7 @@ class CommentRepositoryTest {
     private BookRepository bookRepository;
 
     @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void testSaveNew() {
         var comments = repository.findAll();
         assertFalse(comments.isEmpty());
@@ -77,6 +77,7 @@ class CommentRepositoryTest {
     }
 
     @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void testDelete() {
         var comments = repository.findAll();
         assertFalse(comments.isEmpty());
