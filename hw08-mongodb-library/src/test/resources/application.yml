@@ -1,0 +1,14 @@
+spring:
+  shell:
+    interactive:
+      enabled: false
+  data:
+    mongodb:
+      database: test-library
+      host: localhost
+      port: 0
+
+mongock:
+  change-logs-scan-package: ru.otus.erinary.hw08.library.dao.changelog.test
+  runner-type: initializingbean
+
