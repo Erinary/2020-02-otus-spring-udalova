@@ -75,7 +75,7 @@ public class ModelConverter {
                 comment.getText(),
                 comment.getUser(),
                 comment.getDate(),
-                comment.getBook().getId()
+                comment.getBookId()
         );
     }
 }

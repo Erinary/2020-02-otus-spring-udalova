@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 import ru.otus.erinary.hw11.library.dao.converter.ZoneDateTimeWriteConverter;
 import ru.otus.erinary.hw11.library.dao.converter.ZonedDateTimeReadConverter;
 import ru.otus.erinary.hw11.library.dao.listener.BookEventListener;
+import ru.otus.erinary.hw11.library.dao.listener.CommentEventListener;
 
 import java.util.List;
 
@@ -26,5 +27,10 @@ public class MongoConfig {
     @Bean
     public BookEventListener bookEventListener() {
         return new BookEventListener();
+    }
+
+    @Bean
+    public CommentEventListener commentEventListener() {
+        return new CommentEventListener();
     }
 }

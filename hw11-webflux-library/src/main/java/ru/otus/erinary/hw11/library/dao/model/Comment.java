@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -29,9 +29,10 @@ public class Comment {
     @Field(name = "date")
     private ZonedDateTime date;
 
-    //TODO fix
-    @DBRef(lazy = true)
-    @Field(name = "book")
+    @Field(name = "bookId")
+    private String bookId;
+
+    @Transient
     private Book book;
 
     public Comment() {
@@ -44,5 +45,9 @@ public class Comment {
         this.user = user;
         this.date = ZonedDateTime.now();
         this.book = book;
+    }
+
+    public void beforeConvert() {
+        bookId = book.getId();
     }
 }

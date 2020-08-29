@@ -43,14 +43,11 @@ public class LibraryServiceImpl implements LibraryService {
         return authorRepository.findById(id)
                 .switchIfEmpty(Mono.error(new LibraryServiceException(
                         String.format("Author with id [%s] does not exist", id))))
-                .flatMap(author -> Mono.zip(
-                        Mono.just(author),
-                        bookRepository.findAllByAuthorId(author.getId()).collectList()
-                ))
-                .map(tuple -> {
-                    tuple.getT1().setBooks(tuple.getT2());
-                    return tuple.getT1();
-                });
+                .zipWith(bookRepository.findAllByAuthorId(id).collectList(),
+                        (author, books) -> {
+                            author.setBooks(books);
+                            return author;
+                        });
     }
 
     @Override
@@ -75,7 +72,12 @@ public class LibraryServiceImpl implements LibraryService {
     public Mono<Genre> getGenreByIdMono(final String id) {
         return genreRepository.findById(id)
                 .switchIfEmpty(Mono.error(new LibraryServiceException(
-                        String.format("Genre with id [%s] does not exist", id))));
+                        String.format("Genre with id [%s] does not exist", id))))
+                .zipWith(bookRepository.findAllByGenreId(id).collectList(),
+                        (genre, books) -> {
+                            genre.setBooks(books);
+                            return genre;
+                        });
     }
 
     @Override
