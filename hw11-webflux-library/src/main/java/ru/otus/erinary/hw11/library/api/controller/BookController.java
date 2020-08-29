@@ -22,36 +22,36 @@ public class BookController {
 
     @GetMapping("/book")
     public Flux<BookDto> getAllBooks() {
-        return libraryService.getBooksFlux()
+        return libraryService.getBooks()
                 .map(ModelConverter::toShortBookModel);
     }
 
     @GetMapping("/book/{id}")
     public Mono<BookDto> getBook(@PathVariable(value = "id") final String id) {
         return Mono.zip(
-                libraryService.getBookByIdMono(id),
-                libraryService.getBookCommentsFlux(id).collect(Collectors.toList()),
+                libraryService.getBookById(id),
+                libraryService.getBookComments(id).collect(Collectors.toList()),
                 ModelConverter::toBookModel
         );
     }
 
     @PostMapping("/book")
     public Mono<BookDto> saveBook(@RequestBody final BookDto bookDto) {
-        return libraryService.saveBookMono(ModelConverter.toBookEntity(bookDto))
+        return libraryService.saveBook(ModelConverter.toBookEntity(bookDto))
                 .map(ModelConverter::toShortBookModel);
     }
 
     @PutMapping("/book/{id}")
     public Mono<BookDto> editBook(@PathVariable(value = "id") final String id, @RequestBody final BookDto bookDto) {
         return Mono.zip(
-                libraryService.saveBookMono(ModelConverter.toBookEntity(bookDto)),
-                libraryService.getBookCommentsFlux(id).collect(Collectors.toList()),
+                libraryService.saveBook(ModelConverter.toBookEntity(bookDto)),
+                libraryService.getBookComments(id).collect(Collectors.toList()),
                 ModelConverter::toBookModel
         );
     }
 
     @DeleteMapping("/book/{id}")
     public Mono<Void> deleteBook(@PathVariable(value = "id") final String id) {
-        return libraryService.deleteBookMono(id);
+        return libraryService.deleteBook(id);
     }
 }

@@ -20,18 +20,18 @@ public class GenreController {
 
     @GetMapping("/genre")
     public Flux<GenreDto> getAllGenres() {
-        return libraryService.getGenresFlux()
+        return libraryService.getGenres()
                 .map(ModelConverter::toGenreModel);
     }
 
     @GetMapping("/genre/{id}")
     public Mono<GenreDto> getGenre(@PathVariable(value = "id") final String id) {
-        return libraryService.getGenreByIdMono(id)
+        return libraryService.getGenreById(id)
                 .map(ModelConverter::toGenreModel);
     }
 
     @DeleteMapping("/genre/{id}")
     public Mono<Void> deleteGenre(@PathVariable(value = "id") final String id) {
-        return libraryService.deleteGenreMono(id);
+        return libraryService.deleteGenre(id);
     }
 }

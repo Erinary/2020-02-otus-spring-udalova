@@ -34,12 +34,12 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public Flux<Author> getAuthorsFlux() {
+    public Flux<Author> getAuthors() {
         return authorRepository.findAll();
     }
 
     @Override
-    public Mono<Author> getAuthorByIdMono(final String id) {
+    public Mono<Author> getAuthorById(final String id) {
         return authorRepository.findById(id)
                 .switchIfEmpty(Mono.error(new LibraryServiceException(
                         String.format("Author with id [%s] does not exist", id))))
@@ -51,7 +51,7 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public Mono<Void> deleteAuthorMono(final String id) {
+    public Mono<Void> deleteAuthor(final String id) {
         return bookRepository.saveAll(
                 bookRepository.findAllByAuthorId(id)
                         .map(
@@ -64,12 +64,12 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public Flux<Genre> getGenresFlux() {
+    public Flux<Genre> getGenres() {
         return genreRepository.findAll();
     }
 
     @Override
-    public Mono<Genre> getGenreByIdMono(final String id) {
+    public Mono<Genre> getGenreById(final String id) {
         return genreRepository.findById(id)
                 .switchIfEmpty(Mono.error(new LibraryServiceException(
                         String.format("Genre with id [%s] does not exist", id))))
@@ -81,7 +81,7 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public Mono<Void> deleteGenreMono(final String id) {
+    public Mono<Void> deleteGenre(final String id) {
         return bookRepository.saveAll(
                 bookRepository.findAllByGenreId(id)
                         .map(
@@ -94,13 +94,13 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public Flux<Book> getBooksFlux() {
+    public Flux<Book> getBooks() {
         return bookRepository.findAll()
                 .flatMap(this::loadBookLinks);
     }
 
     @Override
-    public Mono<Book> getBookByIdMono(final String id) {
+    public Mono<Book> getBookById(final String id) {
         return bookRepository.findById(id).flatMap(this::loadBookLinks);
     }
 
@@ -128,7 +128,7 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public Mono<Book> saveBookMono(final Book book) {
+    public Mono<Book> saveBook(final Book book) {
         var bookMono = (book.getId() == null) ? Mono.just(new Book()) :
                 bookRepository.findById(book.getId())
                         .switchIfEmpty(Mono.error(new LibraryServiceException(
@@ -154,19 +154,18 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public Mono<Void> deleteBookMono(final String id) {
-        var commentsFlux = commentRepository.findAllByBookId(id);
-        return commentRepository.deleteAll(commentsFlux)
-                .flatMap(ignored -> bookRepository.deleteById(id));
+    public Mono<Void> deleteBook(final String id) {
+        return commentRepository.deleteAll(commentRepository.findAllByBookId(id))
+                .then(bookRepository.deleteById(id));
     }
 
     @Override
-    public Flux<Comment> getBookCommentsFlux(final String bookId) {
+    public Flux<Comment> getBookComments(final String bookId) {
         return commentRepository.findAllByBookId(bookId);
     }
 
     @Override
-    public Mono<Comment> saveCommentMono(final String text, final String user, String bookId) {
+    public Mono<Comment> saveComment(final String text, final String user, String bookId) {
         return bookRepository.findById(bookId)
                 .switchIfEmpty(Mono.error(new LibraryServiceException(
                         String.format("Book with id [%s] does not exist", bookId))))
@@ -175,12 +174,12 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public Mono<Void> deleteCommentMono(String id) {
+    public Mono<Void> deleteComment(String id) {
         return commentRepository.deleteById(id);
     }
 
     @Override
-    public Mono<String> getBookIdByCommentMono(String commentId) {
+    public Mono<String> getBookIdByComment(String commentId) {
         return commentRepository.findById(commentId)
                 .map(Comment::getBook)
                 .map(Book::getId)

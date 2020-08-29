@@ -32,7 +32,7 @@ class CommentControllerTest {
     @Test
     void saveBookComment() {
         var bookId = UUID.randomUUID().toString();
-        Mockito.when(libraryService.saveCommentMono(Mockito.anyString(), Mockito.anyString(), Mockito.eq(bookId)))
+        Mockito.when(libraryService.saveComment(Mockito.anyString(), Mockito.anyString(), Mockito.eq(bookId)))
                 .thenAnswer(invocation ->
                         {
                             var book = new Book();
@@ -61,6 +61,6 @@ class CommentControllerTest {
                 .exchange()
                 .expectStatus().isOk();
 
-        Mockito.verify(libraryService).deleteCommentMono(Mockito.anyString());
+        Mockito.verify(libraryService).deleteComment(Mockito.anyString());
     }
 }

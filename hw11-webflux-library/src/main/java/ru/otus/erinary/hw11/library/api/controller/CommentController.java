@@ -20,7 +20,7 @@ public class CommentController {
     @PostMapping("/comment")
     public Mono<CommentDto> saveBookComment(@RequestBody final CommentDto commentDto) {
         var userName = commentDto.getUser() != null && !commentDto.getUser().isBlank() ? commentDto.getUser() : "Guest";
-        return libraryService.saveCommentMono(
+        return libraryService.saveComment(
                 commentDto.getText(),
                 userName,
                 commentDto.getBookId()
@@ -29,6 +29,6 @@ public class CommentController {
 
     @DeleteMapping("/comment/{id}")
     public Mono<Void> deleteBookComment(@PathVariable(value = "id") final String id) {
-        return libraryService.deleteCommentMono(id);
+        return libraryService.deleteComment(id);
     }
 }

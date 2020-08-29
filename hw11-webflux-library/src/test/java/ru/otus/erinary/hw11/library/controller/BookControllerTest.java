@@ -36,7 +36,7 @@ class BookControllerTest {
 
     @Test
     void getAllBooks() {
-        Mockito.when(libraryService.getBooksFlux())
+        Mockito.when(libraryService.getBooks())
                 .thenReturn(Flux.fromIterable(
                         List.of(
                                 createBook("title1", 1970, "author1", "genre1"),
@@ -58,9 +58,9 @@ class BookControllerTest {
     @Test
     void getBook() {
         var firstBook = createBook("title1", 1970, "author", "genre");
-        Mockito.when(libraryService.getBookByIdMono(firstBook.getId()))
+        Mockito.when(libraryService.getBookById(firstBook.getId()))
                 .thenReturn(Mono.just(firstBook));
-        Mockito.when(libraryService.getBookCommentsFlux(firstBook.getId()))
+        Mockito.when(libraryService.getBookComments(firstBook.getId()))
                 .thenReturn(Flux.fromIterable(List.of(new Comment("text", "user", firstBook))));
 
         webClient.get().uri("/library/book/{id}", firstBook.getId())
@@ -74,9 +74,9 @@ class BookControllerTest {
                 .jsonPath("$.genre").isEqualTo(firstBook.getGenre().getName());
 
         var secondBook = createBook("title2", 1980, null, null);
-        Mockito.when(libraryService.getBookByIdMono(secondBook.getId()))
+        Mockito.when(libraryService.getBookById(secondBook.getId()))
                 .thenReturn(Mono.just(secondBook));
-        Mockito.when(libraryService.getBookCommentsFlux(secondBook.getId()))
+        Mockito.when(libraryService.getBookComments(secondBook.getId()))
                 .thenReturn(Flux.fromIterable(List.of(new Comment("text", "user", secondBook))));
 
         webClient.get().uri("/library/book/{id}", secondBook.getId())
@@ -92,7 +92,7 @@ class BookControllerTest {
 
     @Test
     void saveBook() {
-        Mockito.when(libraryService.saveBookMono(Mockito.any(Book.class)))
+        Mockito.when(libraryService.saveBook(Mockito.any(Book.class)))
                 .thenAnswer(invocation ->
                         {
                             var book = (Book) invocation.getArgument(0);
@@ -123,7 +123,7 @@ class BookControllerTest {
 
     @Test
     void editBook() {
-        Mockito.when(libraryService.saveBookMono(Mockito.any(Book.class)))
+        Mockito.when(libraryService.saveBook(Mockito.any(Book.class)))
                 .thenAnswer(invocation ->
                         {
                             var book = (Book) invocation.getArgument(0);
@@ -137,7 +137,7 @@ class BookControllerTest {
                             );
                         }
                 );
-        Mockito.when(libraryService.getBookCommentsFlux(Mockito.anyString()))
+        Mockito.when(libraryService.getBookComments(Mockito.anyString()))
                 .thenReturn(Flux.fromIterable(List.of(new Comment("text", "user", new Book()))));
         var bookModel = new BookDto(UUID.randomUUID().toString(), "title", 1970, "author", "genre", null);
 
@@ -160,7 +160,7 @@ class BookControllerTest {
                 .exchange()
                 .expectStatus().isOk();
 
-        Mockito.verify(libraryService).deleteBookMono(Mockito.anyString());
+        Mockito.verify(libraryService).deleteBook(Mockito.anyString());
     }
 
     private Book createBook(final String title, final int year, final String authorName, final String genreName) {

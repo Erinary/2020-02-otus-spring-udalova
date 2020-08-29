@@ -34,7 +34,7 @@ class GenreControllerTest {
         var secondId = UUID.randomUUID().toString();
         var thirdId = UUID.randomUUID().toString();
 
-        Mockito.when(libraryService.getGenresFlux())
+        Mockito.when(libraryService.getGenres())
                 .thenReturn(Flux.fromIterable(
                         List.of(
                                 new Genre(firstId, "genre1", Collections.emptyList()),
@@ -55,7 +55,7 @@ class GenreControllerTest {
     @Test
     void getGenre() {
         var id = UUID.randomUUID().toString();
-        Mockito.when(libraryService.getGenreByIdMono(id))
+        Mockito.when(libraryService.getGenreById(id))
                 .thenReturn(Mono.just(new Genre(id, "genre1", Collections.emptyList())));
 
         webClient.get().uri("/library/genre/{id}", id)
@@ -72,6 +72,6 @@ class GenreControllerTest {
                 .exchange()
                 .expectStatus().isOk();
 
-        Mockito.verify(libraryService).deleteGenreMono(Mockito.anyString());
+        Mockito.verify(libraryService).deleteGenre(Mockito.anyString());
     }
 }

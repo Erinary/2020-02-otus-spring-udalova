@@ -20,18 +20,18 @@ public class AuthorController {
 
     @GetMapping("/author")
     public Flux<AuthorDto> getAllAuthors() {
-        return libraryService.getAuthorsFlux()
+        return libraryService.getAuthors()
                 .map(ModelConverter::toAuthorModel);
     }
 
     @GetMapping("/author/{id}")
     public Mono<AuthorDto> getAuthor(@PathVariable(value = "id") final String id) {
-        return libraryService.getAuthorByIdMono(id)
+        return libraryService.getAuthorById(id)
                 .map(ModelConverter::toAuthorModel);
     }
 
     @DeleteMapping("/author/{id}")
     public Mono<Void> deleteAuthor(@PathVariable(value = "id") final String id) {
-        return libraryService.deleteAuthorMono(id);
+        return libraryService.deleteAuthor(id);
     }
 }

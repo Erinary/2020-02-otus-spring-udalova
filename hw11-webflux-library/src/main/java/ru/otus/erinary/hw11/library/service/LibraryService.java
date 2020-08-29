@@ -9,31 +9,31 @@ import ru.otus.erinary.hw11.library.dao.model.Genre;
 
 public interface LibraryService {
 
-    Flux<Author> getAuthorsFlux();
+    Flux<Author> getAuthors();
 
-    Mono<Author> getAuthorByIdMono(String id);
+    Mono<Author> getAuthorById(String id);
 
-    Mono<Void> deleteAuthorMono(String id);
+    Mono<Void> deleteAuthor(String id);
 
-    Flux<Genre> getGenresFlux();
+    Flux<Genre> getGenres();
 
-    Mono<Genre> getGenreByIdMono(String id);
+    Mono<Genre> getGenreById(String id);
 
-    Mono<Void> deleteGenreMono(String id);
+    Mono<Void> deleteGenre(String id);
 
-    Flux<Book> getBooksFlux();
+    Flux<Book> getBooks();
 
-    Mono<Book> getBookByIdMono(String id);
+    Mono<Book> getBookById(String id);
 
-    Mono<Book> saveBookMono(Book book);
+    Mono<Book> saveBook(Book book);
 
-    Mono<Void> deleteBookMono(String id);
+    Mono<Void> deleteBook(String id);
 
-    Flux<Comment> getBookCommentsFlux(String bookId);
+    Flux<Comment> getBookComments(String bookId);
 
-    Mono<Comment> saveCommentMono(String text, String user, String bookId);
+    Mono<Comment> saveComment(String text, String user, String bookId);
 
-    Mono<Void> deleteCommentMono(String id);
+    Mono<Void> deleteComment(String id);
 
-    Mono<String> getBookIdByCommentMono(String commentId);
+    Mono<String> getBookIdByComment(String commentId);
 }

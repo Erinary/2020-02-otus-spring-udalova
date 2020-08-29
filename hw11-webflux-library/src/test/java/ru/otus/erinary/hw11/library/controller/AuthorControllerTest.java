@@ -34,7 +34,7 @@ class AuthorControllerTest {
         var secondId = UUID.randomUUID().toString();
         var thirdId = UUID.randomUUID().toString();
 
-        Mockito.when(libraryService.getAuthorsFlux())
+        Mockito.when(libraryService.getAuthors())
                 .thenReturn(Flux.fromIterable(
                         List.of(
                                 new Author(firstId, "author1", Collections.emptyList()),
@@ -55,7 +55,7 @@ class AuthorControllerTest {
     @Test
     void getAuthor() {
         var id = UUID.randomUUID().toString();
-        Mockito.when(libraryService.getAuthorByIdMono(id))
+        Mockito.when(libraryService.getAuthorById(id))
                 .thenReturn(Mono.just(new Author(id, "author1", Collections.emptyList())));
 
         webClient.get().uri("/library/author/{id}", id)
@@ -72,6 +72,6 @@ class AuthorControllerTest {
                 .exchange()
                 .expectStatus().isOk();
 
-        Mockito.verify(libraryService).deleteAuthorMono(Mockito.anyString());
+        Mockito.verify(libraryService).deleteAuthor(Mockito.anyString());
     }
 }
