@@ -2,6 +2,8 @@ package ru.otus.erinary.hw11.library.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.erinary.hw11.library.dao.model.Author;
 import ru.otus.erinary.hw11.library.dao.model.Book;
 import ru.otus.erinary.hw11.library.dao.model.Comment;
@@ -11,8 +13,6 @@ import ru.otus.erinary.hw11.library.dao.repository.BookRepository;
 import ru.otus.erinary.hw11.library.dao.repository.CommentRepository;
 import ru.otus.erinary.hw11.library.dao.repository.GenreRepository;
 import ru.otus.erinary.hw11.library.service.exception.LibraryServiceException;
-
-import java.util.List;
 
 @Service
 public class LibraryServiceImpl implements LibraryService {
@@ -34,131 +34,156 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public List<Author> getAuthors() {
+    public Flux<Author> getAuthorsFlux() {
         return authorRepository.findAll();
     }
 
     @Override
-    public Author getAuthorById(String id) {
+    public Mono<Author> getAuthorByIdMono(final String id) {
         return authorRepository.findById(id)
-                .orElseThrow(() -> new LibraryServiceException(String.format("Author with id [%s] does not exist", id)));
+                .switchIfEmpty(Mono.error(new LibraryServiceException(
+                        String.format("Author with id [%s] does not exist", id))))
+                .flatMap(author -> Mono.zip(
+                        Mono.just(author),
+                        bookRepository.findAllByAuthorId(author.getId()).collectList()
+                ))
+                .map(tuple -> {
+                    tuple.getT1().setBooks(tuple.getT2());
+                    return tuple.getT1();
+                });
     }
 
     @Override
-    public Author getAuthorByName(final String name) {
-        var author = authorRepository.findByName(name);
-        author.ifPresent(a -> {
-            var books = bookRepository.findAllByAuthorId(a.getId());
-            a.setBooks(books);
-        });
-        return author.orElse(null);
+    public Mono<Void> deleteAuthorMono(final String id) {
+        return bookRepository.saveAll(
+                bookRepository.findAllByAuthorId(id)
+                        .map(
+                                b -> {
+                                    b.setAuthor(null);
+                                    return b;
+                                })
+        )
+                .then(authorRepository.deleteById(id));
     }
 
     @Override
-    public void deleteAuthor(final String id) {
-        var books = bookRepository.findAllByAuthorId(id);
-        books.forEach(book -> book.setAuthor(null));
-        bookRepository.saveAll(books);
-        authorRepository.deleteById(id);
-    }
-
-    @Override
-    public List<Genre> getGenres() {
+    public Flux<Genre> getGenresFlux() {
         return genreRepository.findAll();
     }
 
     @Override
-    public Genre getGenreById(String id) {
+    public Mono<Genre> getGenreByIdMono(final String id) {
         return genreRepository.findById(id)
-                .orElseThrow(() -> new LibraryServiceException(String.format("Genre with id [%s] does not exist", id)));
+                .switchIfEmpty(Mono.error(new LibraryServiceException(
+                        String.format("Genre with id [%s] does not exist", id))));
     }
 
     @Override
-    public Genre getGenreByName(final String name) {
-        var genre = genreRepository.findByName(name);
-        genre.ifPresent(g -> {
-            var books = bookRepository.findAllByGenreId(g.getId());
-            g.setBooks(books);
-        });
-        return genre.orElse(null);
+    public Mono<Void> deleteGenreMono(final String id) {
+        return bookRepository.saveAll(
+                bookRepository.findAllByGenreId(id)
+                        .map(
+                                b -> {
+                                    b.setGenre(null);
+                                    return b;
+                                })
+        )
+                .then(genreRepository.deleteById(id));
     }
 
     @Override
-    public void deleteGenre(final String id) {
-        var books = bookRepository.findAllByGenreId(id);
-        books.forEach(book -> book.setGenre(null));
-        bookRepository.saveAll(books);
-        genreRepository.deleteById(id);
+    public Flux<Book> getBooksFlux() {
+        return bookRepository.findAll()
+                .flatMap(this::loadBookLinks);
     }
 
     @Override
-    public List<Book> getBooks() {
-        return bookRepository.findAll();
+    public Mono<Book> getBookByIdMono(final String id) {
+        return bookRepository.findById(id).flatMap(this::loadBookLinks);
+    }
+
+    private Mono<Book> loadBookLinks(Book book) {
+        var toReturn = Mono.just(book);
+        if (book.getAuthorId() != null) {
+            toReturn = toReturn
+                    .zipWith(
+                            authorRepository.findById(book.getAuthorId()),
+                            (theBook, author) -> {
+                                theBook.setAuthor(author);
+                                return theBook;
+                            });
+        }
+        if (book.getGenreId() != null) {
+            toReturn = toReturn
+                    .zipWith(
+                            genreRepository.findById(book.getGenreId()),
+                            (theBook, genre) -> {
+                                theBook.setGenre(genre);
+                                return theBook;
+                            });
+        }
+        return toReturn;
     }
 
     @Override
-    public Book getBookById(final String id) {
-        return bookRepository.findById(id).orElse(null);
+    public Mono<Book> saveBookMono(final Book book) {
+        var bookMono = (book.getId() == null) ? Mono.just(new Book()) :
+                bookRepository.findById(book.getId())
+                        .switchIfEmpty(Mono.error(new LibraryServiceException(
+                                String.format("Book with id [%s] does not exist", book.getId()))));
+
+        var authorMono = authorRepository.findByName(book.getAuthor().getName())
+                .switchIfEmpty(authorRepository.save(new Author(book.getAuthor().getName())));
+        var genreMono = genreRepository.findByName(book.getGenre().getName())
+                .switchIfEmpty(genreRepository.save(new Genre(book.getGenre().getName())));
+
+        return Mono.zip(bookMono, authorMono, genreMono)
+                .map(tuple -> {
+                    var savedBook = tuple.getT1();
+                    var author = tuple.getT2();
+                    var genre = tuple.getT3();
+                    savedBook.setTitle(book.getTitle());
+                    savedBook.setYear(book.getYear());
+                    savedBook.setAuthor(author);
+                    savedBook.setGenre(genre);
+                    return savedBook;
+                })
+                .flatMap(bookRepository::save);
     }
 
     @Override
-    public Book saveBook(Book book) {
-        var author = authorRepository.findByName(book.getAuthor().getName())
-                .orElseGet(() -> {
-                    var a = new Author(book.getAuthor().getName());
-                    authorRepository.save(a);
-                    return a;
-                });
-        var genre = genreRepository.findByName(book.getGenre().getName())
-                .orElseGet(() -> {
-                    var g = new Genre(book.getGenre().getName());
-                    genreRepository.save(g);
-                    return g;
-                });
-
-        var savedBook = book.getId() == null ? new Book() : bookRepository
-                .findById(book.getId())
-                .orElseThrow(() -> new LibraryServiceException(String.format("Book with id [%s] does not exist", book.getId())));
-        savedBook.setTitle(book.getTitle());
-        savedBook.setYear(book.getYear());
-        savedBook.setAuthor(author);
-        savedBook.setGenre(genre);
-
-        return bookRepository.save(savedBook);
+    public Mono<Void> deleteBookMono(final String id) {
+        var commentsFlux = commentRepository.findAllByBookId(id);
+        return commentRepository.deleteAll(commentsFlux)
+                .flatMap(ignored -> bookRepository.deleteById(id));
     }
 
     @Override
-    public void deleteBook(final String id) {
-        var comments = commentRepository.findAllByBookId(id);
-        commentRepository.deleteAll(comments);
-        bookRepository.deleteById(id);
-    }
-
-    @Override
-    public List<Comment> getBookComments(final String bookId) {
+    public Flux<Comment> getBookCommentsFlux(final String bookId) {
         return commentRepository.findAllByBookId(bookId);
     }
 
     @Override
-    public Comment saveComment(String text, String user, String bookId) {
-        var book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new LibraryServiceException(String.format("Book with id [%s] does not exist", bookId)));
-        var comment = new Comment(text, user, book);
-        return commentRepository.save(comment);
+    public Mono<Comment> saveCommentMono(final String text, final String user, String bookId) {
+        return bookRepository.findById(bookId)
+                .switchIfEmpty(Mono.error(new LibraryServiceException(
+                        String.format("Book with id [%s] does not exist", bookId))))
+                .map(book -> new Comment(text, user, book))
+                .flatMap(commentRepository::save);
     }
 
     @Override
-    public void deleteComment(final String id) {
-        commentRepository.deleteById(id);
+    public Mono<Void> deleteCommentMono(String id) {
+        return commentRepository.deleteById(id);
     }
 
     @Override
-    public String getBookIdByComment(String commentId) {
+    public Mono<String> getBookIdByCommentMono(String commentId) {
         return commentRepository.findById(commentId)
                 .map(Comment::getBook)
                 .map(Book::getId)
-                .orElseThrow(() -> new LibraryServiceException(String.format("Comment with id [%s] does not exist", commentId)));
+                .switchIfEmpty(
+                        Mono.error(new LibraryServiceException(String.format("Comment with id [%s] does not exist", commentId))));
     }
-
 
 }

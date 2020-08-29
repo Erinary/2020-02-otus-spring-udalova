@@ -2,6 +2,7 @@ package ru.otus.erinary.hw11.library.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 import ru.otus.erinary.hw11.library.api.model.CommentDto;
 import ru.otus.erinary.hw11.library.service.LibraryService;
 
@@ -17,17 +18,17 @@ public class CommentController {
     }
 
     @PostMapping("/comment")
-    public CommentDto saveBookComment(@RequestBody final CommentDto commentDto) {
+    public Mono<CommentDto> saveBookComment(@RequestBody final CommentDto commentDto) {
         var userName = commentDto.getUser() != null && !commentDto.getUser().isBlank() ? commentDto.getUser() : "Guest";
-        var comment = libraryService.saveComment(
+        return libraryService.saveCommentMono(
                 commentDto.getText(),
                 userName,
-                commentDto.getBookId());
-        return ModelConverter.toCommentModel(comment);
+                commentDto.getBookId()
+        ).map(ModelConverter::toCommentModel);
     }
 
     @DeleteMapping("/comment/{id}")
-    public void deleteBookComment(@PathVariable(value = "id") final String id) {
-        libraryService.deleteComment(id);
+    public Mono<Void> deleteBookComment(@PathVariable(value = "id") final String id) {
+        return libraryService.deleteCommentMono(id);
     }
 }

@@ -23,6 +23,7 @@ public class Genre {
     @Field(name = "name")
     private String name;
 
+    //TODO fix
     @DBRef(lazy = true)
     @Field(name = "books")
     private List<Book> books;

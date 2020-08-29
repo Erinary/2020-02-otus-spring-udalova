@@ -2,11 +2,10 @@ package ru.otus.erinary.hw11.library.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.erinary.hw11.library.api.model.GenreDto;
 import ru.otus.erinary.hw11.library.service.LibraryService;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/library")
@@ -20,20 +19,19 @@ public class GenreController {
     }
 
     @GetMapping("/genre")
-    public List<GenreDto> getAllGenres() {
-        return libraryService.getGenres().stream()
-                .map(ModelConverter::toGenreModel)
-                .collect(Collectors.toList());
+    public Flux<GenreDto> getAllGenres() {
+        return libraryService.getGenresFlux()
+                .map(ModelConverter::toGenreModel);
     }
 
     @GetMapping("/genre/{id}")
-    public GenreDto getGenre(@PathVariable(value = "id") final String id) {
-        var genre = libraryService.getGenreById(id);
-        return ModelConverter.toGenreModel(genre);
+    public Mono<GenreDto> getGenre(@PathVariable(value = "id") final String id) {
+        return libraryService.getGenreByIdMono(id)
+                .map(ModelConverter::toGenreModel);
     }
 
     @DeleteMapping("/genre/{id}")
-    public void deleteGenre(@PathVariable(value = "id") final String id) {
-        libraryService.deleteGenre(id);
+    public Mono<Void> deleteGenre(@PathVariable(value = "id") final String id) {
+        return libraryService.deleteGenreMono(id);
     }
 }

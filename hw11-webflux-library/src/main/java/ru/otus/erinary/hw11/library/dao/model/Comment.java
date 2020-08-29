@@ -29,6 +29,7 @@ public class Comment {
     @Field(name = "date")
     private ZonedDateTime date;
 
+    //TODO fix
     @DBRef(lazy = true)
     @Field(name = "book")
     private Book book;

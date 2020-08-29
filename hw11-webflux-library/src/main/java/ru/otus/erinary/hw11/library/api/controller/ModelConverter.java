@@ -53,7 +53,7 @@ public class ModelConverter {
         return new AuthorDto(
                 author.getId(),
                 author.getName(),
-                author.getBooks().stream()
+                (author.getBooks() == null) ? null : author.getBooks().stream()
                         .map(ModelConverter::toShortBookModel)
                         .collect(Collectors.toList())
         );

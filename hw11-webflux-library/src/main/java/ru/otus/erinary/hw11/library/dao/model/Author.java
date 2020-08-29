@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -23,8 +23,7 @@ public class Author {
     @Field(name = "name")
     private String name;
 
-    @DBRef(lazy = true)
-    @Field(name = "books")
+    @Transient
     private List<Book> books;
 
     public Author() {

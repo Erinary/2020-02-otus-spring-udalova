@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -25,12 +25,16 @@ public class Book {
     @Field(name = "year")
     private int year;
 
-    @DBRef
-    @Field(name = "author")
+    @Field(name = "authorId")
+    private String authorId;
+
+    @Field(name = "genreId")
+    private String genreId;
+
+    @Transient
     private Author author;
 
-    @DBRef
-    @Field(name = "genre")
+    @Transient
     private Genre genre;
 
     public Book() {
@@ -43,5 +47,18 @@ public class Book {
         this.year = year;
         this.author = author;
         this.genre = genre;
+    }
+
+    public Book(final String id, final String title, final int year, final Author author, final Genre genre) {
+        this.id = id;
+        this.title = title;
+        this.year = year;
+        this.author = author;
+        this.genre = genre;
+    }
+
+    public void beforeConvert() {
+        if (author != null) authorId = author.getId();
+        if (genre != null) genreId = genre.getId();
     }
 }

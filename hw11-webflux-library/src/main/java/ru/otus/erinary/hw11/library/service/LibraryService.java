@@ -1,43 +1,39 @@
 package ru.otus.erinary.hw11.library.service;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.erinary.hw11.library.dao.model.Author;
 import ru.otus.erinary.hw11.library.dao.model.Book;
 import ru.otus.erinary.hw11.library.dao.model.Comment;
 import ru.otus.erinary.hw11.library.dao.model.Genre;
 
-import java.util.List;
-
 public interface LibraryService {
 
-    List<Author> getAuthors();
+    Flux<Author> getAuthorsFlux();
 
-    Author getAuthorById(String id);
+    Mono<Author> getAuthorByIdMono(String id);
 
-    Author getAuthorByName(String name);
+    Mono<Void> deleteAuthorMono(String id);
 
-    void deleteAuthor(String id);
+    Flux<Genre> getGenresFlux();
 
-    List<Genre> getGenres();
+    Mono<Genre> getGenreByIdMono(String id);
 
-    Genre getGenreById(String id);
+    Mono<Void> deleteGenreMono(String id);
 
-    Genre getGenreByName(String name);
+    Flux<Book> getBooksFlux();
 
-    void deleteGenre(String id);
+    Mono<Book> getBookByIdMono(String id);
 
-    List<Book> getBooks();
+    Mono<Book> saveBookMono(Book book);
 
-    Book getBookById(String id);
+    Mono<Void> deleteBookMono(String id);
 
-    Book saveBook(Book book);
+    Flux<Comment> getBookCommentsFlux(String bookId);
 
-    void deleteBook(String id);
+    Mono<Comment> saveCommentMono(String text, String user, String bookId);
 
-    List<Comment> getBookComments(String bookId);
+    Mono<Void> deleteCommentMono(String id);
 
-    Comment saveComment(String text, String user, String bookId);
-
-    void deleteComment(String id);
-
-    String getBookIdByComment(String commentId);
+    Mono<String> getBookIdByCommentMono(String commentId);
 }
