@@ -1,5 +1,6 @@
 package ru.otus.erinary.hw11.library.config;
 
+import com.github.cloudyrock.spring.v5.EnableMongock;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
@@ -13,6 +14,7 @@ import ru.otus.erinary.hw11.library.dao.listener.CommentEventListener;
 import java.util.List;
 
 @Configuration
+@EnableMongock
 @EnableReactiveMongoRepositories(basePackages = "ru.otus.erinary.hw11.library.dao")
 @EnableMongoRepositories(basePackages = "ru.otus.erinary.hw11.library.dao")
 public class MongoConfig {

@@ -63,7 +63,7 @@ public class ModelConverter {
         return new GenreDto(
                 genre.getId(),
                 genre.getName(),
-                genre.getBooks().stream()
+                (genre.getBooks() == null) ? null : genre.getBooks().stream()
                         .map(ModelConverter::toShortBookModel)
                         .collect(Collectors.toList())
         );

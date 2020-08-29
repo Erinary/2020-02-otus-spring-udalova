@@ -4,11 +4,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.erinary.hw11.library.api.controller.AuthorController;
 import ru.otus.erinary.hw11.library.dao.model.Author;
 import ru.otus.erinary.hw11.library.service.LibraryService;
@@ -17,66 +18,60 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(AuthorController.class)
+@WebFluxTest(controllers = AuthorController.class)
 class AuthorControllerTest {
 
     @Autowired
-    private MockMvc mvc;
+    private WebTestClient webClient;
 
     @MockBean
     private LibraryService libraryService;
 
     @Test
-    void getAllAuthors() throws Exception {
+    void getAllAuthors() {
         var firstId = UUID.randomUUID().toString();
         var secondId = UUID.randomUUID().toString();
         var thirdId = UUID.randomUUID().toString();
 
-        Mockito.when(libraryService.getAuthors())
-                .thenReturn(List.of(
-                        new Author(firstId, "author1", Collections.emptyList()),
-                        new Author(secondId, "author2", Collections.emptyList()),
-                        new Author(thirdId, "author3", Collections.emptyList())
-                ));
+        Mockito.when(libraryService.getAuthorsFlux())
+                .thenReturn(Flux.fromIterable(
+                        List.of(
+                                new Author(firstId, "author1", Collections.emptyList()),
+                                new Author(secondId, "author2", Collections.emptyList()),
+                                new Author(thirdId, "author3", Collections.emptyList())
+                        )));
 
-        mvc.perform(get("/library/author")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[*].id").isNotEmpty())
-                .andExpect(jsonPath("$[?(@.id ==" + firstId +")].name").value("author1"))
-                .andExpect(jsonPath("$[?(@.id == " + secondId +")].name").value("author2"))
-                .andExpect(jsonPath("$[?(@.id == " + thirdId +")].name").value("author3"));
+        webClient.get().uri("/library/author")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$[*].id").isNotEmpty()
+                .jsonPath("$[?(@.id == '" + firstId + "')].name").isEqualTo("author1")
+                .jsonPath("$[?(@.id == '" + secondId + "')].name").isEqualTo("author2")
+                .jsonPath("$[?(@.id == '" + thirdId + "')].name").isEqualTo("author3");
     }
 
     @Test
-    void getAuthor() throws Exception {
+    void getAuthor() {
         var id = UUID.randomUUID().toString();
-        Mockito.when(libraryService.getAuthorById(id))
-                .thenReturn(new Author(id, "author1", Collections.emptyList()));
+        Mockito.when(libraryService.getAuthorByIdMono(id))
+                .thenReturn(Mono.just(new Author(id, "author1", Collections.emptyList())));
 
-        mvc.perform(get("/library/author/{id}", id)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(id))
-                .andExpect(jsonPath("$.name").value("author1"));
+        webClient.get().uri("/library/author/{id}", id)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.id").isEqualTo(id)
+                .jsonPath("$.name").isEqualTo("author1");
     }
 
     @Test
-    void deleteAuthor() throws Exception {
-        mvc.perform(delete("/library/author/{id}", UUID.randomUUID().toString())
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk());
+    void deleteAuthor() {
+        webClient.delete().uri("/library/author/{id}", UUID.randomUUID().toString())
+                .exchange()
+                .expectStatus().isOk();
 
-        Mockito.verify(libraryService).deleteAuthor(Mockito.anyString());
+        Mockito.verify(libraryService).deleteAuthorMono(Mockito.anyString());
     }
 }

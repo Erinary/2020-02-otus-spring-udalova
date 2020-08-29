@@ -1,15 +1,17 @@
 package ru.otus.erinary.hw11.library.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.erinary.hw11.library.api.controller.BookController;
 import ru.otus.erinary.hw11.library.api.model.BookDto;
 import ru.otus.erinary.hw11.library.dao.model.Author;
@@ -20,151 +22,148 @@ import ru.otus.erinary.hw11.library.service.LibraryService;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(BookController.class)
+@WebFluxTest(controllers = BookController.class)
 class BookControllerTest {
 
     @Autowired
-    private MockMvc mvc;
-
-    @Autowired
-    private ObjectMapper mapper;
+    private WebTestClient webClient;
 
     @MockBean
     private LibraryService libraryService;
 
     @Test
-    void getAllBooks() throws Exception {
-        Mockito.when(libraryService.getBooks())
-                .thenReturn(List.of(
-                        createBook("title1", 1970, "author1", "genre1"),
-                        createBook("title2", 1980, "author1", "genre2"),
-                        createBook("title3", 1990, "author2", "genre1")
-                ));
+    void getAllBooks() {
+        Mockito.when(libraryService.getBooksFlux())
+                .thenReturn(Flux.fromIterable(
+                        List.of(
+                                createBook("title1", 1970, "author1", "genre1"),
+                                createBook("title2", 1980, "author1", "genre2"),
+                                createBook("title3", 1990, "author2", "genre1")
+                        )));
 
-        mvc.perform(get("/library/book")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[*].id").isNotEmpty())
-                .andExpect(jsonPath("$[*].title").isNotEmpty())
-                .andExpect(jsonPath("$[*].year").isNotEmpty())
-                .andExpect(jsonPath("$[*].author").isNotEmpty())
-                .andExpect(jsonPath("$[*].genre").isNotEmpty());
+        webClient.get().uri("/library/book")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$[*].id").isNotEmpty()
+                .jsonPath("$[*].title").isNotEmpty()
+                .jsonPath("$[*].year").isNotEmpty()
+                .jsonPath("$[*].author").isNotEmpty()
+                .jsonPath("$[*].genre").isNotEmpty();
     }
 
     @Test
-    void getBook() throws Exception {
+    void getBook() {
         var firstBook = createBook("title1", 1970, "author", "genre");
-        Mockito.when(libraryService.getBookById(firstBook.getId()))
-                .thenReturn(firstBook);
+        Mockito.when(libraryService.getBookByIdMono(firstBook.getId()))
+                .thenReturn(Mono.just(firstBook));
+        Mockito.when(libraryService.getBookCommentsFlux(firstBook.getId()))
+                .thenReturn(Flux.fromIterable(List.of(new Comment("text", "user", firstBook))));
 
-        mvc.perform(get("/library/book/{id}", firstBook.getId())
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(firstBook.getId()))
-                .andExpect(jsonPath("$.title").value(firstBook.getTitle()))
-                .andExpect(jsonPath("$.year").value(firstBook.getYear()))
-                .andExpect(jsonPath("$.author").value(firstBook.getAuthor().getName()))
-                .andExpect(jsonPath("$.genre").value(firstBook.getGenre().getName()));
+        webClient.get().uri("/library/book/{id}", firstBook.getId())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.id").isEqualTo(firstBook.getId())
+                .jsonPath("$.title").isEqualTo(firstBook.getTitle())
+                .jsonPath("$.year").isEqualTo(firstBook.getYear())
+                .jsonPath("$.author").isEqualTo(firstBook.getAuthor().getName())
+                .jsonPath("$.genre").isEqualTo(firstBook.getGenre().getName());
 
         var secondBook = createBook("title2", 1980, null, null);
-        Mockito.when(libraryService.getBookById(secondBook.getId()))
-                .thenReturn(secondBook);
+        Mockito.when(libraryService.getBookByIdMono(secondBook.getId()))
+                .thenReturn(Mono.just(secondBook));
+        Mockito.when(libraryService.getBookCommentsFlux(secondBook.getId()))
+                .thenReturn(Flux.fromIterable(List.of(new Comment("text", "user", secondBook))));
 
-        mvc.perform(get("/library/book/{id}", secondBook.getId())
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(secondBook.getId()))
-                .andExpect(jsonPath("$.title").value(secondBook.getTitle()))
-                .andExpect(jsonPath("$.year").value(secondBook.getYear()))
-                .andExpect(jsonPath("$.author").value("NOT SPECIFIED"))
-                .andExpect(jsonPath("$.genre").value("NOT SPECIFIED"));
+        webClient.get().uri("/library/book/{id}", secondBook.getId())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.id").isEqualTo(secondBook.getId())
+                .jsonPath("$.title").isEqualTo(secondBook.getTitle())
+                .jsonPath("$.year").isEqualTo(secondBook.getYear())
+                .jsonPath("$.author").isEqualTo("NOT SPECIFIED")
+                .jsonPath("$.genre").isEqualTo("NOT SPECIFIED");
     }
 
     @Test
-    void saveBook() throws Exception {
-        Mockito.when(libraryService.saveBook(Mockito.any(Book.class)))
+    void saveBook() {
+        Mockito.when(libraryService.saveBookMono(Mockito.any(Book.class)))
                 .thenAnswer(invocation ->
                         {
                             var book = (Book) invocation.getArgument(0);
-                            return new Book(
-                                    book.getId(),
-                                    book.getTitle(),
-                                    book.getYear(),
-                                    book.getAuthor(),
-                                    book.getGenre()
+                            return Mono.just(
+                                    new Book(
+                                            book.getId(),
+                                            book.getTitle(),
+                                            book.getYear(),
+                                            book.getAuthor(),
+                                            book.getGenre())
                             );
                         }
                 );
         var bookModel = new BookDto(UUID.randomUUID().toString(), "title", 1970, "author", "genre", null);
 
-        mvc.perform(post("/library/book")
+        webClient.post().uri("/library/book/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(bookModel)))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(bookModel.getId()))
-                .andExpect(jsonPath("$.title").value(bookModel.getTitle()))
-                .andExpect(jsonPath("$.year").value(bookModel.getYear()))
-                .andExpect(jsonPath("$.author").value(bookModel.getAuthorName()))
-                .andExpect(jsonPath("$.genre").value(bookModel.getGenreName()));
+                .body(BodyInserters.fromValue(bookModel))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.id").isEqualTo(bookModel.getId())
+                .jsonPath("$.title").isEqualTo(bookModel.getTitle())
+                .jsonPath("$.year").isEqualTo(bookModel.getYear())
+                .jsonPath("$.author").isEqualTo(bookModel.getAuthorName())
+                .jsonPath("$.genre").isEqualTo(bookModel.getGenreName());
     }
 
     @Test
-    void editBook() throws Exception {
-        Mockito.when(libraryService.saveBook(Mockito.any(Book.class)))
+    void editBook() {
+        Mockito.when(libraryService.saveBookMono(Mockito.any(Book.class)))
                 .thenAnswer(invocation ->
                         {
                             var book = (Book) invocation.getArgument(0);
-                            return new Book(
-                                    book.getId(),
-                                    book.getTitle(),
-                                    book.getYear(),
-                                    book.getAuthor(),
-                                    book.getGenre()
+                            return Mono.just(
+                                    new Book(
+                                            book.getId(),
+                                            book.getTitle(),
+                                            book.getYear(),
+                                            book.getAuthor(),
+                                            book.getGenre())
                             );
                         }
                 );
-        Mockito.when(libraryService.getBookComments(Mockito.anyString()))
-                .thenReturn(List.of(new Comment("text", "user", new Book())));
+        Mockito.when(libraryService.getBookCommentsFlux(Mockito.anyString()))
+                .thenReturn(Flux.fromIterable(List.of(new Comment("text", "user", new Book()))));
         var bookModel = new BookDto(UUID.randomUUID().toString(), "title", 1970, "author", "genre", null);
 
-        mvc.perform(put("/library/book/{id}", 1L)
+        webClient.put().uri("/library/book/{id}", bookModel.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(bookModel)))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(bookModel.getId()))
-                .andExpect(jsonPath("$.title").value(bookModel.getTitle()))
-                .andExpect(jsonPath("$.year").value(bookModel.getYear()))
-                .andExpect(jsonPath("$.author").value(bookModel.getAuthorName()))
-                .andExpect(jsonPath("$.genre").value(bookModel.getGenreName()))
-                .andExpect(jsonPath("$.comments").isNotEmpty());
+                .body(BodyInserters.fromValue(bookModel))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.id").isEqualTo(bookModel.getId())
+                .jsonPath("$.title").isEqualTo(bookModel.getTitle())
+                .jsonPath("$.year").isEqualTo(bookModel.getYear())
+                .jsonPath("$.author").isEqualTo(bookModel.getAuthorName())
+                .jsonPath("$.genre").isEqualTo(bookModel.getGenreName());
     }
 
     @Test
-    void deleteBook() throws Exception {
-        mvc.perform(delete("/library/book/{id}", UUID.randomUUID().toString())
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk());
+    void deleteBook() {
+        webClient.delete().uri("/library/book/{id}", UUID.randomUUID().toString())
+                .exchange()
+                .expectStatus().isOk();
 
-        Mockito.verify(libraryService).deleteBook(Mockito.anyString());
+        Mockito.verify(libraryService).deleteBookMono(Mockito.anyString());
     }
 
     private Book createBook(final String title, final int year, final String authorName, final String genreName) {
-        var random = new Random();
         return new Book(
                 UUID.randomUUID().toString(),
                 title,
