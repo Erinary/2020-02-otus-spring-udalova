@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Реализация {@link ExerciseLoader} для загрузки из .csv файла
+ * Реализация {@link ExerciseLoader} для загрузки из .csv файла.
  */
 public final class FileExerciseLoader implements ExerciseLoader {
 
@@ -28,9 +28,10 @@ public final class FileExerciseLoader implements ExerciseLoader {
     @SneakyThrows
     public List<Exercise> getExercises() {
         Reader reader = new FileReader(getFile());
-        Iterable<CSVRecord> records = CSVFormat.DEFAULT.withEscape('\\')
-                .withFirstRecordAsHeader()
-                .withHeader(FileHeaders.class)
+        var records = CSVFormat.Builder.create().setEscape('\\')
+                .setSkipHeaderRecord(true)
+                .setHeader(FileHeaders.class)
+                .build()
                 .parse(reader);
 
         List<Exercise> exercises = new ArrayList<>();
