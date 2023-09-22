@@ -7,24 +7,36 @@ import ru.otus.erinary.hw01.quiz.service.interaction.UserInteractionService;
 
 import java.util.List;
 
+/**
+ * Сервис для запуска викторины.
+ */
 public final class QuizService {
-    private final static String QUIZ_COMMAND = "-quiz";
-    private final static String HELP_COMMAND = "-help";
-    private final static String QUIT_COMMAND = "-quit";
+    private static final String QUIZ_COMMAND = "-quiz";
+    private static final String HELP_COMMAND = "-help";
+    private static final String QUIT_COMMAND = "-quit";
 
     private final ExerciseService exerciseService;
     private final UserInteractionService userInteractionService;
 
+    /**
+     * Создает новый экземпляр {@link QuizService}.
+     *
+     * @param exerciseService        сервис для работы с упражнениями
+     * @param userInteractionService сервис для взаимодействия с пользователем
+     */
     public QuizService(final ExerciseService exerciseService, final UserInteractionService userInteractionService) {
         this.exerciseService = exerciseService;
         this.userInteractionService = userInteractionService;
     }
 
+    /**
+     * Запускает викторину.
+     */
     public void start() {
         System.out.println(MessageConstants.GREETING);
         help();
         System.out.println(MessageConstants.INPUT_USER);
-        User user = userInteractionService.getUser();
+        var user = userInteractionService.getUser();
 
         //noinspection InfiniteLoopStatement
         while (true) {

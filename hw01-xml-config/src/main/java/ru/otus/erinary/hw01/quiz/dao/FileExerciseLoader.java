@@ -2,7 +2,6 @@ package ru.otus.erinary.hw01.quiz.dao;
 
 import lombok.SneakyThrows;
 import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
 import ru.otus.erinary.hw01.quiz.model.Exercise;
 
 import java.io.File;
@@ -20,6 +19,11 @@ public final class FileExerciseLoader implements ExerciseLoader {
 
     private final String fileName;
 
+    /**
+     * Создает новый экземпляр {@link FileExerciseLoader}.
+     *
+     * @param fileName имя файла
+     */
     public FileExerciseLoader(final String fileName) {
         this.fileName = fileName;
     }
@@ -35,7 +39,7 @@ public final class FileExerciseLoader implements ExerciseLoader {
                 .parse(reader);
 
         List<Exercise> exercises = new ArrayList<>();
-        for (CSVRecord record : records) {
+        for (var record : records) {
             try {
                 exercises.add(new Exercise(
                         record.get(FileHeaders.QUESTION),
