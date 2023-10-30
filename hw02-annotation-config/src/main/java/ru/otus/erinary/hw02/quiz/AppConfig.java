@@ -16,26 +16,50 @@ import ru.otus.erinary.hw02.quiz.service.interaction.output.OutputInteractionSer
 
 import java.util.Scanner;
 
+/**
+ * Выполняет настройку контекста приложения.
+ */
 @ComponentScan
 @Configuration
 @PropertySource("classpath:application.properties")
 public class AppConfig {
 
+    /**
+     * Создает {@link MessageSource}.
+     *
+     * @return {@link MessageSource}
+     */
     @Bean
     public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource source = new ReloadableResourceBundleMessageSource();
+        var source = new ReloadableResourceBundleMessageSource();
         source.setBasename("/messages");
         source.setDefaultEncoding("UTF-8");
         return source;
     }
 
+    /**
+     * Создает {@link InputInteractionService}.
+     *
+     * @param localizationService {@link LocalizationService}
+     * @param outputService       {@link OutputInteractionService}
+     * @return {@link InputInteractionService}
+     */
     @Bean
-    public InputInteractionService inputService(LocalizationService localizationService, OutputInteractionService outputService) {
+    public InputInteractionService inputService(final LocalizationService localizationService,
+                                                final OutputInteractionService outputService) {
         return new ScannerService(new Scanner(System.in), localizationService, outputService);
     }
 
+    /**
+     * Создает {@link ExerciseLoader}.
+     *
+     * @param fileName            базовое название файла упражнений
+     * @param localizationService {@link LocalizationService}
+     * @return {@link ExerciseLoader}
+     */
     @Bean
-    public ExerciseLoader exerciseLoader(@Value("${exercise.base.file.name}") String fileName, LocalizationService localizationService) {
+    public ExerciseLoader exerciseLoader(final @Value("${exercise.base.file.name}") String fileName,
+                                         final LocalizationService localizationService) {
         return new FileExerciseLoader(localizationService.getLocaleCode(), fileName);
     }
 }

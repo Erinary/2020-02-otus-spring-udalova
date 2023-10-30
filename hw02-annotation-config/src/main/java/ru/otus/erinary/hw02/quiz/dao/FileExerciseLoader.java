@@ -2,7 +2,6 @@ package ru.otus.erinary.hw02.quiz.dao;
 
 import lombok.SneakyThrows;
 import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
 import ru.otus.erinary.hw02.quiz.model.Exercise;
 
 import java.io.File;
@@ -14,13 +13,19 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Реализация {@link ExerciseLoader} для загрузки из .csv файла
+ * Реализация {@link ExerciseLoader} для загрузки из .csv файла.
  */
 public class FileExerciseLoader implements ExerciseLoader {
 
     private final String localeCode;
     private final String fileName;
 
+    /**
+     * Создает новый экземпляр {@link FileExerciseLoader}.
+     *
+     * @param localeCode   код языка текущей локали
+     * @param fileBaseName базовое имя файла
+     */
     public FileExerciseLoader(final String localeCode, final String fileBaseName) {
         this.localeCode = localeCode;
         this.fileName = selectFileName(fileBaseName);
@@ -30,13 +35,14 @@ public class FileExerciseLoader implements ExerciseLoader {
     @SneakyThrows
     public List<Exercise> getExercises() {
         Reader reader = new FileReader(getFile());
-        Iterable<CSVRecord> records = CSVFormat.DEFAULT.withEscape('\\')
-                .withFirstRecordAsHeader()
-                .withHeader(FileHeaders.class)
+        var records = CSVFormat.Builder.create().setEscape('\\')
+                .setSkipHeaderRecord(true)
+                .setHeader(FileHeaders.class)
+                .build()
                 .parse(reader);
 
         List<Exercise> exercises = new ArrayList<>();
-        for (CSVRecord record : records) {
+        for (var record : records) {
             try {
                 exercises.add(new Exercise(
                         record.get(FileHeaders.QUESTION),

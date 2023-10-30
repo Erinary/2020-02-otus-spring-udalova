@@ -1,30 +1,35 @@
 package ru.otus.erinary.hw02.quiz.service;
 
 import org.springframework.stereotype.Service;
+import ru.otus.erinary.hw02.quiz.model.User;
 import ru.otus.erinary.hw02.quiz.service.exercise.ExerciseService;
 import ru.otus.erinary.hw02.quiz.service.interaction.input.InputInteractionService;
 import ru.otus.erinary.hw02.quiz.service.interaction.output.OutputInteractionService;
 import ru.otus.erinary.hw02.quiz.service.localization.LocalizationService;
-import ru.otus.erinary.hw02.quiz.model.Exercise;
-import ru.otus.erinary.hw02.quiz.model.User;
-
-import java.util.List;
 
 /**
- * Сервис для запуска викторины
+ * Сервис для запуска викторины.
  */
 @Service
 public class QuizService {
 
-    private final static String QUIZ_COMMAND = "-quiz";
-    private final static String HELP_COMMAND = "-help";
-    private final static String QUIT_COMMAND = "-quit";
+    private static final String QUIZ_COMMAND = "-quiz";
+    private static final String HELP_COMMAND = "-help";
+    private static final String QUIT_COMMAND = "-quit";
 
     private final ExerciseService exerciseService;
     private final LocalizationService localizationService;
     private final InputInteractionService inputService;
     private final OutputInteractionService outputService;
 
+    /**
+     * Создает новый экземпляр {@link QuizService}.
+     *
+     * @param exerciseService     {@link ExerciseService}
+     * @param localizationService {@link LocalizationService}
+     * @param inputService        {@link InputInteractionService}
+     * @param outputService       {@link OutputInteractionService}
+     */
     public QuizService(final ExerciseService exerciseService, final LocalizationService localizationService,
                        final InputInteractionService inputService, final OutputInteractionService outputService) {
         this.exerciseService = exerciseService;
@@ -33,16 +38,19 @@ public class QuizService {
         this.outputService = outputService;
     }
 
+    /**
+     * Запускает викторину.
+     */
     public void start() {
         outputService.sendMessage(localizationService.localizeMessage("message.greeting"));
         help();
         outputService.sendMessage(localizationService.localizeMessage("message.input.user"));
-        User user = inputService.getUser();
+        var user = inputService.getUser();
 
         //noinspection InfiniteLoopStatement
         while (true) {
             outputService.sendMessage(localizationService.localizeMessage("message.input.command"));
-            String command = inputService.readCommand();
+            var command = inputService.readCommand();
             if (QUIZ_COMMAND.equals(command)) {
                 quiz(user);
             } else if (QUIT_COMMAND.equals(command)) {
@@ -59,12 +67,12 @@ public class QuizService {
         outputService.sendMessage(localizationService.localizeMessage("message.help"));
     }
 
-    private void quiz(User user) {
+    private void quiz(final User user) {
         if (user.getCorrectAnswersCounter() != 0) {
             user.setCorrectAnswersCounter(0);
         }
         outputService.sendMessage(localizationService.localizeMessage("message.quiz.start"));
-        List<Exercise> exercises = exerciseService.getExercises();
+        var exercises = exerciseService.getExercises();
         exercises.forEach(exercise -> {
             outputService.sendMessage(localizationService.localizeMessage("message.question"));
             outputService.sendMessage(exercise.getQuestion());
