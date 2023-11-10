@@ -8,7 +8,7 @@ values ('Стив Макконнелл'),
        ('Анджей Сапковский'),
        ('Олдос Хаксли');
 
-insert into books (title, year, author_id, genre_id)
+insert into books (title, edition_year, author_id, genre_id)
 values ('Совершенный код',
         2019,
         (select id from authors where name = 'Стив Макконнелл'),

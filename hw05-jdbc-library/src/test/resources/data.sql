@@ -8,7 +8,7 @@ values ('author1'),
        ('author2'),
        ('author3');
 
-insert into books (title, year, author_id, genre_id)
+insert into books (title, edition_year, author_id, genre_id)
 values ('title1',
         2020,
         (select id from authors where name = 'author1'),

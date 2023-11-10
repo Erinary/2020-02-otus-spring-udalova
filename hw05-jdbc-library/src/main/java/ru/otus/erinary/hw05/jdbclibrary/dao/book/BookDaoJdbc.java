@@ -48,7 +48,7 @@ public class BookDaoJdbc implements BookDao {
         params.addValue("title", book.getTitle());
         params.addValue("year", book.getYear());
         var keyHolder = new GeneratedKeyHolder();
-        jdbcOperations.update("insert into books (title, year, author_id, genre_id)" +
+        jdbcOperations.update("insert into books (title, edition_year, author_id, genre_id)" +
                 " values (:title, :year, :author_id, :genre_id)", params, keyHolder);
         return (Long) keyHolder.getKey();
     }
@@ -60,7 +60,7 @@ public class BookDaoJdbc implements BookDao {
         params.addValue("year", book.getYear());
         handleBookAuthor(params, book.getAuthor());
         handleBookGenre(params, book.getGenre());
-        jdbcOperations.update("update books set title = :title, year = :year, author_id = :author_id," +
+        jdbcOperations.update("update books set title = :title, edition_year = :year, author_id = :author_id," +
                 " genre_id = :genre_id where id = :id", params);
     }
 
@@ -89,7 +89,7 @@ public class BookDaoJdbc implements BookDao {
         var params = new HashMap<String, Object>();
         params.put("id", id);
         var books = jdbcOperations.query(
-                "select b.id, b.title, b.year," +
+                "select b.id, b.title, b.edition_year," +
                         " a.id as author_id, a.name as author_name," +
                         " g.id as genre_id, g.name as genre_name" +
                         " from books as b" +
@@ -102,7 +102,7 @@ public class BookDaoJdbc implements BookDao {
     @Override
     public List<Book> findAll() {
         var books = jdbcOperations.query(
-                "select b.id, b.title, b.year," +
+                "select b.id, b.title, b.edition_year," +
                         " a.id as author_id, a.name as author_name," +
                         " g.id as genre_id, g.name as genre_name" +
                         " from books as b" +
@@ -116,7 +116,7 @@ public class BookDaoJdbc implements BookDao {
         var params = new HashMap<String, Object>();
         params.put("author_id", authorId);
         var books = jdbcOperations.query(
-                "select b.id, b.title, b.year," +
+                "select b.id, b.title, b.edition_year," +
                         " a.id as author_id, a.name as author_name," +
                         " g.id as genre_id, g.name as genre_name" +
                         " from books as b" +
@@ -131,7 +131,7 @@ public class BookDaoJdbc implements BookDao {
         var params = new HashMap<String, Object>();
         params.put("genre_id", genreId);
         var books = jdbcOperations.query(
-                "select b.id, b.title, b.year," +
+                "select b.id, b.title, b.edition_year," +
                         " a.id as author_id, a.name as author_name," +
                         " g.id as genre_id, g.name as genre_name" +
                         " from books as b" +
@@ -176,7 +176,7 @@ public class BookDaoJdbc implements BookDao {
                     book = new Book(
                             bookId,
                             rs.getString("title"),
-                            rs.getInt("year"),
+                            rs.getInt("edition_year"),
                             author,
                             genre
                     );
