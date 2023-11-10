@@ -1,36 +1,36 @@
 package ru.otus.erinary.hw03.quiz.service.interaction;
 
 /**
- * Сервис взаимодействия с пользователем
+ * Interface used to interact with the user.
  */
 public interface InteractionService {
 
     /**
-     * Чтение пользовательского ввода
+     * Reads user's input.
      *
-     * @return введенная строка
+     * @return input string
      */
     String readLine();
 
     /**
-     * Отправка сообщения пользователю
+     * Sends the message to the user.
      *
-     * @param message сообщение
+     * @param message message
      */
-    void sendMessage(final String message);
+    void sendMessage(String message);
 
     /**
-     * Отправка локализованного сообщения
+     * Sends localized message by corresponding message code.
      *
-     * @param code код сообщения
+     * @param code the message code
      */
-    void sendLocalizedMessage(final String code);
+    void sendLocalizedMessage(String code);
 
     /**
-     * Отправка локализованного сообщения
+     * Sends localized message with parameters by corresponding message code.
      *
-     * @param code код сообщения
-     * @param params параметры сообщения
+     * @param code   the message code
+     * @param params message parameters
      */
-    void sendLocalizedMessage(final String code, final String... params);
+    void sendLocalizedMessage(String code, String... params);
 }

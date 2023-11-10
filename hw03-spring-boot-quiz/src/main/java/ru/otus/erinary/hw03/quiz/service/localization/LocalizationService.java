@@ -1,12 +1,25 @@
 package ru.otus.erinary.hw03.quiz.service.localization;
 
 /**
- * Интерфейс сервиса для локализации сообщений
+ * Interface used to localize messages.
  */
 public interface LocalizationService {
 
-    String localizeMessage(final String code);
+    /**
+     * Returns a localized message by the corresponding message code.
+     *
+     * @param code the message code
+     * @return localized message
+     */
+    String localizeMessage(String code);
 
-    String localizeMessageWithParams(final String code, final String[] params);
+    /**
+     * Returns a localized message with parameters by the corresponding message code.
+     *
+     * @param code   the message code
+     * @param params message parameters
+     * @return localized message
+     */
+    String localizeMessageWithParams(String code, String[] params);
 
 }

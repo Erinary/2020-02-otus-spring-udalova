@@ -8,9 +8,18 @@ import ru.otus.erinary.hw03.quiz.service.localization.LocalizationService;
 
 import java.util.Scanner;
 
+/**
+ * Configures application context.
+ */
 @Configuration
 public class AppConfig {
 
+    /**
+     * Returns {@link InteractionService} used for interaction with user.
+     *
+     * @param localizationService a {@link LocalizationService} instance
+     * @return {@link InteractionService} instance
+     */
     @Bean
     public InteractionService interactionService(final LocalizationService localizationService) {
         return new ConsoleInteractionService(new Scanner(System.in), localizationService);

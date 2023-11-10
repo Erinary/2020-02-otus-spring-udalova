@@ -1,15 +1,26 @@
 package ru.otus.erinary.hw03.quiz.dao;
 
 /**
- * Исключения при загрузке упражнений
+ * A {@link ExerciseLoaderException} is thrown when an attempt to load exercises fails.
  */
 public class ExerciseLoaderException extends RuntimeException {
 
-    public ExerciseLoaderException(String message) {
+    /**
+     * Constructs a new exception with the specified message.
+     *
+     * @param message detailed message
+     */
+    public ExerciseLoaderException(final String message) {
         super(message);
     }
 
-    public ExerciseLoaderException(String message, Throwable cause) {
+    /**
+     * Constructs a new exception with the specified message and cause.
+     *
+     * @param message detailed message
+     * @param cause   the cause
+     */
+    public ExerciseLoaderException(final String message, final Throwable cause) {
         super(message, cause);
     }
 }

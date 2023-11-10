@@ -7,21 +7,28 @@ import ru.otus.erinary.hw03.quiz.model.Exercise;
 import java.util.List;
 
 /**
- * Сервис для получения и работы с упражнениями
+ * Realization of {@link ExerciseService}.
  */
 @Service
 public class ExerciseServiceImpl implements ExerciseService {
 
     private final ExerciseLoader loader;
 
+    /**
+     * Creates a new {@link ExerciseServiceImpl} instance.
+     *
+     * @param loader {@link ExerciseLoader}
+     */
     public ExerciseServiceImpl(final ExerciseLoader loader) {
         this.loader = loader;
     }
 
+    @Override
     public List<Exercise> getExercises() {
         return loader.getExercises();
     }
 
+    @Override
     public boolean checkAnswer(final Exercise exercise, final String answer) {
         return exercise.getAnswer().equals(answer);
     }

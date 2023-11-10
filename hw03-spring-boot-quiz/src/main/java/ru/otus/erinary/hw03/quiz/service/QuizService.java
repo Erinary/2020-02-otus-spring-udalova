@@ -1,12 +1,12 @@
 package ru.otus.erinary.hw03.quiz.service;
 
 /**
- * Сервис для запуска викторины
+ * Interface that represents the quiz.
  */
 public interface QuizService {
 
     /**
-     * Старт викторины
+     * Runs the quiz.
      */
     void start();
 
