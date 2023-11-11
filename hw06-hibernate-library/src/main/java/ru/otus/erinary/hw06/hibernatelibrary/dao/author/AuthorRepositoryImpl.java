@@ -3,9 +3,9 @@ package ru.otus.erinary.hw06.hibernatelibrary.dao.author;
 import org.springframework.stereotype.Repository;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Author;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 

@@ -8,7 +8,7 @@ values ('author1'),
        ('author2'),
        ('author3');
 
-insert into books (title, year, author_id, genre_id)
+insert into books (title, edition_year, author_id, genre_id)
 values ('title1',
         2020,
         (select id from authors where name = 'author1'),
@@ -26,7 +26,7 @@ values ('title1',
         (select id from authors where name = 'author1'),
         (select id from genres where name = 'genre2'));
 
-insert into comments(text, user, date, book_id)
+insert into comments(text, username, date, book_id)
 values ('comment text 1',
         'user1',
         '2019-06-16 10:15:30 Europe/Moscow',

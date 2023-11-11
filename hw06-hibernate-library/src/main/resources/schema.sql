@@ -18,7 +18,7 @@ CREATE TABLE books
 (
     id        BIGINT AUTO_INCREMENT,
     title     VARCHAR(255) NOT NULL,
-    year      INT,
+    edition_year      INT,
     author_id BIGINT,
     genre_id  BIGINT,
     PRIMARY KEY (id),
@@ -30,7 +30,7 @@ CREATE TABLE comments
 (
     id      BIGINT AUTO_INCREMENT,
     text    CLOB,
-    user    VARCHAR(255) NOT NULL,
+    username    VARCHAR(255) NOT NULL,
     date    TIMESTAMP WITH TIME ZONE,
     book_id BIGINT NOT NULL,
     PRIMARY KEY (id),

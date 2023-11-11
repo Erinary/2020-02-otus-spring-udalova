@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 @SuppressWarnings("JpaDataSourceORMInspection")
@@ -25,7 +25,8 @@ public class Book {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "year")
+    //TODO rename field according to schema
+    @Column(name = "edition_year")
     private int year;
 
     @ManyToOne

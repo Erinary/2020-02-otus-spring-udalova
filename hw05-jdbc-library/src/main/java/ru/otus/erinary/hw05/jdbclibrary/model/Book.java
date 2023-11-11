@@ -9,6 +9,7 @@ public class Book {
 
     private Long id;
     private String title;
+    //TODO rename field according to schema
     private int year;
     private Author author;
     private Genre genre;

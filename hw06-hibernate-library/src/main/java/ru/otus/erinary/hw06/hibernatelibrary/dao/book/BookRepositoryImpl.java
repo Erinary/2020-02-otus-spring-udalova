@@ -3,8 +3,8 @@ package ru.otus.erinary.hw06.hibernatelibrary.dao.book;
 import org.springframework.stereotype.Repository;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Book;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 
