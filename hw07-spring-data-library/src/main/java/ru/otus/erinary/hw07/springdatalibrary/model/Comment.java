@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.ZonedDateTime;
 
 @SuppressWarnings("JpaDataSourceORMInspection")
@@ -24,7 +24,8 @@ public class Comment {
     @Column(name = "text", columnDefinition = "CLOB")
     private String text;
 
-    @Column(name = "user")
+    //TODO rename field according to schema
+    @Column(name = "username")
     private String user;
 
     @Column(name = "date")

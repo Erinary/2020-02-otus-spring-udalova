@@ -8,7 +8,7 @@ values ('Стив Макконнелл'),
        ('Анджей Сапковский'),
        ('Олдос Хаксли');
 
-insert into books (title, year, author_id, genre_id)
+insert into books (title, edition_year, author_id, genre_id)
 values ('Совершенный код',
         2019,
         (select id from authors where name = 'Стив Макконнелл'),
@@ -22,7 +22,7 @@ values ('Совершенный код',
         (select id from authors where name = 'Олдос Хаксли'),
         (select id from genres where name = 'Классическая зарубежная проза'));
 
-insert into comments(text, user, date, book_id)
+insert into comments(text, username, date, book_id)
 values ('Книга содержит много отличных советов и рекомендаций, которые действительно помогают писать код лучше.',
         'Ваня',
         '2019-06-16 10:15:30 Europe/Moscow',
