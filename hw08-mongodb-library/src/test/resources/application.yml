@@ -9,6 +9,6 @@ spring:
       port: 0
 
 mongock:
-  change-logs-scan-package: ru.otus.erinary.hw08.library.dao.changelog.test
+  migration-scan-package: ru.otus.erinary.hw08.library.dao.changelog.test
   runner-type: initializingbean
 
