@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.Locale;
 
 /**
- * Хранилище настроек приложения
+ * Class that stores application's properties.
  */
 @Component
 @ConfigurationProperties(prefix = "application")
@@ -19,7 +19,7 @@ public class AppSettings {
         return localeCode;
     }
 
-    public void setLocaleCode(String localeCode) {
+    public void setLocaleCode(final String localeCode) {
         this.localeCode = Locale.forLanguageTag(localeCode);
     }
 
@@ -27,7 +27,7 @@ public class AppSettings {
         return fileName;
     }
 
-    public void setFileName(String fileName) {
+    public void setFileName(final String fileName) {
         this.fileName = fileName;
     }
 

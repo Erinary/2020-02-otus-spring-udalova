@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.erinary.hw04.quiz.model.User;
 
 /**
- * Реализация {@link UserService}
+ * Realization of {@link UserService}.
  */
 @Service
 public class UserServiceImpl implements UserService {

@@ -2,7 +2,6 @@ package ru.otus.erinary.hw04.quiz.dao;
 
 import lombok.SneakyThrows;
 import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Component;
 import ru.otus.erinary.hw04.quiz.model.Exercise;
 import ru.otus.erinary.hw04.quiz.settings.AppSettings;
@@ -10,19 +9,23 @@ import ru.otus.erinary.hw04.quiz.settings.AppSettings;
 import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * Реализация {@link ExerciseLoader} для загрузки из .csv файла
+ * Realization of {@link ExerciseLoader} for uploading from .csv file.
  */
 @Component
 public class FileExerciseLoader implements ExerciseLoader {
 
     private final String fileName;
 
+    /**
+     * Creates a new {@link FileExerciseLoader} instance.
+     *
+     * @param settings {@link AppSettings}
+     */
     public FileExerciseLoader(final AppSettings settings) {
         this.fileName = selectFileName(settings.getFileName(), settings.getLocaleCode().getLanguage());
     }
@@ -31,13 +34,14 @@ public class FileExerciseLoader implements ExerciseLoader {
     @SneakyThrows
     public List<Exercise> getExercises() {
         Reader reader = new FileReader(getFile());
-        Iterable<CSVRecord> records = CSVFormat.DEFAULT.withEscape('\\')
-                .withFirstRecordAsHeader()
-                .withHeader(FileHeaders.class)
+        var records = CSVFormat.Builder.create().setEscape('\\')
+                .setSkipHeaderRecord(true)
+                .setHeader(FileHeaders.class)
+                .build()
                 .parse(reader);
 
         List<Exercise> exercises = new ArrayList<>();
-        for (CSVRecord record : records) {
+        for (var record : records) {
             try {
                 exercises.add(new Exercise(
                         record.get(FileHeaders.QUESTION),
@@ -57,8 +61,8 @@ public class FileExerciseLoader implements ExerciseLoader {
     }
 
     private File getFile() {
-        ClassLoader classLoader = getClass().getClassLoader();
-        URL resource = classLoader.getResource(fileName);
+        var classLoader = getClass().getClassLoader();
+        var resource = classLoader.getResource(fileName);
         if (resource == null) {
             throw new ExerciseLoaderException("File not found: " + fileName);
         } else {

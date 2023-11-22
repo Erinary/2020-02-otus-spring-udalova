@@ -5,13 +5,19 @@ import ru.otus.erinary.hw04.quiz.service.localization.LocalizationService;
 import java.util.Scanner;
 
 /**
- * Имплементация {@link InteractionService} для работы с консолью
+ * Realization of {@link InteractionService} that based on work with the console.
  */
 public class ConsoleInteractionService implements InteractionService {
 
     private final Scanner scanner;
     private final LocalizationService localizationService;
 
+    /**
+     * Creates a new {@link ConsoleInteractionService} instance.
+     *
+     * @param scanner             {@link Scanner}
+     * @param localizationService {@link LocalizationService}
+     */
     public ConsoleInteractionService(final Scanner scanner, final LocalizationService localizationService) {
         this.scanner = scanner;
         this.localizationService = localizationService;

@@ -1,35 +1,37 @@
 package ru.otus.erinary.hw04.quiz.service;
 
 /**
- * Сервис для запуска викторины
+ * Interface that represents the quiz.
  */
 public interface QuizService {
 
     /**
-     * Вызов справки
+     * Calls the help information.
      */
     void help();
 
     /**
-     * Старт викторины
+     * Runs the quiz.
      */
     void quiz();
 
     /**
-     * Выход из викторины
+     * Quits the quiz.
      */
     void quit();
 
     /**
-     * Создание пользователя
-     * @param name имя
-     * @param surname фамилия
+     * Creates a new user.
+     *
+     * @param name    user's name
+     * @param surname user's surname
      */
     void createUser(String name, String surname);
 
     /**
-     * Проверка, существует ли пользователь
-     * @return код сообщения с результатом проверки
+     * Checks if user exists.
+     *
+     * @return message code with the check's result
      */
     boolean checkIfUserExists();
 }

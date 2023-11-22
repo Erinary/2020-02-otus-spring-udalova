@@ -6,11 +6,23 @@ import ru.otus.erinary.hw04.quiz.model.Exercise;
 import java.util.List;
 
 /**
- * Интерфейс сервиса для получения и работы с упражнениями
+ * Interface used for acquiring and working with exercises.
  */
 public interface ExerciseService {
 
+    /**
+     * Returns list of exercises.
+     *
+     * @return list of exercises {@link Exercise}
+     */
     List<Exercise> getExercises();
 
-    boolean checkAnswer(final Exercise exercise, final String answer);
+    /**
+     * Check if the given answer is correct.
+     *
+     * @param exercise exercise
+     * @param answer   users answer
+     * @return true, if the users answer is correct
+     */
+    boolean checkAnswer(Exercise exercise, String answer);
 }

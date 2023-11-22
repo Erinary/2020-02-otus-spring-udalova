@@ -3,29 +3,29 @@ package ru.otus.erinary.hw04.quiz.service.user;
 import ru.otus.erinary.hw04.quiz.model.User;
 
 /**
- * Сервис для работы с текущим пользователем
+ * Interface used to work with current user.
  */
 public interface UserService {
 
     /**
-     * Создание текущего пользователя
+     * Creates current user.
      *
-     * @param name    имя
-     * @param surname фамилия
+     * @param name    user's name
+     * @param surname user's surname
      */
-    void createCurrentUser(final String name, final String surname);
+    void createCurrentUser(String name, String surname);
 
     /**
-     * Получение текущего пользователя
+     * Returns current user.
      *
-     * @return текущий пользователь
+     * @return current user
      */
     User getCurrentUser();
 
     /**
-     * Проверка, создан ли уже пользователь
+     * Check if user is created.
      *
-     * @return true, если пользователь создан
+     * @return true if user is created.
      */
     boolean isUserCreated();
 }

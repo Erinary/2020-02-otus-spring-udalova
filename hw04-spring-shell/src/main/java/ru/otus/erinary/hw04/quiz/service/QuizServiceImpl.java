@@ -1,16 +1,12 @@
 package ru.otus.erinary.hw04.quiz.service;
 
 import org.springframework.stereotype.Service;
-import ru.otus.erinary.hw04.quiz.model.Exercise;
-import ru.otus.erinary.hw04.quiz.model.User;
 import ru.otus.erinary.hw04.quiz.service.exercise.ExerciseService;
 import ru.otus.erinary.hw04.quiz.service.interaction.InteractionService;
 import ru.otus.erinary.hw04.quiz.service.user.UserService;
 
-import java.util.List;
-
 /**
- * Реализация сервиса {@link QuizService}
+ * Realization of {@link QuizService}.
  */
 @Service
 public class QuizServiceImpl implements QuizService {
@@ -19,7 +15,15 @@ public class QuizServiceImpl implements QuizService {
     private final InteractionService interactionService;
     private final UserService userService;
 
-    public QuizServiceImpl(final ExerciseService exerciseService, final InteractionService interactionService, final UserService userService) {
+    /**
+     * Creates a new {@link QuizServiceImpl} instance.
+     *
+     * @param exerciseService    {@link ExerciseService}
+     * @param interactionService {@link InteractionService}
+     * @param userService        {@link UserService}
+     */
+    public QuizServiceImpl(final ExerciseService exerciseService, final InteractionService interactionService,
+                           final UserService userService) {
         this.exerciseService = exerciseService;
         this.interactionService = interactionService;
         this.userService = userService;
@@ -33,19 +37,19 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public void quiz() {
-        User user = userService.getCurrentUser();
+        var user = userService.getCurrentUser();
         if (user.getCorrectAnswersCounter() != 0) {
             user.setCorrectAnswersCounter(0);
         }
         interactionService.sendLocalizedMessage("message.quiz.start");
-        List<Exercise> exercises = exerciseService.getExercises();
+        var exercises = exerciseService.getExercises();
         exercises.forEach(exercise -> {
             interactionService.sendLocalizedMessage("message.question");
             interactionService.sendMessage(exercise.getQuestion());
             exercise.getResponses().forEach(System.out::println);
 
             interactionService.sendLocalizedMessage("message.answer");
-            String answer = interactionService.readLine();
+            var answer = interactionService.readLine();
             if (exerciseService.checkAnswer(exercise, answer)) {
                 interactionService.sendLocalizedMessage("message.answer.correct");
                 user.raiseAnswersCounter();
