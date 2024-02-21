@@ -7,16 +7,16 @@ import ru.otus.erinary.hw01.quiz.service.interaction.scanner.ScannerFactory;
 import java.util.Scanner;
 
 /**
- * Сервис для работы с консолью с помощью {@link Scanner}.
+ * Realization of {@link UserInteractionService} based on work with {@link Scanner}.
  */
 public final class ScannerService implements UserInteractionService {
 
     private final Scanner scanner;
 
     /**
-     * Создает новый экземпляр {@link ScannerService}.
+     * Creates a new {@link ScannerService} instance.
      *
-     * @param factory фабрика для {@link Scanner}
+     * @param factory {@link ScannerFactory}
      */
     public ScannerService(final ScannerFactory factory) {
         this.scanner = factory.createScanner();

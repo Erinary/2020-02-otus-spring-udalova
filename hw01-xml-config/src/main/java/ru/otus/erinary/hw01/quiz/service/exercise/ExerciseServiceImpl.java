@@ -6,16 +6,16 @@ import ru.otus.erinary.hw01.quiz.model.Exercise;
 import java.util.List;
 
 /**
- * Сервис для получения и работы с упражнениями.
+ * Realization of {@link ExerciseService}.
  */
 public final class ExerciseServiceImpl implements ExerciseService {
 
     private final ExerciseLoader loader;
 
     /**
-     * Создает новый экземпляр {@link ExerciseServiceImpl}.
+     * Creates a new {@link ExerciseServiceImpl} instance.
      *
-     * @param loader сервис для загрузки упражнений
+     * @param loader {@link ExerciseLoader}
      */
     public ExerciseServiceImpl(final ExerciseLoader loader) {
         this.loader = loader;

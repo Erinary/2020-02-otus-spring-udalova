@@ -3,12 +3,12 @@ package ru.otus.erinary.hw01.quiz.service.interaction.scanner;
 import java.util.Scanner;
 
 /**
- * Фабрика для {@link Scanner}.
+ * Factory for {@link Scanner}.
  */
 public interface ScannerFactory {
 
     /**
-     * Предоставляет экземпляр {@link Scanner}.
+     * Creates new instance of {@link Scanner}.
      *
      * @return {@link Scanner}
      */

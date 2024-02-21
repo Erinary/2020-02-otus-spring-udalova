@@ -7,7 +7,7 @@ import ru.otus.erinary.hw02.quiz.service.localization.LocalizationService;
 import java.util.Scanner;
 
 /**
- * Сервис для работы с консолью с помощью {@link Scanner}.
+ * Realization of {@link InputInteractionService} based on work with {@link Scanner}.
  */
 public class ScannerService implements InputInteractionService {
 
@@ -16,7 +16,7 @@ public class ScannerService implements InputInteractionService {
     private final OutputInteractionService outputService;
 
     /**
-     * Создает новый экземпляр {@link ScannerService}.
+     * Creates a new {@link ScannerService} instance.
      *
      * @param scanner             {@link Scanner}
      * @param localizationService {@link LocalizationService}

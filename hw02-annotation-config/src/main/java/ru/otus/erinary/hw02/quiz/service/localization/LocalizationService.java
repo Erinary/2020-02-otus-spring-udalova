@@ -1,22 +1,22 @@
 package ru.otus.erinary.hw02.quiz.service.localization;
 
 /**
- * Интерфейс сервиса для локализации сообщений.
+ * Interface used to localize messages.
  */
 public interface LocalizationService {
 
     /**
-     * Выдает локализированное сообщение, соответствующее переданному коду.
+     * Returns a localized message by the corresponding message code.
      *
-     * @param code код сообщения
-     * @return локализированное сообщение
+     * @param code the message code
+     * @return localized message
      */
     String localizeMessage(String code);
 
     /**
-     * Возвращает код языка текущей локали.
+     * the language code of current locale.
      *
-     * @return код языка
+     * @return language code
      */
     String getLocaleCode();
 }

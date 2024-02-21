@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Реализация {@link ExerciseLoader} для загрузки из .csv файла.
+ * Realization of {@link ExerciseLoader} for uploading from .csv file.
  */
 public class FileExerciseLoader implements ExerciseLoader {
 
@@ -21,10 +21,10 @@ public class FileExerciseLoader implements ExerciseLoader {
     private final String fileName;
 
     /**
-     * Создает новый экземпляр {@link FileExerciseLoader}.
+     * Creates a new {@link FileExerciseLoader} instance.
      *
-     * @param localeCode   код языка текущей локали
-     * @param fileBaseName базовое имя файла
+     * @param localeCode   current locale code
+     * @param fileBaseName basic file name
      */
     public FileExerciseLoader(final String localeCode, final String fileBaseName) {
         this.localeCode = localeCode;

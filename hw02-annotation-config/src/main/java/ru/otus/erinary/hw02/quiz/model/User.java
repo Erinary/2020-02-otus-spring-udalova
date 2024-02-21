@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Модель пользователя.
+ * A user.
  */
 @Data
 @RequiredArgsConstructor
@@ -17,7 +17,7 @@ public class User {
     private int correctAnswersCounter = 0;
 
     /**
-     * Увеличивает счетчик правильных ответов пользователя.
+     * Increases the user's correct response counter.
      */
     public void raiseAnswersCounter() {
         correctAnswersCounter++;

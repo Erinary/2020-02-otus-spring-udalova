@@ -17,7 +17,7 @@ import ru.otus.erinary.hw02.quiz.service.interaction.output.OutputInteractionSer
 import java.util.Scanner;
 
 /**
- * Выполняет настройку контекста приложения.
+ * Configures application context.
  */
 @ComponentScan
 @Configuration
@@ -25,7 +25,7 @@ import java.util.Scanner;
 public class AppConfig {
 
     /**
-     * Создает {@link MessageSource}.
+     * Creates {@link MessageSource}.
      *
      * @return {@link MessageSource}
      */
@@ -38,7 +38,7 @@ public class AppConfig {
     }
 
     /**
-     * Создает {@link InputInteractionService}.
+     * Creates {@link InputInteractionService}.
      *
      * @param localizationService {@link LocalizationService}
      * @param outputService       {@link OutputInteractionService}
@@ -51,9 +51,9 @@ public class AppConfig {
     }
 
     /**
-     * Создает {@link ExerciseLoader}.
+     * Creates {@link ExerciseLoader}.
      *
-     * @param fileName            базовое название файла упражнений
+     * @param fileName            basic file name with exercises
      * @param localizationService {@link LocalizationService}
      * @return {@link ExerciseLoader}
      */

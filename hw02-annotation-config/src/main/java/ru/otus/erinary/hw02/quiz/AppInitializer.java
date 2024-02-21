@@ -4,14 +4,14 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import ru.otus.erinary.hw02.quiz.service.QuizService;
 
 /**
- * ДЗ-02 - Программа для тестирования (викторины). Java + Annotation-based конфигурация.
+ * HW-02 - Simple quiz program. Java + Annotation-based config.
  */
 public class AppInitializer {
 
     /**
-     * Выполняет конфигурацию и запуск приложения.
+     * Configures and starts the application.
      *
-     * @param args Аргументы командной строки
+     * @param args command line arguments
      */
     public static void main(final String[] args) {
         var context = new AnnotationConfigApplicationContext(AppConfig.class);

@@ -4,16 +4,16 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.otus.erinary.hw01.quiz.service.QuizService;
 
 /**
- * ДЗ-01 - Программа для тестирования (викторины).
+ * HW-01 - Simple quiz program.
  */
 public class AppInitializer {
 
     private static final String CONTEXT = "/spring-context.xml";
 
     /**
-     * Выполняет конфигурацию и запуск приложения.
+     * Configures and starts the application.
      *
-     * @param args Аргументы командной строки
+     * @param args command line arguments
      */
     public static void main(final String[] args) {
         var context = new ClassPathXmlApplicationContext(CONTEXT);

@@ -1,78 +1,78 @@
 package ru.otus.erinary.hw01.quiz.service;
 
 /**
- * Сообщения для вывода пользователю.
+ * Output messages.
  */
 public final class MessageConstants {
 
     //ExerciseController messages
     /**
-     * Приветствие.
+     * Greeting.
      */
     public static final String GREETING = "Приветствую в программе-викторине с несложными вопросами по истории!";
 
     /**
-     * Сообщение ввода.
+     * Input message.
      */
     public static final String INPUT_USER = "Чтобы продолжить, введите имя и фамилию";
 
     /**
-     * Ввод имени.
+     * Name input.
      */
     public static final String INPUT_NAME = "Имя: ";
 
     /**
-     * Ввод фамилии.
+     * Surname input.
      */
     public static final String INPUT_SURNAME = "Фамилия: ";
 
     /**
-     * Ввод команды.
+     * Command input.
      */
     public static final String INPUT_COMMAND = "Введите команду: ";
 
     /**
-     * Ошибка: неизвестная команда.
+     * Error: unknown command.
      */
     public static final String UNKNOWN_COMMAND = "Неизвестная команда: ";
 
     /**
-     * Справка.
+     * Help.
      */
     public static final String HELP = "Доступные команды:\n -help - вызов помощи\n -quiz - начать викторину\n -quit - завершение программы";
 
     /**
-     * Правила викторины.
+     * The rules of the quiz.
      */
     public static final String QUIZ_START = "Начинаю викторину! При выборе ответа введите номер ответа.";
 
     /**
-     * Конец викторины.
+     * The end of the quiz.
      */
     public static final String QUIZ_END = "Викторина окончена! Ваш результат: ";
 
     /**
-     * Поле вопроса.
+     * Question.
      */
     public static final String QUESTION = "Вопрос: ";
 
     /**
-     * Поле ответа.
+     * Answer.
      */
     public static final String ANSWER = "Ответ: ";
 
     /**
-     * Верный ответ.
+     * Right answer.
      */
     public static final String ANSWER_CORRECT = "Верно!";
 
     /**
-     * Неверный ответ.
+     * Wrong answer.
      */
     public static final String ANSWER_WRONG = "Неверно!";
 
     /**
-     * Завершение программы.
+     * Termination of the program.
      */
     public static final String QUIT = "Завершаю выполнение программы...";
 

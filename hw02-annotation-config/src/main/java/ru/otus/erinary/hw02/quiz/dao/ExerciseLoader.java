@@ -5,14 +5,14 @@ import ru.otus.erinary.hw02.quiz.model.Exercise;
 import java.util.List;
 
 /**
- * Интерфейс сервиса для загрузки упражнений.
+ * Interface used for exercise loading.
  */
 public interface ExerciseLoader {
 
     /**
-     * Возвращает список упражнений.
+     * Returns list of exercises.
      *
-     * @return список упражнений {@link Exercise}
+     * @return list of exercises {@link Exercise}
      */
     List<Exercise> getExercises();
 

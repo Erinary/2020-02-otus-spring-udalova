@@ -3,7 +3,7 @@ package ru.otus.erinary.hw01.quiz.service.interaction.scanner;
 import java.util.Scanner;
 
 /**
- * {@link Scanner} для чтения с консоли.
+ * {@link Scanner} for working with the console.
  */
 public class ConsoleScannerFactory implements ScannerFactory {
 

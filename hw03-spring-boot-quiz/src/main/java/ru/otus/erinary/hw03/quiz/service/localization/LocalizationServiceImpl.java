@@ -16,7 +16,7 @@ public class LocalizationServiceImpl implements LocalizationService {
     private final Locale currentLocale;
 
     /**
-     * Create a new {@link LocalizationServiceImpl} instance.
+     * Creates a new {@link LocalizationServiceImpl} instance.
      *
      * @param messageSource {@link MessageSource}
      * @param settings      {@link AppSettings}

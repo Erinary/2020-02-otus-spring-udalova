@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 /**
- * Модель для упражнения с вариантами ответов.
+ * An exercise with answer choices.
  */
 @Data
 @RequiredArgsConstructor

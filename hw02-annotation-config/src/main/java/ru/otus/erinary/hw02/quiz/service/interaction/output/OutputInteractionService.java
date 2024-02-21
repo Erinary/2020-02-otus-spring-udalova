@@ -1,14 +1,14 @@
 package ru.otus.erinary.hw02.quiz.service.interaction.output;
 
 /**
- * Интерфейс сервисов для работы с пользовательским выводом.
+ * Interface used to send output to user.
  */
 public interface OutputInteractionService {
 
     /**
-     * Выводит пользователю переданное сообщение.
+     * Sends the message to the user.
      *
-     * @param message сообщение
+     * @param message message
      */
     void sendMessage(String message);
 

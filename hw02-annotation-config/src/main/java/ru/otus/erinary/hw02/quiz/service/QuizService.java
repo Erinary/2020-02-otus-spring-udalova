@@ -8,7 +8,7 @@ import ru.otus.erinary.hw02.quiz.service.interaction.output.OutputInteractionSer
 import ru.otus.erinary.hw02.quiz.service.localization.LocalizationService;
 
 /**
- * Сервис для запуска викторины.
+ * Service that represents the quiz.
  */
 @Service
 public class QuizService {
@@ -23,7 +23,7 @@ public class QuizService {
     private final OutputInteractionService outputService;
 
     /**
-     * Создает новый экземпляр {@link QuizService}.
+     * Creates a new {@link QuizService} instance.
      *
      * @param exerciseService     {@link ExerciseService}
      * @param localizationService {@link LocalizationService}
@@ -39,7 +39,7 @@ public class QuizService {
     }
 
     /**
-     * Запускает викторину.
+     * Runs the quiz.
      */
     public void start() {
         outputService.sendMessage(localizationService.localizeMessage("message.greeting"));

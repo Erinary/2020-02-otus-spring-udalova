@@ -13,16 +13,16 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Реализация {@link ExerciseLoader} для загрузки из .csv файла.
+ * Realization of {@link ExerciseLoader} for uploading from .csv file.
  */
 public final class FileExerciseLoader implements ExerciseLoader {
 
     private final String fileName;
 
     /**
-     * Создает новый экземпляр {@link FileExerciseLoader}.
+     * Creates a new {@link FileExerciseLoader} instance.
      *
-     * @param fileName имя файла
+     * @param fileName file name
      */
     public FileExerciseLoader(final String fileName) {
         this.fileName = fileName;

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.Locale;
 
 /**
- * Сервис для локализации сообщений.
+ * Realization of {@link LocalizationService}.
  */
 @Service
 public class LocalizationServiceImpl implements LocalizationService {
@@ -16,10 +16,10 @@ public class LocalizationServiceImpl implements LocalizationService {
     private final Locale currentLocale;
 
     /**
-     * Создает новый экземпляр {@link LocalizationServiceImpl}.
+     * Creates a new {@link LocalizationServiceImpl} instance.
      *
      * @param messageSource {@link MessageSource}
-     * @param localeKey     локаль приложения
+     * @param localeKey     application's locale
      */
     public LocalizationServiceImpl(final MessageSource messageSource,
                                    final @Value("${application.locale}") String localeKey) {

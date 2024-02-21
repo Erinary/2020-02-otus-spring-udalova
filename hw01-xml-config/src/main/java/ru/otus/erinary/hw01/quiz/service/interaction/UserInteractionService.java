@@ -3,19 +3,19 @@ package ru.otus.erinary.hw01.quiz.service.interaction;
 import ru.otus.erinary.hw01.quiz.model.User;
 
 /**
- * Интерфейс сервисов для работы с вводом/выводом и взаимодействия с пользователем.
+ * Interface used to interact with the user and user's input.
  */
 public interface UserInteractionService {
 
     /**
-     * Считывает команду пользователя.
+     * Reads user's command.
      *
-     * @return команда пользователя
+     * @return user's command
      */
     String readCommand();
 
     /**
-     * Формирует пользователя из пользовательского ввода.
+     * Creates a new {@link User} instance based on user's input.
      *
      * @return {@link User}
      */

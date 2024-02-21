@@ -8,7 +8,7 @@ import ru.otus.erinary.hw01.quiz.service.interaction.UserInteractionService;
 import java.util.List;
 
 /**
- * Сервис для запуска викторины.
+ * Service that represents the quiz.
  */
 public final class QuizService {
     private static final String QUIZ_COMMAND = "-quiz";
@@ -19,10 +19,10 @@ public final class QuizService {
     private final UserInteractionService userInteractionService;
 
     /**
-     * Создает новый экземпляр {@link QuizService}.
+     * Creates a new {@link QuizService} instance.
      *
-     * @param exerciseService        сервис для работы с упражнениями
-     * @param userInteractionService сервис для взаимодействия с пользователем
+     * @param exerciseService        {@link ExerciseService}
+     * @param userInteractionService {@link UserInteractionService}
      */
     public QuizService(final ExerciseService exerciseService, final UserInteractionService userInteractionService) {
         this.exerciseService = exerciseService;
@@ -30,7 +30,7 @@ public final class QuizService {
     }
 
     /**
-     * Запускает викторину.
+     * Runs the quiz.
      */
     public void start() {
         System.out.println(MessageConstants.GREETING);
