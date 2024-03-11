@@ -55,9 +55,9 @@ class GenreDaoJdbcTest {
 
     @Test
     void testFindByName() {
-        var author = repository.findByName("genre1").orElseThrow();
-        assertEquals(1L, author.getId());
-        assertNull(author.getBooks());
+        var genre = repository.findByName("genre1").orElseThrow();
+        assertEquals(1L, genre.getId());
+        assertNull(genre.getBooks());
     }
 
     @Test
@@ -73,7 +73,7 @@ class GenreDaoJdbcTest {
         assertEquals(3, genres.size());
         assertNull(genres.get(0).getBooks());
 
-        var genreNames = genres.stream().map(Genre::getName).collect(Collectors.toList());
+        var genreNames = genres.stream().map(Genre::getName).toList();
         assertTrue(genreNames.containsAll(List.of("genre1", "genre2", "genre3")));
     }
 
@@ -86,7 +86,7 @@ class GenreDaoJdbcTest {
         repository.delete(1L);
         genres = repository.findAll();
         assertEquals(2, genres.size());
-        var genreIds = genres.stream().map(Genre::getId).collect(Collectors.toList());
+        var genreIds = genres.stream().map(Genre::getId).toList();
         assertFalse(genreIds.contains(1L));
     }
 }

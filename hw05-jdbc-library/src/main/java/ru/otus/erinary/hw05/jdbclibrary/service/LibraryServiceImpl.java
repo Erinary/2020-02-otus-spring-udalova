@@ -11,12 +11,22 @@ import ru.otus.erinary.hw05.jdbclibrary.model.Genre;
 
 import java.util.List;
 
+/**
+ * Realization of {@link LibraryService}.
+ */
 @Service
 public class LibraryServiceImpl implements LibraryService {
     private final BookDao bookDao;
     private final AuthorDao authorDao;
     private final GenreDao genreDao;
 
+    /**
+     * Creates a new {@link LibraryServiceImpl} instance.
+     *
+     * @param bookDao   {@link BookDao}
+     * @param authorDao {@link AuthorDao}
+     * @param genreDao  {@link GenreDao}
+     */
     @Autowired
     public LibraryServiceImpl(final BookDao bookDao, final AuthorDao authorDao, final GenreDao genreDao) {
         this.bookDao = bookDao;
@@ -40,7 +50,7 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public void deleteAuthor(Long id) {
+    public void deleteAuthor(final Long id) {
         authorDao.delete(id);
     }
 
@@ -60,7 +70,7 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public void deleteGenre(Long id) {
+    public void deleteGenre(final Long id) {
         genreDao.delete(id);
     }
 
@@ -75,7 +85,8 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public Book saveBook(final Long id, final String title, final int year, final String authorName, final String genreName) {
+    public Book saveBook(final Long id, final String title, final int year, final String authorName,
+                         final String genreName) {
         var author = authorDao.findByName(authorName)
                 .orElseGet(() -> {
                     var a = new Author(authorName);
@@ -93,7 +104,7 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public void deleteBook(Long id) {
+    public void deleteBook(final Long id) {
         bookDao.delete(id);
     }
 }

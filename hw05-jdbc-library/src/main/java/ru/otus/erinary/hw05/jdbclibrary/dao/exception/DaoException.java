@@ -1,11 +1,16 @@
 package ru.otus.erinary.hw05.jdbclibrary.dao.exception;
 
 /**
- * Исключения при работе с DAO.
+ * An exception when working with DAO.
  */
 public class DaoException extends RuntimeException {
 
-    public DaoException(String message) {
+    /**
+     * Constructs a new exception with the specified message.
+     *
+     * @param message detailed message
+     */
+    public DaoException(final String message) {
         super(message);
     }
 

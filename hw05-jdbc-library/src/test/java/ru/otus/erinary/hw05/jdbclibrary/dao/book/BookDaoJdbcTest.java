@@ -74,13 +74,13 @@ class BookDaoJdbcTest {
         assertNotNull(books.get(0).getAuthor());
         assertNotNull(books.get(0).getGenre());
 
-        var bookTitles = books.stream().map(Book::getTitle).collect(Collectors.toList());
+        var bookTitles = books.stream().map(Book::getTitle).toList();
         assertTrue(bookTitles.containsAll(List.of("title1", "title2", "title3")));
 
-        var authorNames = books.stream().map(book -> book.getAuthor().getName()).collect(Collectors.toList());
+        var authorNames = books.stream().map(book -> book.getAuthor().getName()).toList();
         assertTrue(authorNames.containsAll(List.of("author1", "author2", "author3")));
 
-        var genreNames = books.stream().map(book -> book.getGenre().getName()).collect(Collectors.toList());
+        var genreNames = books.stream().map(book -> book.getGenre().getName()).toList();
         assertTrue(genreNames.containsAll(List.of("genre1", "genre2", "genre3")));
     }
 
@@ -89,7 +89,7 @@ class BookDaoJdbcTest {
         var books = repository.findAllByAuthorId(1L);
         assertEquals(2, books.size());
         assertEquals("author1", books.get(0).getAuthor().getName());
-        var bookTitles = books.stream().map(Book::getTitle).collect(Collectors.toList());
+        var bookTitles = books.stream().map(Book::getTitle).toList();
         assertTrue(bookTitles.containsAll(List.of("title1", "title4")));
     }
 
@@ -102,7 +102,7 @@ class BookDaoJdbcTest {
         repository.delete(1L);
         books = repository.findAll();
         assertEquals(3, books.size());
-        var bookIds = books.stream().map(Book::getId).collect(Collectors.toList());
+        var bookIds = books.stream().map(Book::getId).toList();
         assertFalse(bookIds.contains(1L));
     }
 

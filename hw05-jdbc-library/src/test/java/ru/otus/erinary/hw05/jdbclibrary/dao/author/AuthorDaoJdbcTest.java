@@ -73,7 +73,7 @@ class AuthorDaoJdbcTest {
         assertEquals(3, authors.size());
         assertNull(authors.get(0).getBooks());
 
-        var authorNames = authors.stream().map(Author::getName).collect(Collectors.toList());
+        var authorNames = authors.stream().map(Author::getName).toList();
         assertTrue(authorNames.containsAll(List.of("author1", "author2", "author3")));
     }
 
@@ -86,7 +86,7 @@ class AuthorDaoJdbcTest {
         repository.delete(1L);
         authors = repository.findAll();
         assertEquals(2, authors.size());
-        var authorIds = authors.stream().map(Author::getId).collect(Collectors.toList());
+        var authorIds = authors.stream().map(Author::getId).toList();
         assertFalse(authorIds.contains(1L));
     }
 }

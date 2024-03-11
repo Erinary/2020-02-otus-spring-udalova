@@ -1,7 +1,6 @@
 package ru.otus.erinary.hw05.jdbclibrary.dao.genre;
 
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Имплементация {@link GenreDao}
+ * Realization of {@link GenreDao}.
  */
 @SuppressWarnings({"SqlResolve"})
 @Repository
@@ -25,6 +24,11 @@ public class GenreDaoJdbc implements GenreDao {
     private final NamedParameterJdbcOperations jdbcOperations;
     private final GenreRowMapper mapper;
 
+    /**
+     * Creates a new {@link GenreDaoJdbc} instance.
+     *
+     * @param jdbcOperations {@link NamedParameterJdbcOperations}
+     */
     public GenreDaoJdbc(final NamedParameterJdbcOperations jdbcOperations) {
         this.jdbcOperations = jdbcOperations;
         this.mapper = new GenreRowMapper();
@@ -93,10 +97,13 @@ public class GenreDaoJdbc implements GenreDao {
         jdbcOperations.update("delete from genres where id = :id", params);
     }
 
+    /**
+     * A {@link RowMapper} for {@link Genre}.
+     */
     private static class GenreRowMapper implements RowMapper<Genre> {
 
         @Override
-        public Genre mapRow(ResultSet rs, int rowNum) throws SQLException {
+        public Genre mapRow(final ResultSet rs, final int rowNum) throws SQLException {
             var id = rs.getLong("id");
             var name = rs.getString("name");
             return new Genre(id, name, null);

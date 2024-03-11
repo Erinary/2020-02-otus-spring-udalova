@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Имплементация {@link AuthorDao}
+ * Realization of {@link AuthorDao}.
  */
 @SuppressWarnings({"SqlResolve"})
 @Repository
@@ -24,6 +24,11 @@ public class AuthorDaoJdbc implements AuthorDao {
     private final NamedParameterJdbcOperations jdbcOperations;
     private final AuthorRowMapper mapper;
 
+    /**
+     * Creates a new {@link AuthorDaoJdbc} instance.
+     *
+     * @param jdbcOperations {@link NamedParameterJdbcOperations}
+     */
     public AuthorDaoJdbc(final NamedParameterJdbcOperations jdbcOperations) {
         this.jdbcOperations = jdbcOperations;
         this.mapper = new AuthorRowMapper();
@@ -92,10 +97,13 @@ public class AuthorDaoJdbc implements AuthorDao {
         jdbcOperations.update("delete from authors where id = :id", params);
     }
 
+    /**
+     * A {@link RowMapper} for {@link Author}.
+     */
     private static class AuthorRowMapper implements RowMapper<Author> {
 
         @Override
-        public Author mapRow(ResultSet rs, int rowNum) throws SQLException {
+        public Author mapRow(final ResultSet rs, final int rowNum) throws SQLException {
             var id = rs.getLong("id");
             var name = rs.getString("name");
             return new Author(id, name, null);

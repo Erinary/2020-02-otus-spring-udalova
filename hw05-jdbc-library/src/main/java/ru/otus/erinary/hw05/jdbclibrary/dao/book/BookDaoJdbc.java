@@ -13,10 +13,15 @@ import ru.otus.erinary.hw05.jdbclibrary.model.Genre;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
- * Имплементация {@link BookDao}
+ * Realization of {@link BookDao}.
  */
 @SuppressWarnings({"SqlResolve"})
 @Repository
@@ -25,6 +30,11 @@ public class BookDaoJdbc implements BookDao {
     private final NamedParameterJdbcOperations jdbcOperations;
     private final BookExtractor extractor;
 
+    /**
+     * Creates a new {@link BookDaoJdbc} instance.
+     *
+     * @param jdbcOperations {@link NamedParameterJdbcOperations}
+     */
     public BookDaoJdbc(final NamedParameterJdbcOperations jdbcOperations) {
         this.jdbcOperations = jdbcOperations;
         this.extractor = new BookExtractor();
@@ -148,10 +158,17 @@ public class BookDaoJdbc implements BookDao {
         jdbcOperations.update("delete from books where id = :id", params);
     }
 
+    /**
+     * A {@link ResultSetExtractor} for {@link Book}.
+     *
+     * @implNote It's also possible to use {@link org.springframework.jdbc.core.RowMapper}
+     * instead of {@link ResultSetExtractor}. During book data extraction, there is an attempt
+     * to avoid duplication of objects by storing processed entities in maps.
+     */
     private static class BookExtractor implements ResultSetExtractor<Map<Long, Book>> {
 
         @Override
-        public Map<Long, Book> extractData(ResultSet rs) throws SQLException, DataAccessException {
+        public Map<Long, Book> extractData(final ResultSet rs) throws SQLException, DataAccessException {
             var books = new HashMap<Long, Book>();
             var authors = new HashMap<Long, Author>();
             var genres = new HashMap<Long, Genre>();
