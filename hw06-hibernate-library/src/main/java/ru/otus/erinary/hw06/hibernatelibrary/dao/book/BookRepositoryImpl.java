@@ -5,11 +5,12 @@ import ru.otus.erinary.hw06.hibernatelibrary.model.Book;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Имплементация {@link BookRepository}
+ * Realization of {@link BookRepository}.
  */
 @Repository
 public class BookRepositoryImpl implements BookRepository {
@@ -19,10 +20,10 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public Book save(final Book book) {
-        if (book.getId() == null) {
-            manager.persist(book);
-        } else {
+        if (book.getId() != null) {
             manager.merge(book);
+        } else {
+            manager.persist(book);
         }
         return book;
     }
@@ -34,20 +35,20 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public List<Book> findAll() {
-        return manager.createQuery("select b from Book b join fetch b.author join fetch b.genre", Book.class)
+        return manager.createQuery("select b from Book b left join fetch b.author left join fetch b.genre", Book.class)
                 .getResultList();
     }
 
     @Override
     public List<Book> findAllByAuthorId(final Long authorId) {
-        var query = manager.createQuery("select b from Book b join fetch b.author join fetch b.genre where b.author.id = :author_id", Book.class);
+        var query = manager.createQuery("select b from Book b join fetch b.author left join fetch b.genre where b.author.id = :author_id", Book.class);
         query.setParameter("author_id", authorId);
         return query.getResultList();
     }
 
     @Override
     public List<Book> findAllByGenreId(final Long genreId) {
-        var query = manager.createQuery("select b from Book b join fetch b.author join fetch b.genre where b.genre.id = :genre_id", Book.class);
+        var query = manager.createQuery("select b from Book b left join fetch b.author join fetch b.genre where b.genre.id = :genre_id", Book.class);
         query.setParameter("genre_id", genreId);
         return query.getResultList();
     }

@@ -6,11 +6,12 @@ import ru.otus.erinary.hw06.hibernatelibrary.model.Genre;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Имплементация {@link GenreRepository}
+ * Realization of {@link GenreRepository}.
  */
 @Repository
 public class GenreRepositoryImpl implements GenreRepository {
@@ -49,7 +50,11 @@ public class GenreRepositoryImpl implements GenreRepository {
     public Optional<Long> findIdByName(final String name) {
         var query = manager.createQuery("select g.id from Genre g where g.name = :name", Long.class);
         query.setParameter("name", name);
-        return Optional.ofNullable(query.getSingleResult());
+        try {
+            return Optional.ofNullable(query.getSingleResult());
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
     @Override

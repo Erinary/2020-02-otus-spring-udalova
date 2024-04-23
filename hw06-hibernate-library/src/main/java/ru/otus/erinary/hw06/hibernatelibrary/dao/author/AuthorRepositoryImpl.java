@@ -6,11 +6,12 @@ import ru.otus.erinary.hw06.hibernatelibrary.model.Author;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Имплементация {@link AuthorRepository}
+ * Realization of {@link AuthorRepository}.
  */
 @Repository
 public class AuthorRepositoryImpl implements AuthorRepository {
@@ -49,7 +50,11 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     public Optional<Long> findIdByName(final String name) {
         var query = manager.createQuery("select a.id from Author a where a.name = :name", Long.class);
         query.setParameter("name", name);
-        return Optional.ofNullable(query.getSingleResult());
+        try {
+            return Optional.ofNullable(query.getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     @Override

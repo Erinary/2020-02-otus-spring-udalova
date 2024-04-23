@@ -13,6 +13,9 @@ import ru.otus.erinary.hw06.hibernatelibrary.model.Genre;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * Realization of {@link DataRenderer}.
+ */
 @Service
 public class DataRendererImpl implements DataRenderer {
 
@@ -25,6 +28,7 @@ public class DataRendererImpl implements DataRenderer {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final String EMPTY_COMMENTS_MESSAGE = "[There are no comments yet]";
+    private static final String EMPTY_CELL_VALUE = "<Not specified>";
 
     @Override
     public String getShortBookTable(final List<Book> books) {
@@ -51,7 +55,7 @@ public class DataRendererImpl implements DataRenderer {
     }
 
     @Override
-    public String getCommentTable(List<Comment> comments) {
+    public String getCommentTable(final List<Comment> comments) {
         if (CollectionUtils.isEmpty(comments)) {
             return EMPTY_COMMENTS_MESSAGE;
         } else {
@@ -67,9 +71,10 @@ public class DataRendererImpl implements DataRenderer {
         return builder.build().render(AVAILABLE_WIDTH);
     }
 
+    @SuppressWarnings("DataFlowIssue")
     private String[][] applyBookShortModel(final List<Book> books) {
         if (CollectionUtils.isEmpty(books)) {
-            return new String[][] {BOOK_COLUMNS};
+            return new String[][]{BOOK_COLUMNS};
         } else {
             var bookData = new String[books.size() + 1][];
             bookData[0] = BOOK_COLUMNS;
@@ -84,9 +89,10 @@ public class DataRendererImpl implements DataRenderer {
         }
     }
 
+    @SuppressWarnings("DataFlowIssue")
     private String[][] applyBookFullModel(final List<Book> books) {
         if (CollectionUtils.isEmpty(books)) {
-            return new String[][] {FULL_BOOK_COLUMNS};
+            return new String[][]{FULL_BOOK_COLUMNS};
         } else {
             var bookData = new String[books.size() + 1][];
             bookData[0] = FULL_BOOK_COLUMNS;
@@ -96,8 +102,8 @@ public class DataRendererImpl implements DataRenderer {
                         Long.toString(book.getId()),
                         book.getTitle(),
                         Integer.toString(book.getYear()),
-                        book.getAuthor().getName(),
-                        book.getGenre().getName()};
+                        book.getAuthor().map(Author::getName).orElse(EMPTY_CELL_VALUE),
+                        book.getGenre().map(Genre::getName).orElse(EMPTY_CELL_VALUE)};
             }
             return bookData;
         }
@@ -106,7 +112,7 @@ public class DataRendererImpl implements DataRenderer {
     @SuppressWarnings("DuplicatedCode")
     private String[][] applyAuthorModel(final List<Author> authors) {
         if (CollectionUtils.isEmpty(authors)) {
-            return new String[][] {AUTHOR_COLUMNS};
+            return new String[][]{AUTHOR_COLUMNS};
         } else {
             var authorData = new String[authors.size() + 1][];
             authorData[0] = AUTHOR_COLUMNS;
@@ -124,7 +130,7 @@ public class DataRendererImpl implements DataRenderer {
     @SuppressWarnings("DuplicatedCode")
     private String[][] applyGenreModel(final List<Genre> genres) {
         if (CollectionUtils.isEmpty(genres)) {
-            return new String[][] {GENRE_COLUMNS};
+            return new String[][]{GENRE_COLUMNS};
         } else {
             var genreData = new String[genres.size() + 1][];
             genreData[0] = GENRE_COLUMNS;
@@ -144,9 +150,9 @@ public class DataRendererImpl implements DataRenderer {
         commentsData[0] = COMMENT_COLUMNS;
         for (int i = 1; i < commentsData.length; i++) {
             var comment = comments.get(i - 1);
-            commentsData[i]  = new String[]{
+            commentsData[i] = new String[]{
                     Long.toString(comment.getId()),
-                    comment.getUser(),
+                    comment.getUsername(),
                     comment.getText(),
                     comment.getDate().format(FORMATTER)
             };

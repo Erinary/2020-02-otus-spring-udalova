@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Import;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Author;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,7 +38,7 @@ class AuthorRepositoryImplTest {
         assertEquals("author1", author.getName());
 
         var newName = "author5";
-        author.setName(newName);
+        author.rename(newName);
         repository.update(author);
 
         var loadedAuthor = repository.findById(1L).orElseThrow();
@@ -58,12 +57,16 @@ class AuthorRepositoryImplTest {
         var author = repository.findByName("author1").orElseThrow();
         assertEquals(1L, author.getId());
         assertFalse(author.getBooks().isEmpty());
+        var nonexistentAuthor = repository.findByName("name");
+        assertTrue(nonexistentAuthor.isEmpty());
     }
 
     @Test
     void testFindIdByName() {
         var id = repository.findIdByName("author1").orElseThrow();
         assertEquals(1L, id);
+        var nonexistentAuthor = repository.findIdByName("name");
+        assertTrue(nonexistentAuthor.isEmpty());
     }
 
     @Test
@@ -73,7 +76,7 @@ class AuthorRepositoryImplTest {
         assertEquals(3, authors.size());
         assertFalse(authors.get(0).getBooks().isEmpty());
 
-        var authorNames = authors.stream().map(Author::getName).collect(Collectors.toList());
+        var authorNames = authors.stream().map(Author::getName).toList();
         assertTrue(authorNames.containsAll(List.of("author1", "author2", "author3")));
     }
 
@@ -86,7 +89,7 @@ class AuthorRepositoryImplTest {
         repository.delete(1L);
         authors = repository.findAll();
         assertEquals(2, authors.size());
-        var authorIds = authors.stream().map(Author::getId).collect(Collectors.toList());
+        var authorIds = authors.stream().map(Author::getId).toList();
         assertFalse(authorIds.contains(1L));
     }
 }

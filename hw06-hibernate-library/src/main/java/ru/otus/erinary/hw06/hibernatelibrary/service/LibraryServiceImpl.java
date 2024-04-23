@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.otus.erinary.hw06.hibernatelibrary.dao.author.AuthorRepository;
 import ru.otus.erinary.hw06.hibernatelibrary.dao.book.BookRepository;
 import ru.otus.erinary.hw06.hibernatelibrary.dao.comment.CommentRepository;
-import ru.otus.erinary.hw06.hibernatelibrary.dao.exception.DaoException;
+import ru.otus.erinary.hw06.hibernatelibrary.service.exception.LibraryServiceException;
 import ru.otus.erinary.hw06.hibernatelibrary.dao.genre.GenreRepository;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Author;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Book;
@@ -15,6 +15,9 @@ import ru.otus.erinary.hw06.hibernatelibrary.model.Genre;
 
 import java.util.List;
 
+/**
+ * Realization of {@link LibraryService}.
+ */
 @Service
 public class LibraryServiceImpl implements LibraryService {
 
@@ -23,6 +26,14 @@ public class LibraryServiceImpl implements LibraryService {
     private final GenreRepository genreRepository;
     private final CommentRepository commentRepository;
 
+    /**
+     * Creates a new {@link LibraryServiceImpl} instance.
+     *
+     * @param bookRepository    {@link BookRepository}
+     * @param authorRepository  {@link AuthorRepository}
+     * @param genreRepository   {@link GenreRepository}
+     * @param commentRepository {@link CommentRepository}
+     */
     @Autowired
     public LibraryServiceImpl(final BookRepository bookRepository,
                               final AuthorRepository authorRepository,
@@ -46,7 +57,7 @@ public class LibraryServiceImpl implements LibraryService {
         var author = authorRepository.findByName(name);
         author.ifPresent(a -> {
             var books = bookRepository.findAllByAuthorId(a.getId());
-            a.setBooks(books);
+            books.forEach(a::addBook);
         });
         return author.orElse(null);
     }
@@ -69,7 +80,7 @@ public class LibraryServiceImpl implements LibraryService {
         var genre = genreRepository.findByName(name);
         genre.ifPresent(g -> {
             var books = bookRepository.findAllByGenreId(g.getId());
-            g.setBooks(books);
+            books.forEach(g::addBook);
         });
         return genre.orElse(null);
     }
@@ -108,13 +119,8 @@ public class LibraryServiceImpl implements LibraryService {
                     return g;
                 });
 
-        var book = id == null ? new Book() : bookRepository
-                .findById(id)
-                .orElseThrow(() -> new DaoException(String.format("Book with id [%d] does not exist", id)));
-        book.setTitle(title);
-        book.setYear(year);
-        book.setAuthor(author);
-        book.setGenre(genre);
+        var book = id == null ? new Book(title, year, author, genre) : bookRepository.findById(id)
+                .orElseThrow(() -> new LibraryServiceException(String.format("Book with id [%d] does not exist", id)));
 
         return bookRepository.save(book);
     }
@@ -133,9 +139,9 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     @Transactional
-    public Long saveComment(String text, String user, Long bookId) {
+    public Long saveComment(final String text, final String user, final Long bookId) {
         var book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new DaoException(String.format("Book with id [%d] does not exist", bookId)));
+                .orElseThrow(() -> new LibraryServiceException(String.format("Book with id [%d] does not exist", bookId)));
         var comment = new Comment(text, user, book);
         return commentRepository.insert(comment);
     }

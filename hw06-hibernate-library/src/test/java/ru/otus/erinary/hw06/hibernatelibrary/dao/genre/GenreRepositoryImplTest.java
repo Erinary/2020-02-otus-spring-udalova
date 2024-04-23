@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Import;
 import ru.otus.erinary.hw06.hibernatelibrary.model.Genre;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,7 +38,7 @@ class GenreRepositoryImplTest {
         assertEquals("genre1", genre.getName());
 
         var newName = "genre5";
-        genre.setName(newName);
+        genre.rename(newName);
         repository.update(genre);
 
         var loadedGenre = repository.findById(1L).orElseThrow();
@@ -73,7 +72,7 @@ class GenreRepositoryImplTest {
         assertEquals(3, genres.size());
         assertFalse(genres.get(0).getBooks().isEmpty());
 
-        var genreNames = genres.stream().map(Genre::getName).collect(Collectors.toList());
+        var genreNames = genres.stream().map(Genre::getName).toList();
         assertTrue(genreNames.containsAll(List.of("genre1", "genre2", "genre3")));
     }
 
@@ -86,7 +85,7 @@ class GenreRepositoryImplTest {
         repository.delete(1L);
         genres = repository.findAll();
         assertEquals(2, genres.size());
-        var genreIds = genres.stream().map(Genre::getId).collect(Collectors.toList());
+        var genreIds = genres.stream().map(Genre::getId).toList();
         assertFalse(genreIds.contains(1L));
     }
 }

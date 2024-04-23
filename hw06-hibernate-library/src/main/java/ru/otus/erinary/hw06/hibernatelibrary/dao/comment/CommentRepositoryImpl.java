@@ -5,11 +5,12 @@ import ru.otus.erinary.hw06.hibernatelibrary.model.Comment;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Имплементация {@link CommentRepository}
+ * Realization of {@link CommentRepository}.
  */
 @Repository
 public class CommentRepositoryImpl implements CommentRepository {
@@ -34,7 +35,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public List<Comment> findAllByBookId(Long bookId) {
+    public List<Comment> findAllByBookId(final Long bookId) {
         var query = manager.createQuery("select c from Comment c where c.book.id = :book_id", Comment.class);
         query.setParameter("book_id", bookId);
         return query.getResultList();

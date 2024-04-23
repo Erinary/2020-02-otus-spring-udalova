@@ -1,22 +1,27 @@
 package ru.otus.erinary.hw06.hibernatelibrary.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import jakarta.persistence.*;
-import java.util.List;
+import java.util.Optional;
 
+/**
+ * Book's entity.
+ */
 @SuppressWarnings("JpaDataSourceORMInspection")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "books")
 public class Book {
 
+    @SuppressWarnings("unused")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -25,7 +30,6 @@ public class Book {
     @Column(name = "title")
     private String title;
 
-    //TODO rename field according to schema
     @Column(name = "edition_year")
     private int year;
 
@@ -37,10 +41,57 @@ public class Book {
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
+    /**
+     * Default constructor.
+     */
+    protected Book() {
+    }
+
+    /**
+     * Creates a new {@link Book} instance.
+     *
+     * @param title  book's title
+     * @param year   year of publication
+     * @param author {@link Author}
+     * @param genre  {@link Genre}
+     */
     public Book(final String title, final int year, final Author author, final Genre genre) {
         this.title = title;
         this.year = year;
         this.author = author;
         this.genre = genre;
+    }
+
+    /**
+     * In most cases, id is expected to be non-null. However, id might be null when a new book entity
+     * is created before persisting it into the database. After that id is set by JPA.
+     */
+    public @Nullable Long getId() {
+        return id;
+    }
+
+    public @NotNull String getTitle() {
+        return title;
+    }
+
+    /**
+     * Changes books title.
+     *
+     * @param title new title
+     */
+    public void changeTitle(@NotNull final String title) {
+        this.title = title;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public @NotNull Optional<Author> getAuthor() {
+        return Optional.ofNullable(author);
+    }
+
+    public @NotNull Optional<Genre> getGenre() {
+        return Optional.ofNullable(genre);
     }
 }
