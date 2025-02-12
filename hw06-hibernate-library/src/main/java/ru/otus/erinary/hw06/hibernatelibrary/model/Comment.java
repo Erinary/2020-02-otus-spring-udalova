@@ -17,7 +17,6 @@ import java.time.ZonedDateTime;
 /**
  * Comment's entity.
  */
-@SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 @Table(name = "comments")
 public class Comment {

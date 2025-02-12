@@ -119,9 +119,13 @@ public class LibraryServiceImpl implements LibraryService {
                     return g;
                 });
 
-        var book = id == null ? new Book(title, year, author, genre) : bookRepository.findById(id)
+        var book = id == null ? new Book() : bookRepository.findById(id)
                 .orElseThrow(() -> new LibraryServiceException(String.format("Book with id [%d] does not exist", id)));
 
+        book.setTitle(title);
+        book.setYear(year);
+        book.setAuthor(author);
+        book.setGenre(genre);
         return bookRepository.save(book);
     }
 

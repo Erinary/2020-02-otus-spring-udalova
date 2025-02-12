@@ -16,7 +16,6 @@ import java.util.List;
 /**
  * Genre's entity.
  */
-@SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 @Table(name = "genres")
 public class Genre {

@@ -72,7 +72,7 @@ public interface LibraryService {
     Book getBookById(Long id);
 
     /**
-     * Saves a new book.
+     * Saves a new book or updates an existing.
      *
      * @param id         book's id
      * @param title      book's name

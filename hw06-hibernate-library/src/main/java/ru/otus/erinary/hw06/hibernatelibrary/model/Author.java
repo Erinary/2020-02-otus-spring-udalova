@@ -16,7 +16,6 @@ import java.util.List;
 /**
  * Author's entity.
  */
-@SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 @Table(name = "authors")
 public class Author {

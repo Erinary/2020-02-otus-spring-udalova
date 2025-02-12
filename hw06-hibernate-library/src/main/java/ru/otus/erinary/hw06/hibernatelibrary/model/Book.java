@@ -16,7 +16,6 @@ import java.util.Optional;
 /**
  * Book's entity.
  */
-@SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 @Table(name = "books")
 public class Book {
@@ -44,22 +43,7 @@ public class Book {
     /**
      * Default constructor.
      */
-    protected Book() {
-    }
-
-    /**
-     * Creates a new {@link Book} instance.
-     *
-     * @param title  book's title
-     * @param year   year of publication
-     * @param author {@link Author}
-     * @param genre  {@link Genre}
-     */
-    public Book(final String title, final int year, final Author author, final Genre genre) {
-        this.title = title;
-        this.year = year;
-        this.author = author;
-        this.genre = genre;
+    public Book() {
     }
 
     /**
@@ -74,12 +58,7 @@ public class Book {
         return title;
     }
 
-    /**
-     * Changes books title.
-     *
-     * @param title new title
-     */
-    public void changeTitle(@NotNull final String title) {
+    public void setTitle(@NotNull final String title) {
         this.title = title;
     }
 
@@ -87,11 +66,23 @@ public class Book {
         return year;
     }
 
+    public void setYear(final int year) {
+        this.year = year;
+    }
+
     public @NotNull Optional<Author> getAuthor() {
         return Optional.ofNullable(author);
     }
 
+    public void setAuthor(final Author author) {
+        this.author = author;
+    }
+
     public @NotNull Optional<Genre> getGenre() {
         return Optional.ofNullable(genre);
+    }
+
+    public void setGenre(final Genre genre) {
+        this.genre = genre;
     }
 }

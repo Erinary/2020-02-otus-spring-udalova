@@ -27,9 +27,12 @@ class BookRepositoryImplTest {
         assertFalse(books.isEmpty());
         assertEquals(4, books.size());
 
-        var book = new Book("newTitle", 2018,
-                new Author(1L, "author1", null),
-                new Genre(1L, "genre1", null));
+        var book = new Book();
+        book.setTitle("newTitle");
+        book.setYear(2018);
+        book.setAuthor(new Author(2L, "author2", null));
+        book.setGenre(new Genre(2L, "genre2", null));
+
         repository.save(book);
         assertNotEquals(0L, book.getId());
 
@@ -47,7 +50,7 @@ class BookRepositoryImplTest {
         assertEquals("title1", book.getTitle());
 
         var newTitle = "newTitle";
-        book.changeTitle(newTitle);
+        book.setTitle(newTitle);
         repository.save(book);
 
         var loadedBook = repository.findById(1L).orElseThrow();
