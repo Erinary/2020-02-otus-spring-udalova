@@ -8,14 +8,24 @@ import ru.otus.erinary.hw07.springdatalibrary.model.Author;
 import java.util.Optional;
 
 /**
- * Интерфейс репозитория для {@link Author}
+ * Repository interface for {@link Author}.
  */
 public interface AuthorRepository extends JpaRepository<Author, Long> {
 
-    Optional<Author> findById(Long id);
-
+    /**
+     * Searches the author by given name.
+     *
+     * @param name author's name
+     * @return an author
+     */
     Optional<Author> findByName(String name);
 
+    /**
+     * Searches the author's id by given name.
+     *
+     * @param name author's name
+     * @return author's id
+     */
     @Query("select a.id from Author a where a.name = :name")
     Optional<Long> findIdByName(@Param("name") String name);
 

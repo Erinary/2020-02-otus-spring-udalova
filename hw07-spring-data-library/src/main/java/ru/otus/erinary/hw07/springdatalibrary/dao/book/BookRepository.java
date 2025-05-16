@@ -4,17 +4,26 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ru.otus.erinary.hw07.springdatalibrary.model.Book;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
- * Интерфейс репозитория для {@link Book}
+ * Repository interface for {@link Book}.
  */
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    Optional<Book> findById(Long id);
-
+    /**
+     * Searches all books, related to specified author.
+     *
+     * @param authorId author's id
+     * @return list of the books
+     */
     List<Book> findAllByAuthorId(Long authorId);
 
+    /**
+     * Searches all books, related to specified genre.
+     *
+     * @param genreId genre's id
+     * @return list of the books
+     */
     List<Book> findAllByGenreId(Long genreId);
 
 }

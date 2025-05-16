@@ -8,7 +8,6 @@ import ru.otus.erinary.hw07.springdatalibrary.model.Comment;
 
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,7 +40,7 @@ class CommentRepositoryTest {
     void testFindById() {
         var comment = repository.findById(1L).orElseThrow();
         assertEquals("comment text 1", comment.getText());
-        assertEquals("user1", comment.getUser());
+        assertEquals("user1", comment.getUsername());
         assertEquals(ZonedDateTime.parse("2019-06-16T10:15:30+03:00[Europe/Moscow]").toInstant(), comment.getDate().toInstant());
         assertNotNull(comment.getBook());
         assertEquals(1L, comment.getBook().getId());
@@ -54,7 +53,7 @@ class CommentRepositoryTest {
         assertEquals(4, comments.size());
         assertNotNull(comments.get(0).getBook());
 
-        var users = comments.stream().map(Comment::getUser).collect(Collectors.toList());
+        var users = comments.stream().map(Comment::getUsername).toList();
         assertTrue(users.containsAll(List.of("user1", "user2", "user3", "user4")));
     }
 
@@ -64,7 +63,7 @@ class CommentRepositoryTest {
         assertFalse(comments.isEmpty());
         assertEquals(3, comments.size());
 
-        var users = comments.stream().map(Comment::getUser).collect(Collectors.toList());
+        var users = comments.stream().map(Comment::getUsername).toList();
         assertTrue(users.containsAll(List.of("user1", "user2", "user3")));
     }
 
@@ -77,7 +76,7 @@ class CommentRepositoryTest {
         repository.deleteById(1L);
         comments = repository.findAll();
         assertEquals(3, comments.size());
-        var authorIds = comments.stream().map(Comment::getId).collect(Collectors.toList());
+        var authorIds = comments.stream().map(Comment::getId).toList();
         assertFalse(authorIds.contains(1L));
     }
 }

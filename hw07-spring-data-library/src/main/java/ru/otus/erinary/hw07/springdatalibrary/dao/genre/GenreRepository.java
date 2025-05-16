@@ -8,14 +8,24 @@ import ru.otus.erinary.hw07.springdatalibrary.model.Genre;
 import java.util.Optional;
 
 /**
- * Интерфейс репозитория для {@link Genre}
+ * Repository interface for {@link Genre}.
  */
 public interface GenreRepository extends JpaRepository<Genre, Long> {
 
-    Optional<Genre> findById(Long id);
-
+    /**
+     * Searches the genre by given name.
+     *
+     * @param name genre's name
+     * @return a genre
+     */
     Optional<Genre> findByName(String name);
 
+    /**
+     * Searches the genre's id by given name.
+     *
+     * @param name genre's name
+     * @return genre's id
+     */
     @Query("select g.id from Genre g where g.name = :name")
     Optional<Long> findIdByName(@Param("name") String name);
 

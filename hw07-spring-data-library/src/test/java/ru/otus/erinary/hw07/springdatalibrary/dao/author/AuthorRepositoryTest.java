@@ -6,7 +6,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import ru.otus.erinary.hw07.springdatalibrary.model.Author;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -71,7 +70,7 @@ class AuthorRepositoryTest {
         assertEquals(3, authors.size());
         assertFalse(authors.get(0).getBooks().isEmpty());
 
-        var authorNames = authors.stream().map(Author::getName).collect(Collectors.toList());
+        var authorNames = authors.stream().map(Author::getName).toList();
         assertTrue(authorNames.containsAll(List.of("author1", "author2", "author3")));
     }
 
@@ -84,7 +83,7 @@ class AuthorRepositoryTest {
         repository.deleteById(1L);
         authors = repository.findAll();
         assertEquals(2, authors.size());
-        var authorIds = authors.stream().map(Author::getId).collect(Collectors.toList());
+        var authorIds = authors.stream().map(Author::getId).toList();
         assertFalse(authorIds.contains(1L));
     }
 }

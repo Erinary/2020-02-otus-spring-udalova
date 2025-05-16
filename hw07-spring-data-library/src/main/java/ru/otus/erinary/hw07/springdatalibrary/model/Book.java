@@ -1,17 +1,21 @@
 package ru.otus.erinary.hw07.springdatalibrary.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import jakarta.persistence.*;
+import java.util.Optional;
 
-@SuppressWarnings("JpaDataSourceORMInspection")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+/**
+ * Book's entity.
+ */
 @Entity
 @Table(name = "books")
 public class Book {
@@ -24,7 +28,6 @@ public class Book {
     @Column(name = "title")
     private String title;
 
-    //TODO rename field according to schema
     @Column(name = "edition_year")
     private int year;
 
@@ -36,10 +39,53 @@ public class Book {
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
-    public Book(final String title, final int year, final Author author, final Genre genre) {
+    /**
+     * Default constructor.
+     */
+    public Book() {
+    }
+
+    /**
+     * In most cases, id is expected to be non-null. However, id might be null when a new book entity
+     * is created before persisting it into the database. After that id is set by JPA.
+     */
+    @Nullable
+    public Long getId() {
+        return id;
+    }
+
+    @NotNull
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(@NotNull final String title) {
         this.title = title;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(final int year) {
         this.year = year;
+    }
+
+    @NotNull
+    public Optional<Author> getAuthor() {
+        return Optional.ofNullable(author);
+    }
+
+    public void setAuthor(final Author author) {
         this.author = author;
+    }
+
+    @NotNull
+    public Optional<Genre> getGenre() {
+        return Optional.ofNullable(genre);
+    }
+
+    public void setGenre(final Genre genre) {
         this.genre = genre;
     }
 }
