@@ -1,7 +1,7 @@
-package ru.otus.erinary.hw07.springdatalibrary.dao.book;
+package ru.otus.erinary.hw07.springdatalibrary.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.otus.erinary.hw07.springdatalibrary.model.Book;
+import ru.otus.erinary.hw07.springdatalibrary.entity.Book;
 
 import java.util.List;
 

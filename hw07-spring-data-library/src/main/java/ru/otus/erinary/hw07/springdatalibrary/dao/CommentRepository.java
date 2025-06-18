@@ -1,7 +1,7 @@
-package ru.otus.erinary.hw07.springdatalibrary.dao.comment;
+package ru.otus.erinary.hw07.springdatalibrary.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.otus.erinary.hw07.springdatalibrary.model.Comment;
+import ru.otus.erinary.hw07.springdatalibrary.entity.Comment;
 
 import java.util.List;
 

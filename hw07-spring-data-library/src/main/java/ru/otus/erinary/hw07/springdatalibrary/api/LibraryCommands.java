@@ -1,4 +1,4 @@
-package ru.otus.erinary.hw07.springdatalibrary.service.shell;
+package ru.otus.erinary.hw07.springdatalibrary.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;

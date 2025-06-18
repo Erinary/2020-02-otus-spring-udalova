@@ -1,4 +1,4 @@
-package ru.otus.erinary.hw07.springdatalibrary.model;
+package ru.otus.erinary.hw07.springdatalibrary.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

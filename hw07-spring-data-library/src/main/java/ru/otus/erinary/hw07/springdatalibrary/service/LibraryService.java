@@ -1,9 +1,9 @@
 package ru.otus.erinary.hw07.springdatalibrary.service;
 
-import ru.otus.erinary.hw07.springdatalibrary.model.Author;
-import ru.otus.erinary.hw07.springdatalibrary.model.Book;
-import ru.otus.erinary.hw07.springdatalibrary.model.Comment;
-import ru.otus.erinary.hw07.springdatalibrary.model.Genre;
+import ru.otus.erinary.hw07.springdatalibrary.entity.Author;
+import ru.otus.erinary.hw07.springdatalibrary.entity.Book;
+import ru.otus.erinary.hw07.springdatalibrary.entity.Comment;
+import ru.otus.erinary.hw07.springdatalibrary.entity.Genre;
 
 import java.util.List;
 

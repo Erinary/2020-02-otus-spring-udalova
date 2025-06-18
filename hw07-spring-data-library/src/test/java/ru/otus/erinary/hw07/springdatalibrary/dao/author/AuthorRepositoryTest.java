@@ -3,7 +3,8 @@ package ru.otus.erinary.hw07.springdatalibrary.dao.author;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import ru.otus.erinary.hw07.springdatalibrary.model.Author;
+import ru.otus.erinary.hw07.springdatalibrary.dao.AuthorRepository;
+import ru.otus.erinary.hw07.springdatalibrary.entity.Author;
 
 import java.util.List;
 

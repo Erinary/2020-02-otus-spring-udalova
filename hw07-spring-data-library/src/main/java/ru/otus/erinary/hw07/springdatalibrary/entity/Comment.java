@@ -1,4 +1,4 @@
-package ru.otus.erinary.hw07.springdatalibrary.model;
+package ru.otus.erinary.hw07.springdatalibrary.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -60,23 +60,28 @@ public class Comment {
         this.book = book;
     }
 
-    public @NotNull Long getId() {
+    @NotNull
+    public Long getId() {
         return id;
     }
 
-    public @NotNull String getText() {
+    @NotNull
+    public String getText() {
         return text;
     }
 
-    public @NotNull String getUsername() {
+    @NotNull
+    public String getUsername() {
         return username;
     }
 
-    public @NotNull ZonedDateTime getDate() {
+    @NotNull
+    public ZonedDateTime getDate() {
         return date;
     }
 
-    public @NotNull Book getBook() {
+    @NotNull
+    public Book getBook() {
         return book;
     }
 }

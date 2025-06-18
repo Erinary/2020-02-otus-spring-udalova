@@ -1,17 +1,18 @@
 package ru.otus.erinary.hw07.springdatalibrary.service;
 
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.erinary.hw07.springdatalibrary.dao.author.AuthorRepository;
-import ru.otus.erinary.hw07.springdatalibrary.dao.book.BookRepository;
-import ru.otus.erinary.hw07.springdatalibrary.dao.comment.CommentRepository;
+import ru.otus.erinary.hw07.springdatalibrary.dao.AuthorRepository;
+import ru.otus.erinary.hw07.springdatalibrary.dao.BookRepository;
+import ru.otus.erinary.hw07.springdatalibrary.dao.CommentRepository;
+import ru.otus.erinary.hw07.springdatalibrary.dao.GenreRepository;
+import ru.otus.erinary.hw07.springdatalibrary.entity.Author;
+import ru.otus.erinary.hw07.springdatalibrary.entity.Book;
+import ru.otus.erinary.hw07.springdatalibrary.entity.Comment;
+import ru.otus.erinary.hw07.springdatalibrary.entity.Genre;
 import ru.otus.erinary.hw07.springdatalibrary.service.exception.LibraryServiceException;
-import ru.otus.erinary.hw07.springdatalibrary.dao.genre.GenreRepository;
-import ru.otus.erinary.hw07.springdatalibrary.model.Author;
-import ru.otus.erinary.hw07.springdatalibrary.model.Book;
-import ru.otus.erinary.hw07.springdatalibrary.model.Comment;
-import ru.otus.erinary.hw07.springdatalibrary.model.Genre;
 
 import java.util.List;
 
@@ -25,6 +26,9 @@ public class LibraryServiceImpl implements LibraryService {
     private final AuthorRepository authorRepository;
     private final GenreRepository genreRepository;
     private final CommentRepository commentRepository;
+
+    @Autowired
+    private EntityManager entityManager;
 
     /**
      * Creates a new {@link LibraryServiceImpl} instance.

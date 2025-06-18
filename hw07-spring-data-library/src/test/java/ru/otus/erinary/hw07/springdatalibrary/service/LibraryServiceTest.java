@@ -8,11 +8,11 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ru.otus.erinary.hw07.springdatalibrary.dao.author.AuthorRepository;
-import ru.otus.erinary.hw07.springdatalibrary.dao.book.BookRepository;
-import ru.otus.erinary.hw07.springdatalibrary.dao.comment.CommentRepository;
-import ru.otus.erinary.hw07.springdatalibrary.dao.genre.GenreRepository;
-import ru.otus.erinary.hw07.springdatalibrary.model.Author;
+import ru.otus.erinary.hw07.springdatalibrary.dao.AuthorRepository;
+import ru.otus.erinary.hw07.springdatalibrary.dao.BookRepository;
+import ru.otus.erinary.hw07.springdatalibrary.dao.CommentRepository;
+import ru.otus.erinary.hw07.springdatalibrary.dao.GenreRepository;
+import ru.otus.erinary.hw07.springdatalibrary.entity.Author;
 
 import java.util.List;
 

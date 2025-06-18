@@ -1,14 +1,14 @@
-package ru.otus.erinary.hw07.springdatalibrary.service.shell;
+package ru.otus.erinary.hw07.springdatalibrary.api;
 
 import org.springframework.shell.table.ArrayTableModel;
 import org.springframework.shell.table.BorderStyle;
 import org.springframework.shell.table.TableBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import ru.otus.erinary.hw07.springdatalibrary.model.Author;
-import ru.otus.erinary.hw07.springdatalibrary.model.Book;
-import ru.otus.erinary.hw07.springdatalibrary.model.Comment;
-import ru.otus.erinary.hw07.springdatalibrary.model.Genre;
+import ru.otus.erinary.hw07.springdatalibrary.entity.Author;
+import ru.otus.erinary.hw07.springdatalibrary.entity.Book;
+import ru.otus.erinary.hw07.springdatalibrary.entity.Comment;
+import ru.otus.erinary.hw07.springdatalibrary.entity.Genre;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
