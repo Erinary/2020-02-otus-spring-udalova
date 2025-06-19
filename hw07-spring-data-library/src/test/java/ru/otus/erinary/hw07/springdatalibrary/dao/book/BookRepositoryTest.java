@@ -9,7 +9,6 @@ import ru.otus.erinary.hw07.springdatalibrary.entity.Book;
 import ru.otus.erinary.hw07.springdatalibrary.entity.Genre;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -61,12 +60,8 @@ class BookRepositoryTest {
         var book = repository.findById(1L).orElseThrow();
         assertEquals("title1", book.getTitle());
         assertEquals(2020, book.getYear());
-
-        assertTrue(book.getAuthor().isPresent());
-        assertEquals("author1", book.getAuthor().get().getName());
-
-        assertTrue(book.getGenre().isPresent());
-        assertEquals("genre1", book.getGenre().get().getName());
+        assertEquals("author1", book.getAuthor().getName());
+        assertEquals("genre1", book.getGenre().getName());
     }
 
     @Test
@@ -80,15 +75,13 @@ class BookRepositoryTest {
         var bookTitles = books.stream().map(Book::getTitle).toList();
         assertTrue(bookTitles.containsAll(List.of("title1", "title2", "title3")));
 
-        var authorNames = books.stream().map(book -> book.getAuthor().map(Author::getName))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+        var authorNames = books.stream()
+                .map(book -> book.getAuthor().getName())
                 .toList();
         assertTrue(authorNames.containsAll(List.of("author1", "author2", "author3")));
 
-        var genreNames = books.stream().map(book -> book.getGenre().map(Genre::getName))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+        var genreNames = books.stream()
+                .map(book -> book.getGenre().getName())
                 .toList();
         assertTrue(genreNames.containsAll(List.of("genre1", "genre2", "genre3")));
     }
@@ -97,9 +90,8 @@ class BookRepositoryTest {
     void testFindAllByAuthorId() {
         var books = repository.findAllByAuthorId(1L);
         assertEquals(2, books.size());
-        var authorNames = books.stream().map(book -> book.getAuthor().map(Author::getName))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+        var authorNames = books.stream()
+                .map(book -> book.getAuthor().getName())
                 .collect(Collectors.toSet());
         assertEquals(1, authorNames.size());
         assertTrue(authorNames.contains("author1"));
@@ -111,9 +103,8 @@ class BookRepositoryTest {
     void testFindAllByGenreId() {
         var books = repository.findAllByGenreId(2L);
         assertEquals(2, books.size());
-        var genresNames = books.stream().map(book -> book.getGenre().map(Genre::getName))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+        var genresNames = books.stream()
+                .map(book -> book.getGenre().getName())
                 .collect(Collectors.toSet());
         assertEquals(1, genresNames.size());
         assertTrue(genresNames.contains("genre2"));

@@ -18,14 +18,12 @@ public class AuthorModel {
     /**
      * A model's constructor.
      *
-     * @param id    author's identifier
-     * @param name  author's name
-     * @param books list of related books
+     * @param builder {@link BookShortModel.Builder}
      */
-    public AuthorModel(final Long id, final String name, final List<BookShortModel> books) {
-        this.id = id;
-        this.name = name;
-        this.books = ListUtils.emptyIfNull(books);
+    private AuthorModel(final Builder builder) {
+        this.id = builder.id;
+        this.name = builder.name;
+        this.books = builder.books;
     }
 
     @NotNull
@@ -41,5 +39,47 @@ public class AuthorModel {
     @NotNull
     public List<BookShortModel> getBooks() {
         return Collections.unmodifiableList(books);
+    }
+
+    /**
+     * Creates a new {@link Builder} instance.
+     *
+     * @return {@link Builder}
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private Long id;
+        private String name;
+        private List<BookShortModel> books;
+
+        private Builder() {
+        }
+
+        public Builder setId(final Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setName(final String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setBooks(final List<BookShortModel> books) {
+            this.books = ListUtils.emptyIfNull(books);
+            return this;
+        }
+
+        /**
+         * Creates a new {@link AuthorModel} instance.
+         *
+         * @return {@link AuthorModel}
+         */
+        public AuthorModel build() {
+            return new AuthorModel(this);
+        }
     }
 }

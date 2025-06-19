@@ -11,8 +11,6 @@ import jakarta.persistence.Table;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-
 /**
  * Book's entity.
  */
@@ -71,18 +69,18 @@ public class Book {
         this.year = year;
     }
 
-    @NotNull
-    public Optional<Author> getAuthor() {
-        return Optional.ofNullable(author);
+    @Nullable
+    public Author getAuthor() {
+        return author;
     }
 
     public void setAuthor(final Author author) {
         this.author = author;
     }
 
-    @NotNull
-    public Optional<Genre> getGenre() {
-        return Optional.ofNullable(genre);
+    @Nullable
+    public Genre getGenre() {
+        return genre;
     }
 
     public void setGenre(final Genre genre) {

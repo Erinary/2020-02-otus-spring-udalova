@@ -1,9 +1,9 @@
 package ru.otus.erinary.hw07.springdatalibrary.service;
 
-import ru.otus.erinary.hw07.springdatalibrary.entity.Author;
-import ru.otus.erinary.hw07.springdatalibrary.entity.Book;
-import ru.otus.erinary.hw07.springdatalibrary.entity.Comment;
-import ru.otus.erinary.hw07.springdatalibrary.entity.Genre;
+import ru.otus.erinary.hw07.springdatalibrary.api.model.AuthorModel;
+import ru.otus.erinary.hw07.springdatalibrary.api.model.BookModel;
+import ru.otus.erinary.hw07.springdatalibrary.api.model.CommentModel;
+import ru.otus.erinary.hw07.springdatalibrary.api.model.GenreModel;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public interface LibraryService {
      *
      * @return all authors
      */
-    List<Author> getAuthors();
+    List<AuthorModel> getAuthors();
 
     /**
      * Searches the author by given name.
@@ -25,7 +25,7 @@ public interface LibraryService {
      * @param name author's name
      * @return an author
      */
-    Author getAuthorByName(String name);
+    AuthorModel getAuthorByName(String name);
 
     /**
      * Deletes the author.
@@ -39,7 +39,7 @@ public interface LibraryService {
      *
      * @return all genres
      */
-    List<Genre> getGenres();
+    List<GenreModel> getGenres();
 
     /**
      * Searches the genre by given name.
@@ -47,7 +47,7 @@ public interface LibraryService {
      * @param name genre's name
      * @return a genre
      */
-    Genre getGenreByName(String name);
+    GenreModel getGenreByName(String name);
 
     /**
      * Deletes the genre.
@@ -61,7 +61,7 @@ public interface LibraryService {
      *
      * @return books
      */
-    List<Book> getBooks();
+    List<BookModel> getBooks();
 
     /**
      * Searches the book by given id.
@@ -69,19 +69,15 @@ public interface LibraryService {
      * @param id book's id
      * @return a book
      */
-    Book getBookById(Long id);
+    BookModel getBookById(Long id);
 
     /**
      * Saves a new book or updates an existing.
      *
-     * @param id         book's id
-     * @param title      book's name
-     * @param year       publishing year
-     * @param authorName author's name
-     * @param genreName  genre
+     * @param model book's model for saving or updating
      * @return saved book
      */
-    Book saveBook(Long id, String title, int year, String authorName, String genreName);
+    BookModel saveBook(BookModel model);
 
     /**
      * Deletes the book.
@@ -96,17 +92,15 @@ public interface LibraryService {
      * @param bookId book's id
      * @return list of comments
      */
-    List<Comment> getBookComments(Long bookId);
+    List<CommentModel> getBookComments(Long bookId);
 
     /**
      * Saves a new comment.
      *
-     * @param text   content of the comment
-     * @param user   author of the comment
-     * @param bookId id of the related book
+     * @param model comment's model for saving or updating
      * @return id of the saved comment
      */
-    Long saveComment(String text, String user, Long bookId);
+    Long saveComment(CommentModel model);
 
     /**
      * Deletes the comment.

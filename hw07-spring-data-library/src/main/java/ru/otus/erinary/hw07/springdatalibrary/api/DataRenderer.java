@@ -1,9 +1,10 @@
 package ru.otus.erinary.hw07.springdatalibrary.api;
 
-import ru.otus.erinary.hw07.springdatalibrary.entity.Author;
-import ru.otus.erinary.hw07.springdatalibrary.entity.Book;
-import ru.otus.erinary.hw07.springdatalibrary.entity.Comment;
-import ru.otus.erinary.hw07.springdatalibrary.entity.Genre;
+import ru.otus.erinary.hw07.springdatalibrary.api.model.AuthorModel;
+import ru.otus.erinary.hw07.springdatalibrary.api.model.BookModel;
+import ru.otus.erinary.hw07.springdatalibrary.api.model.BookShortModel;
+import ru.otus.erinary.hw07.springdatalibrary.api.model.CommentModel;
+import ru.otus.erinary.hw07.springdatalibrary.api.model.GenreModel;
 
 import java.util.List;
 
@@ -15,40 +16,40 @@ public interface DataRenderer {
     /**
      * Generates a table with short information about books.
      *
-     * @param books list of {@link Book}
+     * @param books list of {@link BookShortModel}
      * @return a table with short books info
      */
-    String getShortBookTable(List<Book> books);
+    String getShortBookTable(List<BookShortModel> books);
 
     /**
      * Generates a table with full information about books.
      *
-     * @param books list of {@link Book}
+     * @param books list of {@link BookModel}
      * @return a table with full books info
      */
-    String getFullBookTable(List<Book> books);
+    String getFullBookTable(List<BookModel> books);
 
     /**
      * Generates a table with information about authors.
      *
-     * @param authors list of {@link Author}
+     * @param authors list of {@link AuthorModel}
      * @return a table with authors info
      */
-    String getAuthorTable(List<Author> authors);
+    String getAuthorTable(List<AuthorModel> authors);
 
     /**
      * Generates a table with information about genres.
      *
-     * @param genres list of {@link Genre}
+     * @param genres list of {@link GenreModel}
      * @return a table with genres info
      */
-    String getGenreTable(List<Genre> genres);
+    String getGenreTable(List<GenreModel> genres);
 
     /**
      * Generates a table containing comments.
      *
-     * @param comments list of {@link Comment}
+     * @param comments list of {@link CommentModel}
      * @return a table with comments
      */
-    String getCommentTable(List<Comment> comments);
+    String getCommentTable(List<CommentModel> comments);
 }

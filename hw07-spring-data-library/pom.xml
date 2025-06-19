@@ -22,6 +22,7 @@
         <spring-shell.version>3.2.3</spring-shell.version>
         <jetbrains.annotations.version>26.0.2</jetbrains.annotations.version>
         <commons-collections4.version>4.4</commons-collections4.version>
+        <commons-lang3.version>3.17.0</commons-lang3.version>
         <!--plugins-->
         <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
         <checkstyle.version>10.21.1</checkstyle.version>
@@ -57,6 +58,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>${commons-collections4.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
         </dependency>
     </dependencies>
 

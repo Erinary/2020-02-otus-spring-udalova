@@ -51,12 +51,13 @@ public class Comment {
      *
      * @param text     content of the comment
      * @param username author of the comment
+     * @param date     date of creation
      * @param book     related book
      */
-    public Comment(final String text, final String username, final Book book) {
+    public Comment(final String text, final String username, final ZonedDateTime date, final Book book) {
         this.text = text;
         this.username = username;
-        this.date = ZonedDateTime.now();
+        this.date = date;
         this.book = book;
     }
 

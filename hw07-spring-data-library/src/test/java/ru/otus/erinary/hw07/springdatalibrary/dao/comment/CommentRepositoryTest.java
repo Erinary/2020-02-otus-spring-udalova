@@ -28,7 +28,7 @@ class CommentRepositoryTest {
         assertEquals(4, comments.size());
 
         var book = bookRepository.findById(1L).orElseThrow();
-        var comment = new Comment("text", "new_user", book);
+        var comment = new Comment("text", "new_user", ZonedDateTime.now(), book);
         var id = repository.save(comment).getId();
 
         comments = repository.findAll();

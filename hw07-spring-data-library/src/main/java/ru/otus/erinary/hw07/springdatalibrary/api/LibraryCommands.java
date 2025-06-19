@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
-import ru.otus.erinary.hw07.springdatalibrary.service.exception.LibraryServiceException;
+import ru.otus.erinary.hw07.springdatalibrary.api.model.BookModel;
+import ru.otus.erinary.hw07.springdatalibrary.api.model.CommentModel;
 import ru.otus.erinary.hw07.springdatalibrary.service.LibraryService;
+import ru.otus.erinary.hw07.springdatalibrary.service.exception.LibraryServiceException;
 
 import java.util.Collections;
 
@@ -169,7 +171,14 @@ public class LibraryCommands {
             @ShellOption({"g", "--genre"}) final String genreName
     ) {
         try {
-            var book = libraryService.saveBook(id, title, year, authorName, genreName);
+            var model = BookModel.builder()
+                    .setId(id)
+                    .setTitle(title)
+                    .setYear(year)
+                    .setAuthor(authorName)
+                    .setGenre(genreName)
+                    .build();
+            var book = libraryService.saveBook(model);
             if (id != null) {
                 System.out.println("Book was updated");
             } else {
@@ -202,11 +211,16 @@ public class LibraryCommands {
      */
     @ShellMethod(key = "save-comment", value = "Save comment for book")
     public String addComment(
-            @ShellOption({"id"}) final Long bookId,
+            @ShellOption({"b", "--book"}) final Long bookId,
             @ShellOption({"t", "--text"}) final String text,
             @ShellOption(value = {"u", "--user"}, defaultValue = "Guest") final String user) {
         try {
-            Long commentId = libraryService.saveComment(text, user, bookId);
+            var model = CommentModel.builder()
+                    .setBookId(bookId)
+                    .setText(text)
+                    .setUsername(user)
+                    .build();
+            var commentId = libraryService.saveComment(model);
             return String.format("New comment with id [%d] was added", commentId);
         } catch (LibraryServiceException e) {
             return e.getMessage();

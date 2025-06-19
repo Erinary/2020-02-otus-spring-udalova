@@ -1,14 +1,16 @@
 package ru.otus.erinary.hw07.springdatalibrary.api;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.shell.table.ArrayTableModel;
 import org.springframework.shell.table.BorderStyle;
 import org.springframework.shell.table.TableBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import ru.otus.erinary.hw07.springdatalibrary.entity.Author;
-import ru.otus.erinary.hw07.springdatalibrary.entity.Book;
-import ru.otus.erinary.hw07.springdatalibrary.entity.Comment;
-import ru.otus.erinary.hw07.springdatalibrary.entity.Genre;
+import ru.otus.erinary.hw07.springdatalibrary.api.model.AuthorModel;
+import ru.otus.erinary.hw07.springdatalibrary.api.model.BookModel;
+import ru.otus.erinary.hw07.springdatalibrary.api.model.BookShortModel;
+import ru.otus.erinary.hw07.springdatalibrary.api.model.CommentModel;
+import ru.otus.erinary.hw07.springdatalibrary.api.model.GenreModel;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -31,31 +33,31 @@ public class DataRendererImpl implements DataRenderer {
     private static final String EMPTY_CELL_VALUE = "<Not specified>";
 
     @Override
-    public String getShortBookTable(final List<Book> books) {
+    public String getShortBookTable(final List<BookShortModel> books) {
         var bookData = applyBookShortModel(books);
         return generateTable(bookData);
     }
 
     @Override
-    public String getFullBookTable(final List<Book> books) {
+    public String getFullBookTable(final List<BookModel> books) {
         var bookData = applyBookFullModel(books);
         return generateTable(bookData);
     }
 
     @Override
-    public String getAuthorTable(final List<Author> authors) {
+    public String getAuthorTable(final List<AuthorModel> authors) {
         var authorData = applyAuthorModel(authors);
         return generateTable(authorData);
     }
 
     @Override
-    public String getGenreTable(final List<Genre> genres) {
+    public String getGenreTable(final List<GenreModel> genres) {
         var genreData = applyGenreModel(genres);
         return generateTable(genreData);
     }
 
     @Override
-    public String getCommentTable(final List<Comment> comments) {
+    public String getCommentTable(final List<CommentModel> comments) {
         if (CollectionUtils.isEmpty(comments)) {
             return EMPTY_COMMENTS_MESSAGE;
         } else {
@@ -72,7 +74,7 @@ public class DataRendererImpl implements DataRenderer {
     }
 
     @SuppressWarnings("DataFlowIssue")
-    private String[][] applyBookShortModel(final List<Book> books) {
+    private String[][] applyBookShortModel(final List<BookShortModel> books) {
         if (CollectionUtils.isEmpty(books)) {
             return new String[][]{BOOK_COLUMNS};
         } else {
@@ -90,7 +92,7 @@ public class DataRendererImpl implements DataRenderer {
     }
 
     @SuppressWarnings("DataFlowIssue")
-    private String[][] applyBookFullModel(final List<Book> books) {
+    private String[][] applyBookFullModel(final List<BookModel> books) {
         if (CollectionUtils.isEmpty(books)) {
             return new String[][]{FULL_BOOK_COLUMNS};
         } else {
@@ -102,15 +104,15 @@ public class DataRendererImpl implements DataRenderer {
                         Long.toString(book.getId()),
                         book.getTitle(),
                         Integer.toString(book.getYear()),
-                        book.getAuthor().map(Author::getName).orElse(EMPTY_CELL_VALUE),
-                        book.getGenre().map(Genre::getName).orElse(EMPTY_CELL_VALUE)};
+                        StringUtils.defaultIfBlank(book.getAuthor(), EMPTY_CELL_VALUE),
+                        StringUtils.defaultIfBlank(book.getGenre(), EMPTY_CELL_VALUE)};
             }
             return bookData;
         }
     }
 
     @SuppressWarnings("DuplicatedCode")
-    private String[][] applyAuthorModel(final List<Author> authors) {
+    private String[][] applyAuthorModel(final List<AuthorModel> authors) {
         if (CollectionUtils.isEmpty(authors)) {
             return new String[][]{AUTHOR_COLUMNS};
         } else {
@@ -128,7 +130,7 @@ public class DataRendererImpl implements DataRenderer {
     }
 
     @SuppressWarnings("DuplicatedCode")
-    private String[][] applyGenreModel(final List<Genre> genres) {
+    private String[][] applyGenreModel(final List<GenreModel> genres) {
         if (CollectionUtils.isEmpty(genres)) {
             return new String[][]{GENRE_COLUMNS};
         } else {
@@ -145,7 +147,7 @@ public class DataRendererImpl implements DataRenderer {
         }
     }
 
-    private String[][] applyCommentModel(final List<Comment> comments) {
+    private String[][] applyCommentModel(final List<CommentModel> comments) {
         var commentsData = new String[comments.size() + 1][];
         commentsData[0] = COMMENT_COLUMNS;
         for (int i = 1; i < commentsData.length; i++) {
