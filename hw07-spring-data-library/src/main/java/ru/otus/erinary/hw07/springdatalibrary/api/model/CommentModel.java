@@ -18,14 +18,22 @@ public class CommentModel {
     /**
      * A model's constructor.
      *
-     * @param builder {@link Builder}
+     * @param id       comment's identifier
+     * @param bookId   book's identifier
+     * @param text     content of the comment
+     * @param username author of the comment
+     * @param date     date of creation
      */
-    private CommentModel(final Builder builder) {
-        this.id = builder.id;
-        this.bookId = builder.bookId;
-        this.text = builder.text;
-        this.username = builder.username;
-        this.date = builder.date != null ? builder.date : ZonedDateTime.now();
+    public CommentModel(final Long id,
+                        final Long bookId,
+                        final String text,
+                        final String username,
+                        final ZonedDateTime date) {
+        this.id = id;
+        this.bookId = bookId;
+        this.text = text;
+        this.username = username;
+        this.date = date != null ? date : ZonedDateTime.now();
     }
 
     @NotNull
@@ -51,59 +59,5 @@ public class CommentModel {
     @NotNull
     public ZonedDateTime getDate() {
         return date;
-    }
-
-    /**
-     * Creates a new {@link BookShortModel.Builder} instance.
-     *
-     * @return {@link BookShortModel.Builder}
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static class Builder {
-        private Long id;
-        private Long bookId;
-        private String text;
-        private String username;
-        private ZonedDateTime date;
-
-        private Builder() {
-        }
-
-        public Builder setId(final Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder setBookId(final Long bookId) {
-            this.bookId = bookId;
-            return this;
-        }
-
-        public Builder setText(final String text) {
-            this.text = text;
-            return this;
-        }
-
-        public Builder setUsername(final String username) {
-            this.username = username;
-            return this;
-        }
-
-        public Builder setDate(final ZonedDateTime date) {
-            this.date = date;
-            return this;
-        }
-
-        /**
-         * Creates a new {@link CommentModel} instance.
-         *
-         * @return {@link CommentModel}
-         */
-        public CommentModel build() {
-            return new CommentModel(this);
-        }
     }
 }

@@ -171,13 +171,7 @@ public class LibraryCommands {
             @ShellOption({"g", "--genre"}) final String genreName
     ) {
         try {
-            var model = BookModel.builder()
-                    .setId(id)
-                    .setTitle(title)
-                    .setYear(year)
-                    .setAuthor(authorName)
-                    .setGenre(genreName)
-                    .build();
+            var model = new BookModel(id, title, year, authorName, genreName);
             var book = libraryService.saveBook(model);
             if (id != null) {
                 System.out.println("Book was updated");
@@ -215,11 +209,7 @@ public class LibraryCommands {
             @ShellOption({"t", "--text"}) final String text,
             @ShellOption(value = {"u", "--user"}, defaultValue = "Guest") final String user) {
         try {
-            var model = CommentModel.builder()
-                    .setBookId(bookId)
-                    .setText(text)
-                    .setUsername(user)
-                    .build();
+            var model = new CommentModel(null, bookId, text, user, null);
             var commentId = libraryService.saveComment(model);
             return String.format("New comment with id [%d] was added", commentId);
         } catch (LibraryServiceException e) {

@@ -18,12 +18,14 @@ public class GenreModel {
     /**
      * A model's constructor.
      *
-     * @param builder {@link Builder}
+     * @param id    identifier of the genre
+     * @param name  name of the genre
+     * @param books list of related books
      */
-    private GenreModel(final Builder builder) {
-        this.id = builder.id;
-        this.name = builder.name;
-        this.books = builder.books;
+    public GenreModel(final Long id, final String name, final List<BookShortModel> books) {
+        this.id = id;
+        this.name = name;
+        this.books = ListUtils.emptyIfNull(books);
     }
 
     @NotNull
@@ -39,47 +41,5 @@ public class GenreModel {
     @NotNull
     public List<BookShortModel> getBooks() {
         return Collections.unmodifiableList(books);
-    }
-
-    /**
-     * Creates a new {@link Builder} instance.
-     *
-     * @return {@link Builder}
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static class Builder {
-        private Long id;
-        private String name;
-        private List<BookShortModel> books;
-
-        private Builder() {
-        }
-
-        public Builder setId(final Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder setName(final String name) {
-            this.name = name;
-            return this;
-        }
-
-        public Builder setBooks(final List<BookShortModel> books) {
-            this.books = ListUtils.emptyIfNull(books);
-            return this;
-        }
-
-        /**
-         * Creates a new {@link GenreModel} instance.
-         *
-         * @return {@link GenreModel}
-         */
-        public GenreModel build() {
-            return new GenreModel(this);
-        }
     }
 }

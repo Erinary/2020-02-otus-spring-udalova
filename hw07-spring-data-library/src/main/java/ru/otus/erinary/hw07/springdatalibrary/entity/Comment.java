@@ -11,6 +11,7 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.ZonedDateTime;
 
@@ -61,7 +62,7 @@ public class Comment {
         this.book = book;
     }
 
-    @NotNull
+    @Nullable
     public Long getId() {
         return id;
     }

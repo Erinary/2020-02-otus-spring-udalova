@@ -10,6 +10,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import org.apache.commons.collections4.ListUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,7 +64,7 @@ public class Author {
         this.books = ListUtils.emptyIfNull(books);
     }
 
-    @NotNull
+    @Nullable
     public Long getId() {
         return id;
     }

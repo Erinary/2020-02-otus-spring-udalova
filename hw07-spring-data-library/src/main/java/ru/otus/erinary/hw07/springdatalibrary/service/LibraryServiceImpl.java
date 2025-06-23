@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.erinary.hw07.springdatalibrary.api.model.AuthorModel;
 import ru.otus.erinary.hw07.springdatalibrary.api.model.BookModel;
-import ru.otus.erinary.hw07.springdatalibrary.api.model.BookShortModel;
 import ru.otus.erinary.hw07.springdatalibrary.api.model.CommentModel;
 import ru.otus.erinary.hw07.springdatalibrary.api.model.GenreModel;
 import ru.otus.erinary.hw07.springdatalibrary.dao.AuthorRepository;
@@ -17,9 +16,12 @@ import ru.otus.erinary.hw07.springdatalibrary.entity.Book;
 import ru.otus.erinary.hw07.springdatalibrary.entity.Comment;
 import ru.otus.erinary.hw07.springdatalibrary.entity.Genre;
 import ru.otus.erinary.hw07.springdatalibrary.service.exception.LibraryServiceException;
+import ru.otus.erinary.hw07.springdatalibrary.service.mapper.AuthorMapper;
+import ru.otus.erinary.hw07.springdatalibrary.service.mapper.BookMapper;
+import ru.otus.erinary.hw07.springdatalibrary.service.mapper.CommentMapper;
+import ru.otus.erinary.hw07.springdatalibrary.service.mapper.GenreMapper;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Realization of {@link LibraryService}.
@@ -31,6 +33,12 @@ public class LibraryServiceImpl implements LibraryService {
     private final AuthorRepository authorRepository;
     private final GenreRepository genreRepository;
     private final CommentRepository commentRepository;
+
+    private final BookMapper bookMapper;
+    private final AuthorMapper authorMapper;
+    private final GenreMapper genreMapper;
+    private final CommentMapper commentMapper;
+
 
     /**
      * Creates a new {@link LibraryServiceImpl} instance.
@@ -44,20 +52,26 @@ public class LibraryServiceImpl implements LibraryService {
     public LibraryServiceImpl(final BookRepository bookRepository,
                               final AuthorRepository authorRepository,
                               final GenreRepository genreRepository,
-                              final CommentRepository commentRepository) {
+                              final CommentRepository commentRepository,
+                              final BookMapper bookMapper,
+                              final AuthorMapper authorMapper,
+                              final GenreMapper genreMapper,
+                              final CommentMapper commentMapper) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.genreRepository = genreRepository;
         this.commentRepository = commentRepository;
+        this.bookMapper = bookMapper;
+        this.authorMapper = authorMapper;
+        this.genreMapper = genreMapper;
+        this.commentMapper = commentMapper;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<AuthorModel> getAuthors() {
-        return authorRepository.findAll().stream().map(author -> AuthorModel.builder()
-                        .setId(author.getId())
-                        .setName(author.getName())
-                        .build())
+        return authorRepository.findAll().stream()
+                .map(authorMapper::mapWithoutBooks)
                 .toList();
     }
 
@@ -65,20 +79,7 @@ public class LibraryServiceImpl implements LibraryService {
     @Transactional(readOnly = true)
     public AuthorModel getAuthorByName(final String name) {
         return authorRepository.findByName(name)
-                .map(author -> {
-                    var bookList = author.getBooks().stream()
-                            .map(book -> BookShortModel.builder()
-                                    .setId(book.getId())
-                                    .setTitle(book.getTitle())
-                                    .setYear(book.getYear())
-                                    .build())
-                            .toList();
-                    return AuthorModel.builder()
-                            .setId(author.getId())
-                            .setName(author.getName())
-                            .setBooks(bookList)
-                            .build();
-                })
+                .map(authorMapper::map)
                 .orElse(null);
     }
 
@@ -91,10 +92,8 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     @Transactional(readOnly = true)
     public List<GenreModel> getGenres() {
-        return genreRepository.findAll().stream().map(genre -> GenreModel.builder()
-                        .setId(genre.getId())
-                        .setName(genre.getName())
-                        .build())
+        return genreRepository.findAll().stream()
+                .map(genreMapper::mapWithoutBooks)
                 .toList();
     }
 
@@ -102,20 +101,7 @@ public class LibraryServiceImpl implements LibraryService {
     @Transactional(readOnly = true)
     public GenreModel getGenreByName(final String name) {
         return genreRepository.findByName(name)
-                .map(genre -> {
-                    var bookList = genre.getBooks().stream()
-                            .map(book -> BookShortModel.builder()
-                                    .setId(book.getId())
-                                    .setTitle(book.getTitle())
-                                    .setYear(book.getYear())
-                                    .build())
-                            .toList();
-                    return GenreModel.builder()
-                            .setId(genre.getId())
-                            .setName(genre.getName())
-                            .setBooks(bookList)
-                            .build();
-                })
+                .map(genreMapper::map)
                 .orElse(null);
     }
 
@@ -128,13 +114,8 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     @Transactional(readOnly = true)
     public List<BookModel> getBooks() {
-        return bookRepository.findAll().stream().map(book -> BookModel.builder()
-                        .setId(book.getId())
-                        .setTitle(book.getTitle())
-                        .setYear(book.getYear())
-                        .setAuthor(Optional.ofNullable(book.getAuthor()).map(Author::getName).orElse(null))
-                        .setGenre(Optional.ofNullable(book.getGenre()).map(Genre::getName).orElse(null))
-                        .build())
+        return bookRepository.findAll().stream()
+                .map(bookMapper::map)
                 .toList();
     }
 
@@ -142,13 +123,7 @@ public class LibraryServiceImpl implements LibraryService {
     @Transactional(readOnly = true)
     public BookModel getBookById(final Long id) {
         return bookRepository.findById(id)
-                .map(book -> BookModel.builder()
-                        .setId(book.getId())
-                        .setTitle(book.getTitle())
-                        .setYear(book.getYear())
-                        .setAuthor(Optional.ofNullable(book.getAuthor()).map(Author::getName).orElse(null))
-                        .setGenre(Optional.ofNullable(book.getGenre()).map(Genre::getName).orElse(null))
-                        .build())
+                .map(bookMapper::map)
                 .orElse(null);
     }
 
@@ -176,13 +151,7 @@ public class LibraryServiceImpl implements LibraryService {
         book.setGenre(genre);
 
         var savedBook = bookRepository.save(book);
-        return BookModel.builder()
-                .setId(savedBook.getId())
-                .setTitle(savedBook.getTitle())
-                .setYear(savedBook.getYear())
-                .setAuthor(savedBook.getAuthor().getName())
-                .setGenre(savedBook.getGenre().getName())
-                .build();
+        return bookMapper.map(savedBook);
     }
 
     @Override
@@ -194,13 +163,8 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     @Transactional(readOnly = true)
     public List<CommentModel> getBookComments(final Long bookId) {
-        return commentRepository.findAllByBookId(bookId).stream().map(comment -> CommentModel.builder()
-                        .setId(comment.getId())
-                        .setBookId(comment.getBook().getId())
-                        .setText(comment.getText())
-                        .setUsername(comment.getUsername())
-                        .setDate(comment.getDate())
-                        .build())
+        return commentRepository.findAllByBookId(bookId).stream()
+                .map(commentMapper::map)
                 .toList();
     }
 

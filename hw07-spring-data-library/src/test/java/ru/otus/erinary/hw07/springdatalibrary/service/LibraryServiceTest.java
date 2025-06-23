@@ -13,6 +13,10 @@ import ru.otus.erinary.hw07.springdatalibrary.dao.BookRepository;
 import ru.otus.erinary.hw07.springdatalibrary.dao.CommentRepository;
 import ru.otus.erinary.hw07.springdatalibrary.dao.GenreRepository;
 import ru.otus.erinary.hw07.springdatalibrary.entity.Author;
+import ru.otus.erinary.hw07.springdatalibrary.service.mapper.AuthorMapper;
+import ru.otus.erinary.hw07.springdatalibrary.service.mapper.BookMapper;
+import ru.otus.erinary.hw07.springdatalibrary.service.mapper.CommentMapper;
+import ru.otus.erinary.hw07.springdatalibrary.service.mapper.GenreMapper;
 
 import java.util.List;
 
@@ -67,6 +71,26 @@ public class LibraryServiceTest {
         @Bean
         public CommentRepository commentRepository() {
             return Mockito.mock(CommentRepository.class);
+        }
+
+        @Bean
+        public BookMapper bookMapper() {
+            return new BookMapper();
+        }
+
+        @Bean
+        public AuthorMapper authorMapper() {
+            return new AuthorMapper();
+        }
+
+        @Bean
+        public GenreMapper genreMapper() {
+            return new GenreMapper();
+        }
+
+        @Bean
+        public CommentMapper commentMapper() {
+            return new CommentMapper();
         }
     }
 }

@@ -15,12 +15,14 @@ public class BookShortModel {
     /**
      * A model's constructor.
      *
-     * @param builder {@link Builder}
+     * @param id    book's identifier
+     * @param title book's title
+     * @param year  edition year
      */
-    private BookShortModel(final Builder builder) {
-        this.id = builder.id;
-        this.title = builder.title;
-        this.year = builder.year;
+    public BookShortModel(final Long id, final String title, final int year) {
+        this.id = id;
+        this.title = title;
+        this.year = year;
     }
 
     @Nullable
@@ -35,48 +37,5 @@ public class BookShortModel {
 
     public int getYear() {
         return year;
-    }
-
-    /**
-     * Creates a new {@link Builder} instance.
-     *
-     * @return {@link Builder}
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static class Builder {
-
-        private Long id;
-        private String title;
-        private int year;
-
-        private Builder() {
-        }
-
-        public Builder setId(final Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder setTitle(final String title) {
-            this.title = title;
-            return this;
-        }
-
-        public Builder setYear(final int year) {
-            this.year = year;
-            return this;
-        }
-
-        /**
-         * Creates a new {@link BookShortModel} instance.
-         *
-         * @return {@link BookShortModel}
-         */
-        public BookShortModel build() {
-            return new BookShortModel(this);
-        }
     }
 }
