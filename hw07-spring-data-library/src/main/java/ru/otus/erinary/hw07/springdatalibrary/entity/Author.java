@@ -8,7 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import org.apache.commons.collections4.ListUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,20 +47,6 @@ public class Author {
     public Author(final String name) {
         this.name = name;
         this.books = new ArrayList<>();
-    }
-
-    /**
-     * Creates a new {@link Author} instance.
-     *
-     * @param id    id
-     * @param name  author's name
-     * @param books List of related {@link Book}
-     * @implNote is used only in tests
-     */
-    public Author(final Long id, final String name, final List<Book> books) {
-        this.id = id;
-        this.name = name;
-        this.books = ListUtils.emptyIfNull(books);
     }
 
     @Nullable

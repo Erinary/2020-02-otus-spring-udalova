@@ -8,6 +8,7 @@ import ru.otus.erinary.hw07.springdatalibrary.entity.Book;
 import ru.otus.erinary.hw07.springdatalibrary.entity.Genre;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,8 +28,6 @@ class BookRepositoryTest {
         var book = new Book();
         book.setTitle("newTitle");
         book.setYear(2018);
-        book.setAuthor(new Author(2L, "author2", null));
-        book.setGenre(new Genre(2L, "genre2", null));
 
         repository.save(book);
         assertNotEquals(0L, book.getId());
@@ -59,7 +58,9 @@ class BookRepositoryTest {
         var book = repository.findById(1L).orElseThrow();
         assertEquals("title1", book.getTitle());
         assertEquals(2020, book.getYear());
+        assertNotNull(book.getAuthor());
         assertEquals("author1", book.getAuthor().getName());
+        assertNotNull(book.getGenre());
         assertEquals("genre1", book.getGenre().getName());
     }
 
@@ -75,12 +76,12 @@ class BookRepositoryTest {
         assertTrue(bookTitles.containsAll(List.of("title1", "title2", "title3")));
 
         var authorNames = books.stream()
-                .map(book -> book.getAuthor().getName())
+                .map(book -> Optional.ofNullable(book.getAuthor()).map(Author::getName).orElse("empty"))
                 .toList();
         assertTrue(authorNames.containsAll(List.of("author1", "author2", "author3")));
 
         var genreNames = books.stream()
-                .map(book -> book.getGenre().getName())
+                .map(book -> Optional.ofNullable(book.getGenre()).map(Genre::getName).orElse("empty"))
                 .toList();
         assertTrue(genreNames.containsAll(List.of("genre1", "genre2", "genre3")));
     }
@@ -90,7 +91,7 @@ class BookRepositoryTest {
         var books = repository.findAllByAuthorId(1L);
         assertEquals(2, books.size());
         var authorNames = books.stream()
-                .map(book -> book.getAuthor().getName())
+                .map(book -> Optional.ofNullable(book.getAuthor()).map(Author::getName).orElse("empty"))
                 .collect(Collectors.toSet());
         assertEquals(1, authorNames.size());
         assertTrue(authorNames.contains("author1"));
@@ -103,7 +104,7 @@ class BookRepositoryTest {
         var books = repository.findAllByGenreId(2L);
         assertEquals(2, books.size());
         var genresNames = books.stream()
-                .map(book -> book.getGenre().getName())
+                .map(book -> Optional.ofNullable(book.getGenre()).map(Genre::getName).orElse("empty"))
                 .collect(Collectors.toSet());
         assertEquals(1, genresNames.size());
         assertTrue(genresNames.contains("genre2"));
