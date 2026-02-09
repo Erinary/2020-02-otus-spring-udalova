@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.5</version>
+        <version>3.4.2</version>
         <relativePath/>
     </parent>
 
@@ -19,14 +19,16 @@
         <maven.compiler.source>17</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!--dependencies-->
-        <spring-shell.version>3.1.5</spring-shell.version>
-        <mongock.version>5.3.5</mongock.version>
-        <de.flapdoodle.embed.mongo>4.10.1</de.flapdoodle.embed.mongo>
+        <spring-shell.version>3.2.3</spring-shell.version>
+        <mongock.version>5.5.1</mongock.version>
+        <jetbrains.annotations.version>26.0.2</jetbrains.annotations.version>
+        <commons-collections4.version>4.4</commons-collections4.version>
+        <commons-lang3.version>3.17.0</commons-lang3.version>
         <!--plugins-->
-        <maven-checkstyle-plugin.version>3.3.0</maven-checkstyle-plugin.version>
-        <checkstyle.version>10.12.3</checkstyle.version>
-        <!--fix vulnerable dependency from spring-boot-starter maven:org.yaml:snakeyaml:1.33-->
-        <snakeyaml.version>2.0</snakeyaml.version>
+        <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
+        <checkstyle.version>10.21.1</checkstyle.version>
+        <!--fix vulnerable dependency from spring-shell-starter maven:commons-io:commons-io:2.11.0-->
+        <commons-io.version>2.18.0</commons-io.version>
     </properties>
 
     <dependencies>
@@ -44,22 +46,38 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
+            <groupId>io.mongock</groupId>
+            <artifactId>mongock-springboot-v3</artifactId>
+            <version>${mongock.version}</version>
         </dependency>
         <dependency>
             <groupId>io.mongock</groupId>
-            <artifactId>mongock-springboot</artifactId>
+            <artifactId>mongodb-springdata-v4-driver</artifactId>
+            <version>${mongock.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.mongock</groupId>
-            <artifactId>mongodb-springdata-v3-driver</artifactId>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${jetbrains.annotations.version}</version>
         </dependency>
         <dependency>
-            <groupId>de.flapdoodle.embed</groupId>
-            <artifactId>de.flapdoodle.embed.mongo</artifactId>
-            <version>${de.flapdoodle.embed.mongo}</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${commons-collections4.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mongodb</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -74,11 +92,9 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>io.mongock</groupId>
-                <artifactId>mongock-bom</artifactId>
-                <version>${mongock.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

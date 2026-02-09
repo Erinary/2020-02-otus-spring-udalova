@@ -4,11 +4,7 @@ spring:
       enabled: false
   data:
     mongodb:
-      database: test-library
-      host: localhost
-      port: 0
+      uri: ${mongodb://localhost:27017/test-library}
 
 mongock:
   migration-scan-package: ru.otus.erinary.hw08.library.dao.changelog.test
-  runner-type: initializingbean
-

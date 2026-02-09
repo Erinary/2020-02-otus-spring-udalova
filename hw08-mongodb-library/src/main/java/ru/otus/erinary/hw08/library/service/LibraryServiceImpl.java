@@ -2,18 +2,29 @@ package ru.otus.erinary.hw08.library.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.otus.erinary.hw08.library.dao.model.Author;
-import ru.otus.erinary.hw08.library.dao.model.Book;
-import ru.otus.erinary.hw08.library.dao.model.Comment;
-import ru.otus.erinary.hw08.library.dao.model.Genre;
+import ru.otus.erinary.hw08.library.api.model.AuthorModel;
+import ru.otus.erinary.hw08.library.api.model.BookModel;
+import ru.otus.erinary.hw08.library.api.model.CommentModel;
+import ru.otus.erinary.hw08.library.api.model.GenreModel;
+import ru.otus.erinary.hw08.library.entity.Author;
+import ru.otus.erinary.hw08.library.entity.Book;
+import ru.otus.erinary.hw08.library.entity.Comment;
+import ru.otus.erinary.hw08.library.entity.Genre;
 import ru.otus.erinary.hw08.library.dao.repository.AuthorRepository;
 import ru.otus.erinary.hw08.library.dao.repository.BookRepository;
 import ru.otus.erinary.hw08.library.dao.repository.CommentRepository;
 import ru.otus.erinary.hw08.library.dao.repository.GenreRepository;
-import ru.otus.erinary.hw08.library.service.exception.LibraryException;
+import ru.otus.erinary.hw08.library.service.exception.LibraryServiceException;
+import ru.otus.erinary.hw08.library.service.mapper.AuthorMapper;
+import ru.otus.erinary.hw08.library.service.mapper.BookMapper;
+import ru.otus.erinary.hw08.library.service.mapper.CommentMapper;
+import ru.otus.erinary.hw08.library.service.mapper.GenreMapper;
 
 import java.util.List;
 
+/**
+ * Realization of {@link LibraryService}.
+ */
 @Service
 public class LibraryServiceImpl implements LibraryService {
 
@@ -22,30 +33,53 @@ public class LibraryServiceImpl implements LibraryService {
     private final GenreRepository genreRepository;
     private final CommentRepository commentRepository;
 
+    private final BookMapper bookMapper;
+    private final AuthorMapper authorMapper;
+    private final GenreMapper genreMapper;
+    private final CommentMapper commentMapper;
+
+    /**
+     * Creates a new {@link LibraryServiceImpl} instance.
+     *
+     * @param bookRepository    {@link BookRepository}
+     * @param authorRepository  {@link AuthorRepository}
+     * @param genreRepository   {@link GenreRepository}
+     * @param commentRepository {@link CommentRepository}
+     */
     @Autowired
     public LibraryServiceImpl(final BookRepository bookRepository,
                               final AuthorRepository authorRepository,
                               final GenreRepository genreRepository,
-                              final CommentRepository commentRepository) {
+                              final CommentRepository commentRepository,
+                              final BookMapper bookMapper,
+                              final AuthorMapper authorMapper,
+                              final GenreMapper genreMapper,
+                              final CommentMapper commentMapper) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.genreRepository = genreRepository;
         this.commentRepository = commentRepository;
+        this.bookMapper = bookMapper;
+        this.authorMapper = authorMapper;
+        this.genreMapper = genreMapper;
+        this.commentMapper = commentMapper;
     }
 
     @Override
-    public List<Author> getAuthors() {
-        return authorRepository.findAll();
+    public List<AuthorModel> getAuthors() {
+        return authorRepository.findAll().stream()
+                .map(authorMapper::mapWithoutBooks)
+                .toList();
     }
 
     @Override
-    public Author getAuthorByName(final String name) {
+    public AuthorModel getAuthorByName(final String name) {
         var author = authorRepository.findByName(name);
         author.ifPresent(a -> {
             var books = bookRepository.findAllByAuthorId(a.getId());
-            a.setBooks(books);
+            books.forEach(a::addBook);
         });
-        return author.orElse(null);
+        return author.map(authorMapper::map).orElse(null);
     }
 
     @Override
@@ -57,18 +91,20 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public List<Genre> getGenres() {
-        return genreRepository.findAll();
+    public List<GenreModel> getGenres() {
+        return genreRepository.findAll().stream()
+                .map(genreMapper::mapWithoutBooks)
+                .toList();
     }
 
     @Override
-    public Genre getGenreByName(final String name) {
+    public GenreModel getGenreByName(final String name) {
         var genre = genreRepository.findByName(name);
         genre.ifPresent(g -> {
             var books = bookRepository.findAllByGenreId(g.getId());
-            g.setBooks(books);
+            books.forEach(g::addBook);
         });
-        return genre.orElse(null);
+        return genre.map(genreMapper::map).orElse(null);
     }
 
     @Override
@@ -80,39 +116,45 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public List<Book> getBooks() {
-        return bookRepository.findAll();
+    public List<BookModel> getBooks() {
+        return bookRepository.findAll().stream()
+                .map(bookMapper::map)
+                .toList();
     }
 
     @Override
-    public Book getBookById(final String id) {
-        return bookRepository.findById(id).orElse(null);
+    public BookModel getBookById(final String id) {
+        return bookRepository.findById(id)
+                .map(bookMapper::map)
+                .orElse(null);
     }
 
     @Override
-    public Book saveBook(final String id, final String title, final int year, final String authorName, final String genreName) {
-        var author = authorRepository.findByName(authorName)
+    public BookModel saveBook(final BookModel model) {
+        var author = authorRepository.findByName(model.getAuthor())
                 .orElseGet(() -> {
-                    var a = new Author(authorName);
+                    var a = new Author(model.getAuthor());
                     authorRepository.save(a);
                     return a;
                 });
-        var genre = genreRepository.findByName(genreName)
+        var genre = genreRepository.findByName(model.getGenre())
                 .orElseGet(() -> {
-                    var g = new Genre(genreName);
+                    var g = new Genre(model.getGenre());
                     genreRepository.save(g);
                     return g;
                 });
 
+        var id = model.getId();
         var book = id == null ? new Book() : bookRepository
                 .findById(id)
-                .orElseThrow(() -> new LibraryException(String.format("Book with id [%s] does not exist", id)));
-        book.setTitle(title);
-        book.setYear(year);
+                .orElseThrow(() -> new LibraryServiceException(String.format("Book with id [%s] does not exist", id)));
+        book.setTitle(model.getTitle());
+        book.setYear(model.getYear());
         book.setAuthor(author);
         book.setGenre(genre);
 
-        return bookRepository.save(book);
+        var savedBook = bookRepository.save(book);
+        return bookMapper.map(savedBook);
     }
 
     @Override
@@ -123,15 +165,18 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public List<Comment> getBookComments(final String bookId) {
-        return commentRepository.findAllByBookId(bookId);
+    public List<CommentModel> getBookComments(final String bookId) {
+        return commentRepository.findAllByBookId(bookId).stream()
+                .map(commentMapper::map)
+                .toList();
     }
 
     @Override
-    public String saveComment(String text, String user, String bookId) {
+    public String saveComment(final CommentModel model) {
+        var bookId = model.getBookId();
         var book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new LibraryException(String.format("Book with id [%s] does not exist", bookId)));
-        var comment = new Comment(text, user, book);
+                .orElseThrow(() -> new LibraryServiceException(String.format("Book with id [%s] does not exist", bookId)));
+        var comment = new Comment(model.getText(), model.getUsername(), model.getDate(), book);
         return commentRepository.save(comment).getId();
     }
 

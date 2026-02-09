@@ -8,9 +8,17 @@ import ru.otus.erinary.hw08.library.dao.converter.ZonedDateTimeReadConverter;
 
 import java.util.List;
 
+/**
+ * Configures MongoDB components.
+ */
 @Configuration
 public class MongoConfig {
 
+    /**
+     * Registers custom converters for MongoDB.
+     *
+     * @return a bean {@link MongoCustomConversions}
+     */
     @Bean
     public MongoCustomConversions mongoCustomConversions() {
         return new MongoCustomConversions(List.of(
@@ -18,4 +26,5 @@ public class MongoConfig {
                 new ZonedDateTimeReadConverter()
         ));
     }
+
 }
